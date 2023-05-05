@@ -1,0 +1,27 @@
+{% load static %}
+
+{% url 'web:home' as home_url %}
+{% url 'web:materials' as materials_url %}
+{% url 'web:users' as users_url %}
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+<div class="container-fluid">
+    <a class="navbar-brand" href="#"><img src="{% static 'img/python_logo.png' %}" /></a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" >
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+            <a class="nav-link {% if request.path == home_url %}active{% endif %}" href="{{ home_url }}">Начало</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link {% if request.path == materials_url %}active{% endif %}" href="{{ materials_url }}">Материали</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link {% if request.path == users_url %}active{% endif %}" href="{{ users_url }}">Потребители</a>
+        </li>
+    </ul>
+    </div>
+</div>
+</nav>

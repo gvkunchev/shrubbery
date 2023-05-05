@@ -1,0 +1,42 @@
+{% load django_bootstrap5 %}
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    {# Use "{% bootstrap_css %}" to load the CSS over CDN #}
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet" type="text/css">
+
+    <link href="{% static 'css/custom.css' %}" rel="stylesheet" type="text/css">
+    {% block css %}
+        {# Add custom content when extending this template #}
+    {% endblock %}
+
+    {% block javascript %}
+        {# Add custom content when extending this template #}
+    {% endblock %}
+
+    {# Use "{% bootstrap_javascript %}" to load the JS over CDN #}
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+
+    <link href="{% static 'img/python_logo.png' %}" rel="icon" type="image/png">
+
+    {% block title %}
+        <title>Python@ФМИ</title>
+    {% endblock %}
+  </head>
+  <body class="d-flex flex-column min-vh-100">
+    {% block navbar %}
+        {% include "navbar.html" %}
+    {% endblock %}
+
+    <div class="container-fluid">
+      {% block body %}
+          {# Add custom content when extending this template #}
+      {% endblock %}
+    </div>
+    <footer class="mt-auto text-center fs-6 text fw-lighter">Някои права запазени | {% now 'Y' %}</footer>
+  </body>
+</html>
