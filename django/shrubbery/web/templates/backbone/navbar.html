@@ -1,6 +1,7 @@
 {% load static %}
 
 {% url 'web:home' as home_url %}
+{% url 'web:news' as news_url %}
 {% url 'web:materials' as materials_url %}
 {% url 'web:users' as users_url %}
 
@@ -14,6 +15,9 @@
     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
             <a class="nav-link {% if request.path == home_url %}active{% endif %}" href="{{ home_url }}">Начало</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link {% if request.path == news_url %}active{% endif %}" href="{{ news_url }}">Новини</a>
         </li>
         <li class="nav-item">
             <a class="nav-link {% if request.path == materials_url %}active{% endif %}" href="{{ materials_url }}">Материали</a>

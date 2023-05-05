@@ -1,9 +1,17 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.core.exceptions import ObjectDoesNotExist
+
+from news.models import NewsArticle
+
+
+def missing(request, exception=None):
+    '''Not found page.'''
+    return render(request, "missing.html")
 
 
 def home(request):
     '''Home page.'''
-    return render(request, "home.html")
+    return render(request, "home.html", {'news': NewsArticle.objects.all()})
 
 
 def materials(request):
@@ -18,4 +26,13 @@ def users(request):
 
 def news(request):
     '''News page.'''
-    return render(request, "news.html")
+    return render(request, "news/news.html", {'news': NewsArticle.objects.all()})
+
+
+def news_article(request, article):
+    '''News article page.'''
+    try:
+        article = NewsArticle.objects.get(pk=article)
+    except ObjectDoesNotExist:
+        return redirect('web:missing')
+    return render(request, "news/news_article.html", {'article': article})

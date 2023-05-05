@@ -1,0 +1,10 @@
+{% extends "backbone/base.html" %}
+{% block body %}
+    <h4>{{ article.title }}</h4>
+    <h6 class="fw-lighter">{{ article.human_date }}</h6>
+    <p>{{ article.content }}</p>
+    <br/>
+    <button type="button" class="btn btn-primary">
+        <a href="/news" class="text-reset text-decoration-none">&lt; Обратно към всички новини</a>
+    </button>
+{% endblock %}
