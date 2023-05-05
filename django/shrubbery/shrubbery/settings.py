@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-cr0$$!x5mq%(4#07yryem%$y#t9%8t*ha^$o#e6gz-7f8zg_s-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -40,11 +40,13 @@ INSTALLED_APPS = [
     'django_bootstrap5',
     'users',
     'news',
+    'materials',
     'web'
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -120,9 +122,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = BASE_DIR / 'static'
 
 STATICFILES_DIRS = [
     BASE_DIR / "web/static",
+    BASE_DIR / "media",
 ]
 
 # Default primary key field type
@@ -133,3 +137,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Overwrite default user model
 
 AUTH_USER_MODEL = 'users.User'
+
+
+# Media files for uploading resources
+
+MEDIA_URL = '/media/' 
+MEDIA_ROOT = BASE_DIR / 'media'

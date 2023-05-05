@@ -13,13 +13,14 @@ class StudentAdmin(UserAdmin):
     fieldsets = (
             (None, {
                 "fields": (
-                    ('fn', 'email', 'first_name', 'last_name', 'is_active')
+                    ('image', 'fn', 'email', 'first_name', 'last_name', 'github', 'is_active')
                 ),
             }),
         )
     add_fieldsets = (
         (None, {
             'fields': ('fn', 'email', 'first_name', 'last_name',
+                       'image', 'github',
                        'password1', 'password2', 'is_active')
         }),
     )
@@ -34,13 +35,14 @@ class TeacherAdmin(UserAdmin):
     fieldsets = (
             (None, {
                 "fields": (
-                    ('email', 'first_name', 'last_name', 'is_active')
+                    ('image', 'email', 'first_name', 'last_name', 'github', 'is_active')
                 ),
             }),
         )
     add_fieldsets = (
         (None, {
             'fields': ('email', 'first_name', 'last_name',
+                       'image', 'github',
                        'password1', 'password2', 'is_active')
         }),
     )

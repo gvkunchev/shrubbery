@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect
 from django.core.exceptions import ObjectDoesNotExist
 
 from news.models import NewsArticle
+from materials.models import Material
+from users.models import Student
 
 
 def missing(request, exception=None):
@@ -16,12 +18,12 @@ def home(request):
 
 def materials(request):
     '''Materials page.'''
-    return render(request, "materials.html")
+    return render(request, "materials.html", {'materials': Material.objects.all()})
 
 
 def users(request):
     '''Users page.'''
-    return render(request, "users.html")
+    return render(request, "users.html", {'students': Student.objects.all()})
 
 
 def news(request):
