@@ -16,6 +16,8 @@ urlpatterns = [
     re_path(r'^student/(?P<student>\d+)$', views.student, name='student'),
     re_path(r'^teachers$', views.teachers, name='teachers'),
     re_path(r'^teacher/(?P<teacher>\d+)$', views.teacher, name='teacher'),
+    re_path(r'^participants$', views.participants, name='participants'),
     re_path(r'^login$', auth_views.login_, name='login'),
     re_path(r'^logout$', auth_views.logout_, name='logout'),
+    re_path(r'^settings$', auth_views.settings, name='settings'),
 ]

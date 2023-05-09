@@ -1,7 +1,12 @@
 {% extends "backbone/base.html" %}
 {% block body %}
+<h6 class="location-info"><i class="bi bi-globe"></i> <a href="/teachers">Учители</a> > <a href="/teacher/{{ teacher.id }}">{{ teacher.full_name }}</a></h6>
     <h4>{{ teacher.full_name }}</h4>
-    <img src="/static/{{ teacher.image }}" class="teacher-profile-image border"/>
+    {% if teach.image %}
+        <img src="/static/{{ teacher.image }}" class="teacher-profile-image border"/>
+    {% else %}
+        <img src="/static/img/blank-profile.png" class="teacher-profile-image border"/>
+    {% endif %}
     <h6>
         <i class="bi bi-envelope-at-fill"></i>
         <a href="mailto:{{ teacher.email }}">{{ teacher.email }}</a>

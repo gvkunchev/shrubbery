@@ -9266,28 +9266,23 @@ textarea.form-control-lg {
   .navbar-separator > a::before {
     content: none; } }
 
+.navbar-profile-image {
+  border-radius: 50%; }
+
 .navbar-brand-wrapper {
   position: relative;
   width: 2em !important;
   height: 2em !important; }
   .navbar-brand-wrapper img {
+    width: 2em !important;
+    height: 2em !important;
     position: absolute;
     top: 0;
     left: 0; }
-  .navbar-brand-wrapper .navbar-logo {
-    width: 0.7em !important;
-    height: 0.7em !important;
-    top: -5px;
-    left: -5px; }
-  .navbar-brand-wrapper .navbar-profile-picture {
-    -webkit-border-radius: 50px;
-    -webkit-border-top-left-radius: 0;
-    -moz-border-radius: 50px;
-    -moz-border-radius-topleft: 0;
-    border-radius: 50px;
-    border-top-left-radius: 0;
-    width: 2em !important;
-    height: 2em !important; }
+  .navbar-brand-wrapper .temp1 {
+    opacity: 0.5; }
+  .navbar-brand-wrapper .temp2 {
+    border-radius: 50%; }
 
 .student-card {
   max-width: 250px; }

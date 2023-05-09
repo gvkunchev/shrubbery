@@ -1,10 +1,15 @@
 {% extends "backbone/base.html" %}
 {% block body %}
+    <h6 class="location-info"><i class="bi bi-globe"></i> <a href="/teachers">Учители</a></h6>
     {% if teachers %}
         {% for teacher in teachers %}
             <div class="card d-inline-block m-1 teacher-card">
                 <a href="/teacher/{{ teacher.id }}">
-                    <img src="static/{{ teacher.image }}" class="card-img-top"/>
+                    {% if teacher.image %}
+                        <img src="static/{{ teacher.image }}" class="card-img-top"/>
+                    {% else %}
+                        <img src="/static/img/blank-profile.png" class="card-img-top"/>
+                    {% endif %}
                 </a>
                 <div class="card-body">
                     <h5 class="card-title"><a href="/teacher/{{ teacher.id }}">{{ teacher.full_name }}</a></h5>

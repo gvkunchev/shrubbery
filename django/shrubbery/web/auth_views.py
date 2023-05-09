@@ -25,3 +25,7 @@ def logout_(request):
     '''Logut.'''
     logout(request)
     return redirect('/')
+
+def settings(request):
+    '''Profile settings.'''
+    return render(request, "auth/settings.html")

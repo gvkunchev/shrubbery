@@ -35,6 +35,14 @@ class User(AbstractUser):
     REQUIRED_FIELDS = ['first_name', 'last_name']
 
     @property
+    def is_teacher(self):
+        return Teacher.objects.filter(email=self.email).exists()
+
+    @property
+    def is_student(self):
+        return Student.objects.filter(email=self.email).exists()
+
+    @property
     def full_name(self):
         """Get full name."""
         return f"{self.first_name} {self.last_name}"

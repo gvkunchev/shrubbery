@@ -5,10 +5,26 @@
 {% url 'web:materials' as materials_url %}
 {% url 'web:students' as students_url %}
 {% url 'web:teachers' as teachers_url %}
+{% url 'web:participants' as participants_url %}
+{% url 'web:settings' as settings_url %}
 
 <nav class="navbar navbar-expand-lg">
 <div class="container-fluid">
-    <a class="navbar-brand" href="/"><img src="{% static 'img/python_logo.png' %}" /></a>
+    <a class="navbar-brand" href="/">
+        <div class="navbar-brand-wrapper">
+            {% if request.user.is_authenticated %}
+                {% if request.user.image %}
+                    <img src="/static/{{ request.user.image }}" class="navbar-profile-picture"/>
+                {% else %}
+                    <img src="/static/img/blank-profile.png" class="navbar-profile-picture"/>
+                {% endif %}
+                <img src="{% static 'img/python_logo.png' %}"  class="navbar-logo" />
+                {% else %}
+                    <img src="{% static 'img/python_logo.png' %}" />
+            {% endif %}
+        </div>  
+    </a>
+
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" >
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -29,7 +45,16 @@
             <li class="nav-item">
                 <a class="nav-link {% if request.path == teachers_url %}active{% endif %}" href="{{ teachers_url }}"><i class="bi bi-mortarboard-fill text-primary"></i> Учители</a>
             </li>
-            
+            {% if request.user.is_teacher %}
+                <li class="nav-item dropdown navbar-separator">
+                    <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">
+                        <i class="bi bi-person-fill-lock text-primary"></i> Администрация
+                    </a>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="{{ participants_url }}"><i class="bi bi-card-checklist text-primary"></i> Записани</a>
+                    </div>
+                </li>
+            {% endif %}
             {% if not request.user.is_authenticated %}
                 <li class="nav-item navbar-separator">
                     <a class="nav-link" href="/register"><i class="bi bi-journal-arrow-up text-primary"></i> Регистрация</a>
@@ -39,6 +64,9 @@
                 </li>
             {% else %}
                 <li class="nav-item navbar-separator">
+                    <a class="nav-link" href="{{ settings_url }}"><i class="bi bi-gear text-primary"></i> Настройки</a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" href="/logout"><i class="bi bi-door-open text-primary"></i> Изход</a>
                 </li>
             {% endif %}

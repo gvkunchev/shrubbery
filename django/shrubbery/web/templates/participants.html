@@ -1,0 +1,40 @@
+{% extends "backbone/base.html" %}
+{% block body %}
+    <h6 class="location-info"><i class="bi bi-globe"></i> <a href="/participants">Записани</a></h6>
+    {% if participants %}
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">Име</th>
+                    <th scope="col">Факултетен номер</th>
+                    <th scope="col">Поща</th>
+                    <th scope="col">Активен</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for participant in participants %}
+                    <tr>
+                        <th scope="row">
+                            <a href="/student/{{ participant.id }}">
+                                {{ participant.full_name }}
+                            </a>
+                        </th>
+                        <td>
+                            {{ participant.fn }}
+                        </td>
+                        <td>{{ participant.email }}</td>
+                        <td>
+                            {% if participant.is_active %}
+                                <i class="bi bi-check-circle-fill text-success"></i>
+                            {% else %}
+                                <i class="bi bi-x-circle-fill text-danger"></i>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        Все още няма записани.
+    {% endif %}
+{% endblock %}
