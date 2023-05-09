@@ -17,7 +17,7 @@ def rename_profile_picture(instance, filename):
         while os.path.exists(os.path.join(upload_to, filename)):
             filename = f'{uuid4().hex}.{ext}'
     return os.path.join(upload_to, filename)
-    
+
 
 class User(AbstractUser):
     """User model."""
@@ -38,16 +38,45 @@ class User(AbstractUser):
     def full_name(self):
         """Get full name."""
         return f"{self.first_name} {self.last_name}"
-    
-    def save(self):
-        """Extend to convert profile image."""
-        PROFILE_PICTURE_SIZE = 250
-        super().save()
+
+    def _resize_image(self):
+        """Resize profile picture on upload."""
+        width = 250
+        height = 250
+
         img = Image.open(self.image.path)
-        if img.height > PROFILE_PICTURE_SIZE or img.width > PROFILE_PICTURE_SIZE:
-            new_img = (PROFILE_PICTURE_SIZE, PROFILE_PICTURE_SIZE)
-            img.thumbnail(new_img)
-            img.save(self.image.path)
+        original_aspect = img.width/img.height
+        thumbnail_aspect = width/height
+        
+        if original_aspect == thumbnail_aspect:
+            # return resized image
+            thumb = img.resize((width, height))
+        else:
+            # create transparent background size of requested thumbnail
+            thumb = Image.new('RGB', (width, height), (255, 255, 255)) 
+            thumb.putalpha(0)
+
+            if thumbnail_aspect < original_aspect:
+            # thumb aspect ratio is more narrow than original
+                # scale as proportion of width
+                resized_original = img.resize((width, round(img.height * width/img.width)))
+                # paste into background with top/bottom spacing
+                thumb.paste(resized_original, (0, (height-resized_original.height)//2))
+            else:
+            # thumb aspect ratio is wider than original
+                # scale as proportion of height
+                resized_original = img.resize((round(img.width * height/img.height), height))
+                # paste into background with left/right spacing
+                thumb.paste(resized_original, ((width-resized_original.width)//2, 0))
+        thumb.save(self.image.path)
+
+    def save(self, *args, **kwargs):
+        """Clean up on save."""
+        old_image = self.image.path if self.image else None
+        super().save(args, kwargs)
+        new_image = self.image.path if self.image else None
+        if new_image and old_image != new_image:
+            self._resize_image()
 
 
 class Student(User):
