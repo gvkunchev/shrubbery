@@ -1,0 +1,20 @@
+{% extends "backbone/base.html" %}
+{% block body %}
+    <h4>{{ student.full_name }}</h4>
+    {% if student.image %}
+        <img src="/static/{{ student.image }}" class="student-profile-image border"/>
+    {% else %}
+        <img src="/static/img/blank-profile.png" class="student-profile-image border"/>
+    {% endif %}
+    <h6>Поща: <a href="mailto:{{ student.email }}">{{ student.email }}</a></h6>
+    <h6>
+        {% if student.github != "" %}
+            GitHub: <a href="https://github.com/" target="_blank">{{ student.github }}</a>
+        {% else %}
+            GitHub: -
+        {% endif %}
+    </h6>
+    <button type="button" class="btn btn-primary">
+        <a href="/students" class="text-reset text-decoration-none">&lt; Обратно към всички студенти</a>
+    </button>
+{% endblock %}

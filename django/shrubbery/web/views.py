@@ -3,7 +3,7 @@ from django.core.exceptions import ObjectDoesNotExist
 
 from news.models import NewsArticle
 from materials.models import Material
-from users.models import Student
+from users.models import Student, Teacher
 
 
 def missing(request, exception=None):
@@ -21,9 +21,32 @@ def materials(request):
     return render(request, "materials.html", {'materials': Material.objects.all()})
 
 
-def users(request):
-    '''Users page.'''
-    return render(request, "users.html", {'students': Student.objects.all()})
+def students(request):
+    '''Students page.'''
+    return render(request, "students/students.html", {'students': Student.objects.all()})
+
+
+def student(request, student):
+    '''Single student page.'''
+    try:
+        student = Student.objects.get(pk=student)
+    except ObjectDoesNotExist:
+        return redirect('web:missing')
+    return render(request, "students/student.html", {'student': student})
+
+
+def teachers(request):
+    '''Teachers page.'''
+    return render(request, "teachers/teachers.html", {'teachers': Teacher.objects.all()})
+
+
+def teacher(request, teacher):
+    '''Single teacher page.'''
+    try:
+        teacher = Teacher.objects.get(pk=teacher)
+    except ObjectDoesNotExist:
+        return redirect('web:missing')
+    return render(request, "teachers/teacher.html", {'teacher': teacher})
 
 
 def news(request):

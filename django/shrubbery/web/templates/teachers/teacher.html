@@ -1,0 +1,16 @@
+{% extends "backbone/base.html" %}
+{% block body %}
+    <h4>{{ teacher.full_name }}</h4>
+    <img src="/static/{{ teacher.image }}" class="teacher-profile-image border"/>
+    <h6>Поща: <a href="mailto:{{ teacher.email }}">{{ teacher.email }}</a></h6>
+    <h6>
+        {% if teacher.github != "" %}
+            GitHub: <a href="https://github.com/" target="_blank">{{ teacher.github }}</a>
+        {% else %}
+            GitHub: -
+        {% endif %}
+    </h6>
+    <button type="button" class="btn btn-primary">
+        <a href="/teachers" class="text-reset text-decoration-none">&lt; Обратно към всички учители</a>
+    </button>
+{% endblock %}

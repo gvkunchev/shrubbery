@@ -1,7 +1,36 @@
+/* Backbone */
 .navbar-brand img {
     height: 2em;
 }
 
 .student-card {
-    width: 14rem;
+    max-width: 250px;
+}
+
+/* Students */
+.student-card .card-title {
+    height: 1.5em;
+}
+
+@include media-breakpoint-up(xs) {
+    .student-card {
+        width: 45%;
+    }
+}
+
+@include media-breakpoint-up(sm) {
+    .student-card {
+        width: 30%;
+    }
+}
+
+@include media-breakpoint-up(md) {
+    .student-card {
+        width: 20%;
+    }
+}
+
+/* Student */
+.student-profile-image {
+    max-width: 250px;
 }

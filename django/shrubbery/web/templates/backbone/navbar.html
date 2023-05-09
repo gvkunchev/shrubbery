@@ -3,7 +3,8 @@
 {% url 'web:home' as home_url %}
 {% url 'web:news' as news_url %}
 {% url 'web:materials' as materials_url %}
-{% url 'web:users' as users_url %}
+{% url 'web:students' as students_url %}
+{% url 'web:teachers' as teachers_url %}
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
 <div class="container-fluid">
@@ -23,7 +24,10 @@
             <a class="nav-link {% if request.path == materials_url %}active{% endif %}" href="{{ materials_url }}">Материали</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link {% if request.path == users_url %}active{% endif %}" href="{{ users_url }}">Потребители</a>
+            <a class="nav-link {% if request.path == students_url %}active{% endif %}" href="{{ students_url }}">Студенти</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link {% if request.path == teachers_url %}active{% endif %}" href="{{ teachers_url }}">Учители</a>
         </li>
     </ul>
     </div>

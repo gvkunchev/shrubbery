@@ -7434,30 +7434,30 @@ textarea.form-control-lg {
   .d-print-none {
     display: none !important; } }
 
-/* Backbone */
 .navbar-brand img {
   height: 2em; }
 
 .student-card {
-  max-width: 250px; }
+  width: 100%; }
 
-/* Students */
-.student-card .card-title {
-  height: 1.5em; }
-
-.student-card {
-  width: 45%; }
-
-@media (min-width: 576px) {
+@media (max-width: 575.98px) {
   .student-card {
-    width: 30%; } }
+    width: 100%; } }
 
-@media (min-width: 768px) {
+@media (max-width: 767.98px) {
+  .student-card {
+    width: 100%; } }
+
+@media (max-width: 991.98px) {
+  .student-card {
+    width: 100%; } }
+
+@media (max-width: 1199.98px) {
+  .student-card {
+    width: 100%; } }
+
+@media (max-width: 1399.98px) {
   .student-card {
     width: 20%; } }
-
-/* Student */
-.student-profile-image {
-  max-width: 250px; }
 
 /*# sourceMappingURL=bootstrap.css.map */

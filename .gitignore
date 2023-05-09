@@ -58,7 +58,7 @@ cover/
 # Django stuff:
 *.log
 local_settings.py
-db.sqlite3
+#db.sqlite3 # Temporary push the DB to allow other devs to benefit
 db.sqlite3-journal
 
 # Flask stuff:

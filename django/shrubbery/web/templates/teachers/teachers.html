@@ -1,0 +1,27 @@
+{% extends "backbone/base.html" %}
+{% block body %}
+    {% if teachers %}
+        {% for teacher in teachers %}
+            <div class="card d-inline-block m-1 teacher-card">
+                <a href="/teacher/{{ teacher.id }}">
+                    <img src="static/{{ teacher.image }}" class="card-img-top"/>
+                </a>
+                <div class="card-body">
+                    <h5 class="card-title"><a href="/teacher/{{ teacher.id }}">{{ teacher.full_name }}</a></h5>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item text-truncate">Поща: <a href="mailto:{{ teacher.email }}">{{ teacher.email }}</a></li>
+                    <li class="list-group-item text-truncate">
+                        {% if teacher.github != "" %}
+                            GitHub: <a href="https://github.com/" target="_blank">{{ teacher.github }}</a>
+                        {% else %}
+                            GitHub: -
+                        {% endif %}
+                    </li>
+                </ul>
+            </div>
+        {% endfor %}
+    {% else %}
+        Все още няма регистрирани учители.
+    {% endif %}
+{% endblock %}

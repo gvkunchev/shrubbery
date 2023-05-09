@@ -1,6 +1,8 @@
 import os
 from uuid import uuid4
 
+from PIL import Image
+
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from .model_managers import UserManager
@@ -24,8 +26,8 @@ class User(AbstractUser):
     email = models.EmailField(unique=True)
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
-    image = models.ImageField(upload_to=rename_profile_picture)
-    github = models.CharField(max_length=100)
+    image = models.ImageField(upload_to=rename_profile_picture, blank=True)
+    github = models.CharField(max_length=100, blank=True)
 
     objects = UserManager()
 
@@ -36,6 +38,16 @@ class User(AbstractUser):
     def full_name(self):
         """Get full name."""
         return f"{self.first_name} {self.last_name}"
+    
+    def save(self):
+        """Extend to convert profile image."""
+        PROFILE_PICTURE_SIZE = 250
+        super().save()
+        img = Image.open(self.image.path)
+        if img.height > PROFILE_PICTURE_SIZE or img.width > PROFILE_PICTURE_SIZE:
+            new_img = (PROFILE_PICTURE_SIZE, PROFILE_PICTURE_SIZE)
+            img.thumbnail(new_img)
+            img.save(self.image.path)
 
 
 class Student(User):
