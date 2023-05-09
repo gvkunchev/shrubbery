@@ -9259,7 +9259,8 @@ textarea.form-control-lg {
 
 .navbar-separator > a::before {
   content: '|';
-  padding-right: 15px; }
+  padding-right: 15px;
+  color: #0d6efd; }
 
 @media (max-width: 991.98px) {
   .navbar-separator > a::before {

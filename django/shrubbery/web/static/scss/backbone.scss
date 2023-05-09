@@ -5,6 +5,7 @@
 .navbar-separator > a::before {
     content: '|';
     padding-right: 15px;
+    color: $primary;
 }
 
 @include media-breakpoint-down(lg) {

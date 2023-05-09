@@ -15,31 +15,31 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-                <a class="nav-link {% if request.path == home_url %}active{% endif %}" href="{{ home_url }}">Начало</a>
+                <a class="nav-link {% if request.path == home_url %}active{% endif %}" href="{{ home_url }}"><i class="bi bi-house-fill text-primary"></i> Начало</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link {% if request.path == news_url %}active{% endif %}" href="{{ news_url }}">Новини</a>
+                <a class="nav-link {% if request.path == news_url %}active{% endif %}" href="{{ news_url }}"><i class="bi bi-newspaper text-primary"></i> Новини</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link {% if request.path == materials_url %}active{% endif %}" href="{{ materials_url }}">Материали</a>
+                <a class="nav-link {% if request.path == materials_url %}active{% endif %}" href="{{ materials_url }}"><i class="bi bi-book-fill text-primary"></i> Материали</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link {% if request.path == students_url %}active{% endif %}" href="{{ students_url }}">Студенти</a>
+                <a class="nav-link {% if request.path == students_url %}active{% endif %}" href="{{ students_url }}"><i class="bi bi-person-fill text-primary"></i> Студенти</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link {% if request.path == teachers_url %}active{% endif %}" href="{{ teachers_url }}">Учители</a>
+                <a class="nav-link {% if request.path == teachers_url %}active{% endif %}" href="{{ teachers_url }}"><i class="bi bi-mortarboard-fill text-primary"></i> Учители</a>
             </li>
             
             {% if not request.user.is_authenticated %}
                 <li class="nav-item navbar-separator">
-                    <a class="nav-link" href="/register">Регистрация</a>
+                    <a class="nav-link" href="/register"><i class="bi bi-journal-arrow-up text-primary"></i> Регистрация</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/login">Вход</a>
+                    <a class="nav-link" href="/login"><i class="bi bi-door-closed text-primary"></i> Вход</a>
                 </li>
             {% else %}
                 <li class="nav-item navbar-separator">
-                    <a class="nav-link" href="/logout">Изход</a>
+                    <a class="nav-link" href="/logout"><i class="bi bi-door-open text-primary"></i> Изход</a>
                 </li>
             {% endif %}
         </ul>
