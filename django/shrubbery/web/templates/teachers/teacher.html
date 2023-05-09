@@ -2,12 +2,16 @@
 {% block body %}
     <h4>{{ teacher.full_name }}</h4>
     <img src="/static/{{ teacher.image }}" class="teacher-profile-image border"/>
-    <h6>Поща: <a href="mailto:{{ teacher.email }}">{{ teacher.email }}</a></h6>
+    <h6>
+        <i class="bi bi-envelope"></i>
+        <a href="mailto:{{ teacher.email }}">{{ teacher.email }}</a>
+    </h6>
     <h6>
         {% if teacher.github != "" %}
-            GitHub: <a href="https://github.com/" target="_blank">{{ teacher.github }}</a>
+            <i class="bi bi-github"></i>
+            <a href="https://github.com/" target="_blank">{{ teacher.github }}</a>
         {% else %}
-            GitHub: -
+            <i class="bi bi-github"></i> Няма
         {% endif %}
     </h6>
     <button type="button" class="btn btn-primary">

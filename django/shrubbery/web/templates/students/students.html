@@ -14,12 +14,16 @@
                     <h5 class="card-title"><a href="/student/{{ student.id }}">{{ student.full_name }}</a></h5>
                 </div>
                 <ul class="list-group list-group-flush">
-                    <li class="list-group-item text-truncate">Поща: <a href="mailto:{{ student.email }}">{{ student.email }}</a></li>
+                    <li class="list-group-item text-truncate">
+                        <i class="bi bi-envelope"></i>
+                        <a href="mailto:{{ student.email }}">{{ student.email }}</a>
+                    </li>
                     <li class="list-group-item text-truncate">
                         {% if student.github != "" %}
-                            GitHub: <a href="https://github.com/" target="_blank">{{ student.github }}</a>
+                            <i class="bi bi-github"></i>
+                            <a href="https://github.com/" target="_blank">{{ student.github }}</a>
                         {% else %}
-                            GitHub: -
+                            <i class="bi bi-github"></i> Няма
                         {% endif %}
                     </li>
                 </ul>

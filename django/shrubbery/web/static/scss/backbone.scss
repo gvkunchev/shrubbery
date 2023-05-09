@@ -1,3 +1,14 @@
 .navbar-brand img {
     height: 2em;
 }
+
+.navbar-separator > a::before {
+    content: '|';
+    padding-right: 15px;
+}
+
+@include media-breakpoint-down(lg) {
+    .navbar-separator > a::before {
+        content: none;
+    }
+}

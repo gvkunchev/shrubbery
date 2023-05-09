@@ -9257,13 +9257,9 @@ textarea.form-control-lg {
 .navbar-brand img {
   height: 2em; }
 
-.navbar-separator > a::before {
-  content: '|';
-  padding-right: 15px; }
-
-@media (max-width: 991.98px) {
-  .navbar-separator > a::before {
-    content: none; } }
+@media (min-width: 992px) {
+  .navbar .right-button {
+    margin: 0; } }
 
 .student-card {
   max-width: 250px; }
