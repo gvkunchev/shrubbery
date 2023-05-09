@@ -1,12 +1,12 @@
 {% load sass_tags %}
 {% load static %}
 <!doctype html>
-<html lang="en">
+<html lang="en" data-bs-theme="dark">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link href="{% sass_src  'scss/bootstrap.scss' %}" rel="stylesheet" type="text/css">
+    <link href="{% sass_src  'scss/default_theme.scss' %}" rel="stylesheet" type="text/css">
 
     {% block css %}
         {# Add custom content when extending this template #}
@@ -24,7 +24,7 @@
         <title>Python@ФМИ</title>
     {% endblock %}
   </head>
-  <body class="d-flex flex-column min-vh-100 bg-white">
+  <body class="d-flex flex-column min-vh-100">
     {% block navbar %}
         {% include "backbone/navbar.html" %}
     {% endblock %}
@@ -34,6 +34,6 @@
           {# Add custom content when extending this template #}
       {% endblock %}
     </div>
-    <footer class="mt-auto text-center fs-6 text fw-lighter">Някои права запазени | {% now 'Y' %}</footer>
+    <footer class="mt-auto text-center fs-6 text fw-lighter">Някои права запазени</footer>
   </body>
 </html>
