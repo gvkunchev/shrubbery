@@ -60,6 +60,10 @@
             </form>
         </div>
     </div>
+    
+    {% if info %}
+        <div class="text-info"><i class="bi bi-check-circle-fill"></i> {{ info }}</div>
+    {% endif %}
 
     {% if participants %}
         <table class="table table-hover">

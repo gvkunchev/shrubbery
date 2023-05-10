@@ -22,7 +22,11 @@ def add_participant(request):
         student.email = f'{student.fn}@notset.com'
         student.is_active = False
         student.save()
-        return redirect('web:participants')
+        context = {
+            'participants': Student.objects.all(),
+            'info': 'Студентът е добавен'
+        }
+        return render(request, "participants/participants.html", context)
     else:
         context = {
             'participants': Student.objects.all(),
@@ -45,6 +49,7 @@ def add_participants(request):
         }
         return render(request, "participants/participants.html", context)
     errors = []
+    counter = 0
     for i, line in enumerate(lines):
         if not line:
             continue
@@ -64,13 +69,15 @@ def add_participants(request):
                 student.email = f'{student.fn}@notset.com'
                 student.is_active = False
                 student.save()
+                counter += 1
             else:
                 errors.append((i, line, str(form.errors)))
         except Exception as e:
             errors.append((i, line, f'Грешка при обработка на реда: {e}'))
     context = {
         'participants': Student.objects.all(),
-        'errors': {'csv_list': errors}
+        'errors': {'csv_list': errors},
+        'info': f'Добавени бяха {counter} студента.'
     }
     return render(request, "participants/participants.html", context)
 
@@ -89,11 +96,16 @@ def participant(request, participant):
                 form.save()
             context = {
                 'participant': participant_obj,
-                'errors': form.errors
+                'errors': form.errors,
+                'info': 'Успешно редактирахте студент'
             }
             return render(request, "participants/participant.html", context)
         elif 'delete' in request.POST:
             participant_obj.delete()
-            return redirect('web:participants')
+            context = {
+                'participants': Student.objects.all(),
+                'info': 'Успешно изтрихте студент'
+            }
+            return render(request, "participants/participants.html", context)
     else:
         return render(request, "participants/participant.html", {'participant': participant_obj})
