@@ -1,0 +1,30 @@
+{% extends "backbone/base.html" %}
+{% block body %}
+    <h6 class="location-info"><i class="bi bi-globe"></i> <a href="/participants">Записани</a> > <a href="/participant/{{ participant.id }}">{{ participant.full_name }}</a></h6>
+    <div class="card mt-2 d-inline-block">
+        <div class="card-header">
+            <h5 class="card-title">Добави студент</h5>
+        </div>
+        <div class="card-body">
+            <form method="post" action="/participant/{{ participant.id }}">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="first_name">Име</label>
+                    <input type="text" class="form-control" id="first_name" name="first_name" placeholder="Име" value="{% if request.POST.first_name %}{{ request.POST.first_name }}{% else %}{{ participant.first_name }}{% endif %}">
+                    <div class="text-danger">{{ errors.first_name.as_text }}</div>
+                </div>
+                <div class="form-group">
+                    <label for="last_name">Фамилия</label>
+                    <input type="text" class="form-control" id="last_name" name="last_name" placeholder="Фамилия" value="{% if request.POST.last_name %}{{ request.POST.last_name }}{% else %}{{ participant.last_name }}{% endif %}">
+                    <div class="text-danger">{{ errors.last_name.as_text }}</div>
+                </div>
+                <div class="form-group">
+                    <label for="fn">Факултетен номер</label>
+                    <input type="text" class="form-control" id="fn" name="fn" placeholder="ФН" value="{% if request.POST.fn %}{{ request.POST.fn }}{% else %}{{ participant.fn }}{% endif %}">
+                    <div class="text-danger">{{ errors.fn.as_text }}</div>
+                </div>
+                <button type="submit" class="btn btn-primary mt-2">Запази</button>
+            </form>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,68 @@
+{% extends "backbone/base.html" %}
+{% block body %}
+    <h6 class="location-info"><i class="bi bi-globe"></i> <a href="/participants">Записани</a></h6>
+
+    <div class="card mt-2 d-inline-block">
+        <div class="card-header">
+            <h5 class="card-title">Добави студент</h5>
+        </div>
+        <div class="card-body">
+            <form method="post" action="/add_participant">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="first_name">Име</label>
+                    <input type="text" class="form-control" id="first_name" name="first_name" placeholder="Име" value="{{ request.POST.first_name }}">
+                    <div class="text-danger">{{ errors.first_name.as_text }}</div>
+                </div>
+                <div class="form-group">
+                    <label for="last_name">Фамилия</label>
+                    <input type="text" class="form-control" id="last_name" name="last_name" placeholder="Фамилия" value="{{ request.POST.last_name }}">
+                    <div class="text-danger">{{ errors.last_name.as_text }}</div>
+                </div>
+                <div class="form-group">
+                    <label for="fn">Факултетен номер</label>
+                    <input type="text" class="form-control" id="fn" name="fn" placeholder="ФН" value="{{ request.POST.fn }}">
+                    <div class="text-danger">{{ errors.fn.as_text }}</div>
+                </div>
+                <button type="submit" class="btn btn-primary mt-2">Добави</button>
+            </form>
+        </div>
+    </div>
+
+    {% if participants %}
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">Име</th>
+                    <th scope="col">Факултетен номер</th>
+                    <th scope="col">Поща</th>
+                    <th scope="col">Активен</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for participant in participants %}
+                    <tr>
+                        <th scope="row">
+                            <a href="/participant/{{ participant.id }}">
+                                {{ participant.full_name }}
+                            </a>
+                        </th>
+                        <td>
+                            {{ participant.fn }}
+                        </td>
+                        <td>{{ participant.email }}</td>
+                        <td>
+                            {% if participant.is_active %}
+                                <i class="bi bi-check-circle-fill text-success"></i>
+                            {% else %}
+                                <i class="bi bi-x-circle-fill text-danger"></i>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        Все още няма записани.
+    {% endif %}
+{% endblock %}

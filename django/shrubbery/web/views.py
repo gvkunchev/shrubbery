@@ -5,7 +5,6 @@ from news.models import NewsArticle
 from materials.models import Material
 from users.models import Student, Teacher
 
-from .view_decorators import is_teacher
 
 def missing(request, exception=None):
     '''Not found page.'''
@@ -64,8 +63,3 @@ def news_article(request, article):
     except ObjectDoesNotExist:
         return redirect('web:missing')
     return render(request, "news/news_article.html", {'article': article})
-
-@is_teacher
-def participants(request):
-    '''List of participants.'''
-    return render(request, "participants.html", {'participants': Student.objects.all()})
