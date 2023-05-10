@@ -107,5 +107,7 @@ def participant(request, participant):
                 'info': 'Успешно изтрихте студент'
             }
             return render(request, "participants/participants.html", context)
+        else:
+            return redirect('web:missing')
     else:
         return render(request, "participants/participant.html", {'participant': participant_obj})
