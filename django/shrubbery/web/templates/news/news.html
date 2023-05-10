@@ -1,5 +1,19 @@
 {% extends "backbone/base.html" %}
 {% block body %}
     <h6 class="location-info"><i class="bi bi-globe"></i> <a href="/news">Новини</a></h6>
+    {% if request.user.is_teacher %}
+        <button type="button" class="btn btn-primary">
+            <a href="/news/add" class="text-reset text-decoration-none"><i class="bi bi-plus-circle-fill"></i> Създай новина</a>
+        </button>
+    {% endif %}
     {% include "./news_list.html" %}
+    {% if news.paginator.num_pages > 1 %}
+        <nav class="mt-2">
+            <ul class="pagination justify-content-center">
+                    {% for page in news.paginator.page_range %}
+                        <li class="page-item"><a class="page-link {% if page == news.number %}active{% endif %}" href="?page={{ page }}">{{ page }}</a></li>
+                    {% endfor %}
+            </ul>
+        </nav>
+    {% endif %}
 {% endblock %}

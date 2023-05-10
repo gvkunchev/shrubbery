@@ -5,7 +5,6 @@ from django.core.exceptions import ObjectDoesNotExist
 from news.models import NewsArticle
 from materials.models import Material
 from users.models import Student, Teacher
-from .list_views import StudentPaginationView
 
 
 def missing(request, exception=None):
@@ -15,7 +14,8 @@ def missing(request, exception=None):
 
 def home(request):
     '''Home page.'''
-    return render(request, "home.html", {'news': NewsArticle.objects.all()})
+    MAX_NEWS = 5
+    return render(request, "home.html", {'news': NewsArticle.objects.all()[:MAX_NEWS]})
 
 
 def materials(request):
@@ -59,7 +59,11 @@ def teacher(request, teacher):
 
 def news(request):
     '''News page.'''
-    return render(request, "news/news.html", {'news': NewsArticle.objects.all()})
+    all_news = NewsArticle.objects.all()
+    paginator = Paginator(all_news, 5)
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+    return render(request, "news/news.html", {'news': page_obj})
 
 
 def news_article(request, article):

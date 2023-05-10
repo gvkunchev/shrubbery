@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect
 from django.core.exceptions import ObjectDoesNotExist
 
 from users.forms import AddStudentForm, EditStudentForm
+from news.forms import AddNewsArticleForm
+from news.models import NewsArticle
 from users.models import Student
 
 from .view_decorators import is_teacher
@@ -111,3 +113,60 @@ def participant(request, participant):
             return redirect('web:missing')
     else:
         return render(request, "participants/participant.html", {'participant': participant_obj})
+
+
+@is_teacher
+def add_news_article(request):
+    '''Add news article.'''
+    if request.method == 'POST':
+        data = {
+            'title': request.POST.get('title'),
+            'content': request.POST.get('content'),
+            'author': request.user
+        }
+        form = AddNewsArticleForm(data)
+        if form.is_valid():
+            form.save()
+            return redirect('web:news')
+        else:
+            return render(request, "news/add_news_article.html", {'errors': form.errors})
+    else:
+        return render(request, "news/add_news_article.html")
+
+
+@is_teacher
+def edit_news_article(request, article):
+    '''Edit news article.'''
+    try:
+        article = NewsArticle.objects.get(pk=article)
+    except ObjectDoesNotExist:
+        return redirect('web:missing')
+    if request.method == 'POST':
+        data = {
+            'title': request.POST.get('title'),
+            'content': request.POST.get('content'),
+            'author': request.user
+        }
+        form = AddNewsArticleForm(data, instance=article)
+        if form.is_valid():
+            form.save()
+            return redirect(f'/news/{article.pk}')
+        else:
+            context = {
+                'article': article,
+                'errors': form.errors
+            }
+            return render(request, "news/edit_news_article.html", context)
+    else:
+        return render(request, "news/edit_news_article.html", {'article': article})
+
+
+@is_teacher
+def delete_news_article(request, article):
+    '''Delete news article.'''
+    try:
+        article = NewsArticle.objects.get(pk=article)
+    except ObjectDoesNotExist:
+        return redirect('web:missing')
+    article.delete()
+    return redirect('web:news')

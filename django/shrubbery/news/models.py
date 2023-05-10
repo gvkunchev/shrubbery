@@ -9,6 +9,9 @@ class NewsArticle(models.Model):
     title = models.TextField()
     content = models.TextField()
 
+    class Meta:
+        ordering = ('-date', )
+
     @property
     def human_date(self):
         """Date format used for parsing templates."""

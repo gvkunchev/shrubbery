@@ -1,10 +1,36 @@
 {% extends "backbone/base.html" %}
 {% block body %}
+    <h6 class="location-info"><i class="bi bi-globe"></i> <a href="/news">Новини</a> > <a href="/news/{{ article.pk }}">{{ article.title }}</a></h6>
+    {% if request.user.is_teacher %}
+    <button type="button" class="btn btn-primary">
+        <a href="/news/edit/{{ article.pk }}" class="text-reset text-decoration-none"><i class="bi bi-pencil-square"></i> Редактирай</a>
+    </button>
+    <button type="button" class="btn btn-danger">
+        <a href="/news/delete/{{ article.pk }}" class="text-reset text-decoration-none confirm-delete-news-article"><i class="bi bi-x-circle-fill"></i> Изтрий</a>
+    </button>
+    <!-- Modal -->
+    <div class="modal fade" id="confirm_delete_news_article_modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Потвърждение</h5>
+            </div>
+            <div class="modal-body">
+                Сигурен ли си, че искаш да изтриеш тази новина?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btn-no" data-dismiss="modal">Не</button>
+                <button type="button" class="btn btn-danger btn-yes" data-dismiss="modal">Да</button>
+            </div>
+        </div>
+        </div>
+    </div>
+    {% endif %}
     <h4>{{ article.title }}</h4>
     <h6 class="fw-lighter">{{ article.human_date }}</h6>
     <p>{{ article.content }}</p>
     <br/>
     <button type="button" class="btn btn-primary">
-        <a href="/news" class="text-reset text-decoration-none">&lt; Обратно към всички новини</a>
+        <a href="/news" class="text-reset text-decoration-none"><i class="bi bi-arrow-left-circle-fill"></i> Обратно към всички новини</a>
     </button>
 {% endblock %}

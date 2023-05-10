@@ -18,4 +18,17 @@ $(document).ready(function(){
         $('.confirm-delete-student').parents('form').submit();
     })
 
+    // Confirm deleting a news article
+    $('.confirm-delete-news-article').click(function(e){
+        $('#confirm_delete_news_article_modal').modal('show');
+        e.preventDefault();
+    })
+    $('#confirm_delete_news_article_modal').find('.btn-no').bind('click', function(){
+        $('#confirm_delete_news_article_modal').modal('hide');
+    })
+    $('#confirm_delete_news_article_modal').find('.btn-yes').bind('click', function(){
+        $('#confirm_delete_news_article_modal').modal('hide');
+        window.location = $('.confirm-delete-news-article').attr('href');
+    })
+
 })
