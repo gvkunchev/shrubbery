@@ -5,10 +5,11 @@
                 <span class="fs-6 fw-lighter">{{ article.human_date }}</span>
                 <h5 class="card-title"><a href="news/{{ article.id }}">{{ article.title }}</a></h5>
             </div>
-            <div class="card-body">
-                
-                <p class="card-text">{{ article.content }}</p>
-            </div>
+            {% if not no_content %}
+                <div class="card-body">
+                    <p class="card-text">{{ article.content }}</p>
+                </div>
+            {% endif %}
         </div>
     {% endfor %}
 {% else %}
