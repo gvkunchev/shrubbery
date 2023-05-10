@@ -39,13 +39,17 @@ def participant(request, participant):
     except ObjectDoesNotExist:
         return redirect('web:missing')
     if request.method == 'POST':
-        form = EditStudentForm(request.POST, instance=participant_obj)
-        if form.is_valid():
-            form.save()
-        context = {
-            'participant': participant_obj,
-            'errors': form.errors
-        }
-        return render(request, "participants/participant.html", context)
+        if 'edit' in request.POST:
+            form = EditStudentForm(request.POST, instance=participant_obj)
+            if form.is_valid():
+                form.save()
+            context = {
+                'participant': participant_obj,
+                'errors': form.errors
+            }
+            return render(request, "participants/participant.html", context)
+        else:
+            participant_obj.delete()
+            return redirect('web:participants')
     else:
         return render(request, "participants/participant.html", {'participant': participant_obj})

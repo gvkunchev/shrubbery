@@ -3,7 +3,7 @@
     <h6 class="location-info"><i class="bi bi-globe"></i> <a href="/participants">Записани</a> > <a href="/participant/{{ participant.id }}">{{ participant.full_name }}</a></h6>
     <div class="card mt-2 d-inline-block">
         <div class="card-header">
-            <h5 class="card-title">Добави студент</h5>
+            <h5 class="card-title">Редактирай студент</h5>
         </div>
         <div class="card-body">
             <form method="post" action="/participant/{{ participant.id }}">
@@ -23,7 +23,27 @@
                     <input type="text" class="form-control" id="fn" name="fn" placeholder="ФН" value="{% if request.POST.fn %}{{ request.POST.fn }}{% else %}{{ participant.fn }}{% endif %}">
                     <div class="text-danger">{{ errors.fn.as_text }}</div>
                 </div>
-                <button type="submit" class="btn btn-primary mt-2">Запази</button>
+                <button type="submit" name="edit" class="btn btn-primary mt-2">Запази</button>
+
+                <button type="submit" name="delete" class="btn btn-danger mt-2 confirm-delete-student">Изтрий</button>
+                <!-- Modal -->
+                <div class="modal fade" id="confirm_delete_student_modal" tabindex="-1" role="dialog">
+                    <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Потвърждение</h5>
+                        </div>
+                        <div class="modal-body">
+                            Сигурен ли си, че искаш да изтриеш този студент?
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary btn-no" data-dismiss="modal">Не</button>
+                            <button type="button" class="btn btn-danger btn-yes" data-dismiss="modal">Да</button>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+
             </form>
         </div>
     </div>
