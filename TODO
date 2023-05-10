@@ -1,0 +1,14 @@
+Make proper translation for all error messages and get rid of the forms that are currently placed only for translating errors.
+Allow adding teachers
+Allow adding materials
+Add registration for students (email verification and so on)
+Add forum
+Add vouchers
+Add points
+Add homeworks
+Add challanges
+Add activity monitoring
+Add email alerts
+Add settings for email alerts
+Dockerize (Needs Apache and proper handling of /madia and /static)
+* Consider whether homewors can have discussion fields so that we don't need to make separate forum topics
