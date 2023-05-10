@@ -1,9 +1,11 @@
+from django.core.paginator import Paginator
 from django.shortcuts import render, redirect
 from django.core.exceptions import ObjectDoesNotExist
 
 from news.models import NewsArticle
 from materials.models import Material
 from users.models import Student, Teacher
+from .list_views import StudentPaginationView
 
 
 def missing(request, exception=None):
@@ -23,7 +25,11 @@ def materials(request):
 
 def students(request):
     '''Students page.'''
-    return render(request, "students/students.html", {'students': Student.objects.filter(is_active=True)})
+    all_students = Student.objects.filter(is_active=True)
+    paginator = Paginator(all_students, 10)
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+    return render(request, "students/students.html", {'students': page_obj})
 
 
 def student(request, student):

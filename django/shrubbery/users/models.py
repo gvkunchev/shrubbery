@@ -22,6 +22,9 @@ def rename_profile_picture(instance, filename):
 class User(AbstractUser):
     """User model."""
 
+    class Meta:
+        ordering = ('is_active', 'first_name', 'last_name')
+
     username = None
     email = models.EmailField(unique=True)
     first_name = models.CharField(max_length=100)

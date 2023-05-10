@@ -30,6 +30,13 @@
                 </ul>
             </div>
         {% endfor %}
+        <nav class="mt-2">
+            <ul class="pagination justify-content-center">
+                {% for page in students.paginator.page_range %}
+                    <li class="page-item"><a class="page-link {% if page == students.number %}active{% endif %}" href="?page={{ page }}">{{ page }}</a></li>
+                {% endfor %}
+            </ul>
+        </nav>
     {% else %}
         Все още няма регистрирани студенти.
     {% endif %}
