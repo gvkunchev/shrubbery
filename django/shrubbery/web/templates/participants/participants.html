@@ -29,6 +29,38 @@
         </div>
     </div>
 
+    <div class="card mt-2 d-inline-block align-top">
+        <div class="card-header">
+            <h5 class="card-title">Добави списък със студенти</h5>
+        </div>
+        <div class="card-body">
+            <div class="mb-2" style="max-width: 350px">
+                <i class="bi bi-info-circle-fill"></i> Качи .csv файл с един ред за всеки студент. Всеки ред трябва да има три стойности - име, фамилия, факултетен номер.
+            </div>
+            <form action="add_participants" method="POST" enctype="multipart/form-data" class="form-horizontal"> 
+                {% csrf_token %}
+                <input type="file" accept=".csv" name="csv_file" required="True" class="form-control" data-buttonText="Your label here.">
+                <div class="text-danger">{{ errors.csv }}</div>
+                <div class="text-danger">
+                    {% if errors.csv_list %}
+                        <ul>
+                            {% for error in errors.csv_list %}
+                                <li>
+                                    <ul>
+                                        <li>Индекс: {{ error.0 }}</li>
+                                        <li>Стойност: {{ error.1 }}</li>
+                                        <li>Грешка: {{ error.2 }}</li>
+                                    </ul>
+                                <br/>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </div>
+                <button class="btn btn-primary mt-2">Добави</button>
+            </form>
+        </div>
+    </div>
+
     {% if participants %}
         <table class="table table-hover">
             <thead>
