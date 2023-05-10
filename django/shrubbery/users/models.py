@@ -64,8 +64,9 @@ class User(AbstractUser):
             thumb = img.resize((width, height))
         else:
             # create transparent background size of requested thumbnail
-            thumb = Image.new('RGB', (width, height), (255, 255, 255)) 
-            thumb.putalpha(0)
+            thumb = Image.new('RGB', (width, height), (255, 255, 255))
+            if self.image.path.endswith('.png'):
+                thumb.putalpha(0)
 
             if thumbnail_aspect < original_aspect:
             # thumb aspect ratio is more narrow than original
