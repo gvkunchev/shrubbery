@@ -52,7 +52,7 @@ class EditUserForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ('first_name', 'last_name', 'github', 'image')
+        fields = ('first_name', 'last_name', 'github', 'image', 'dark_theme')
         error_messages = {
             'first_name': {
                 'required': "Това поле е задължително",

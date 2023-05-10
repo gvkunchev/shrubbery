@@ -32,7 +32,19 @@
                     <div class="text-danger">{{ errors.github.as_text }}</div>
                 </div>
                 <div class="form-group">
+                    <div class="form-check mt-2">
+                        <label class="form-check-label" for="dark_theme">
+                        <input class="form-check-input" name="dark_theme" type="checkbox" {% if request.user.dark_theme %}checked="checked"{% endif %} id="dark_theme">Тъмна тема</label>
+                    </div>
+                </div>
+                <hr/>
+                <div class="form-group">
                     <label for="image">Снимка</label>
+                    {% if request.user.image %}
+                        <img src="/static/{{ request.user.image }}" class="thumbnail-profile-picture my-2"/>
+                    {% else %}
+                        <img src="/static/img/blank-profile.png" class="thumbnail-profile-picture my-2"/>
+                    {% endif %}
                     <input type="file" name="image" class="form-control" id="image" accept=".png, .jpeg, .jpg"/>
                     <div class="text-danger">{{ errors.image.as_text }}</div>
                 </div>

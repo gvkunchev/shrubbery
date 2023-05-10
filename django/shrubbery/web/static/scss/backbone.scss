@@ -43,3 +43,10 @@
         height: 2em !important;
     }
 }
+
+.thumbnail-profile-picture {
+    width: 3em;
+    height: 3em;
+    border-radius: 50%;
+    border: 1px solid $gray-500;
+}

@@ -31,6 +31,7 @@ class User(AbstractUser):
     last_name = models.CharField(max_length=100)
     image = models.ImageField(upload_to=rename_profile_picture, blank=True)
     github = models.CharField(max_length=100, blank=True)
+    dark_theme = models.BooleanField(default=False)
 
     objects = UserManager()
 

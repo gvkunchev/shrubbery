@@ -9289,6 +9289,12 @@ textarea.form-control-lg {
     width: 2em !important;
     height: 2em !important; }
 
+.thumbnail-profile-picture {
+  width: 3em;
+  height: 3em;
+  border-radius: 50%;
+  border: 1px solid #adb5bd; }
+
 .student-card {
   max-width: 250px; }
 
