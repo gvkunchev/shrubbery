@@ -1,7 +1,7 @@
 {% extends "backbone/base.html" %}
 {% block body %}
-    <h6 class="location-info"><i class="bi bi-globe"></i> <a href="/news">Новини</a> > <a href="/news/edit/{{ article.pk }}">Редактирай {{ article.title }}</a></h6>
-    <div class="card mt-2 d-inline-block">
+    <h6 class="location-info"><i class="bi bi-globe"></i> <a href="/news">Новини</a> > <a href="/news/{{ article.pk }}">{{ article.title }}</a> > <a href="/news/edit/{{ article.pk }}">Редактирай</a></h6>
+    <div class="card mt-2">
         <div class="card-header">
             <h5 class="card-title">Редактирай новина</h5>
         </div>
