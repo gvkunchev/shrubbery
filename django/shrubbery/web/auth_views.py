@@ -4,9 +4,11 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.utils.http import urlsafe_base64_decode
 from django.utils.encoding import force_str
+from django.contrib.auth.forms import PasswordChangeForm
 
-from users.forms import EditUserForm, PasswordSetForm
-from users.models import User
+from users.forms import EditUserForm, PasswordSetForm, RegisterStudent
+from users.emails import send_activation_email
+from users.models import User, Student
 from users.tokens import account_activation_token
 
 
@@ -65,6 +67,7 @@ def activate(request):
                 user = form.save(commit=False)
                 user.is_active = True
                 user.save()
+                login(request, user)
                 update_session_auth_hash(request, user)
                 return render(request, "home.html", {'welcome': True})
             else:
@@ -111,3 +114,37 @@ def settings(request):
             return redirect('web:missing')
     else:
         return render(request, "auth/settings.html")
+
+
+def register(request):
+    """Student form for registering their email."""
+    if request.method == 'POST':
+        try:
+            first_name = request.POST['first_name'].strip()
+            last_name = request.POST['last_name'].strip()
+            fn = request.POST['fn'].strip()
+            user = Student.objects.get(first_name=first_name, last_name=last_name, fn=fn)
+        except Exception as e:
+            context = {
+                'error': 'Липсваш от списъка.'
+            }
+            return render(request, "auth/register.html", context)
+        if user.is_active:
+            context = {
+                'error': 'Вече си регистриран.'
+            }
+            return render(request, "auth/register.html", context)
+        form = RegisterStudent(request.POST, instance=user)
+        if form.is_valid():
+            form.save()
+            send_activation_email(request, user)
+            context = {
+                'info': 'Изпратен е имейл за активация.'
+            }
+        else:
+            context = {
+                'errors': form.errors
+            }
+        return render(request, "auth/register.html", context)
+    else:
+        return render(request, "auth/register.html")

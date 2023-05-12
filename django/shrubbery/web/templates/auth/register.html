@@ -1,0 +1,39 @@
+{% extends "backbone/base.html" %}
+{% block location %}
+    <h6 class="location-info"><i class="bi bi-globe"></i> <a href="/register">Регистрация</a></h6>
+{% endblock %}
+{% block body %}
+    <div class="card d-inline-block m-1">
+        <h5 class="card-header">Регистрация</h5>
+        <div class="card-body">
+            <form method="post" class="d-inline-block">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="first_name">Име</label>
+                    <input type="text" required="required" class="form-control" id="first_name" name="first_name" placeholder="Име" value="{% if request.POST.first_name %}{{ request.POST.first_name }}{% else %}{{ request.user.first_name }}{% endif %}">
+                    <div class="text-danger">{{ errors.first_name.as_text }}</div>
+                </div>
+                <div class="form-group">
+                    <label for="last_name">Фамилия</label>
+                    <input type="text" required="required" class="form-control" id="last_name" name="last_name" placeholder="Фамилия" value="{% if request.POST.last_name %}{{ request.POST.last_name }}{% else %}{{ request.user.last_name }}{% endif %}">
+                    <div class="text-danger">{{ errors.last_name.as_text }}</div>
+                </div>
+                <div class="form-group">
+                    <label for="fn">Факултетен номер</label>
+                    <input type="text" required="required" class="form-control" id="fn" name="fn" placeholder="Факултетен номер" value="{% if request.POST.fn %}{{ request.POST.fn }}{% else %}{{ request.user.fn }}{% endif %}">
+                </div>
+                <div class="form-group">
+                    <label for="email">Електронна поща</label>
+                    <input type="text" required="required" class="form-control" id="email" name="email" placeholder="Електронна поща" value="{% if request.POST.email %}{{ request.POST.email }}{% else %}{{ request.user.email }}{% endif %}">
+                </div>
+                {% if info %}
+                    <div class="text-info"><i class="bi bi-check-circle-fill"></i> {{ info }}</div>
+                {% endif %}
+                {% if error %}
+                    <div class="text-danger"><i class="bi bi-x-circle-fill"></i> {{ error }}</div>
+                {% endif %}
+                <button type="submit" class="btn btn-primary mt-2">Регистрирай ме</button>
+            </form>
+        </div>
+    </div>
+{% endblock %}

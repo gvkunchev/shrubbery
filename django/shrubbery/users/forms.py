@@ -28,6 +28,13 @@ class AddStudentForm(UserCreationForm):
         self.fields['password2'].required = False
 
 
+class RegisterStudent(forms.ModelForm):
+
+    class Meta:
+        model = Student
+        fields = ('first_name', 'last_name', 'fn', 'email')
+
+
 class AddTeacherForm(UserCreationForm):
 
     class Meta:

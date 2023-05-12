@@ -204,7 +204,7 @@ def add_teacher(request):
         teacher.save()
         context = {
             'team': Teacher.objects.all(),
-            'info': 'Учителят е добавен'
+            'info': 'Учителят е добавен. Изпратен е имейл за активация.'
         }
         send_activation_email(request, teacher)
         # Keeping the POST data will refill
