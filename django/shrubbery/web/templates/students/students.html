@@ -4,9 +4,11 @@
 {% endblock %}
 {% block body %}
     {% if request.user.is_teacher %}
-        <button type="button" class="btn btn-primary">
-            <a href="/participants" class="text-reset text-decoration-none"><i class="bi bi-pencil-square"></i> Редактирай студентите</a>
-        </button>
+        <a href="/participants" class="text-reset text-decoration-none">
+            <button type="button" class="btn btn-primary">
+                <i class="bi bi-pencil-square"></i> Редактирай студентите
+            </button>
+        </a>
         <hr class="mt-2 mb-1"/>
     {% endif %}
 

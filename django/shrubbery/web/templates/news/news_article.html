@@ -4,12 +4,16 @@
 {% endblock %}
 {% block body %}
     {% if request.user.is_teacher %}
-    <button type="button" class="btn btn-primary">
-        <a href="/news/edit/{{ article.pk }}" class="text-reset text-decoration-none"><i class="bi bi-pencil-square"></i> Редактирай</a>
-    </button>
-    <button type="button" class="btn btn-danger">
-        <a href="/news/delete/{{ article.pk }}" class="text-reset text-decoration-none confirm-delete-news-article"><i class="bi bi-x-circle-fill"></i> Изтрий</a>
-    </button>
+    <a href="/news/edit/{{ article.pk }}" class="text-reset text-decoration-none">
+        <button type="button" class="btn btn-primary">
+            <i class="bi bi-pencil-square"></i> Редактирай
+        </button>
+    </a>
+    <a href="/news/delete/{{ article.pk }}" class="text-reset text-decoration-none confirm-delete-news-article">
+        <button type="button" class="btn btn-danger">
+            <i class="bi bi-x-circle-fill"></i> Изтрий
+        </button>
+    </a>
     <hr class="mt-2 mb-1"/>
     <!-- Modal -->
     <div class="modal fade" id="confirm_delete_news_article_modal" tabindex="-1" role="dialog">
@@ -31,9 +35,11 @@
     {% endif %}
     <h4>{{ article.title }}</h4>
     <h6 class="fw-lighter">{{ article.human_date }}</h6>
-    <p>{{ article.content }}</p>
-    <br/>
-    <button type="button" class="btn btn-primary">
-        <a href="/news" class="text-reset text-decoration-none"><i class="bi bi-arrow-left-circle-fill"></i> Обратно към всички новини</a>
-    </button>
+    <div class="showdown-trigger">{{ article.content }}</div>
+    <hr class="mt-2 mb-1"/>
+    <a href="/news" class="text-reset text-decoration-none">
+        <button type="button" class="btn btn-primary">
+            <i class="bi bi-arrow-left-circle-fill"></i> Обратно към всички новини
+        </button>
+    </a>
 {% endblock %}

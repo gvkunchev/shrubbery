@@ -12,17 +12,17 @@
                 {% csrf_token %}
                 <div class="form-group">
                     <label for="first_name">Име</label>
-                    <input type="text" class="form-control" id="first_name" name="first_name" placeholder="Име" value="{{ request.POST.first_name }}">
+                    <input type="text" required="required" class="form-control" id="first_name" name="first_name" placeholder="Име" value="{{ request.POST.first_name }}">
                     <div class="text-danger">{{ errors.first_name.as_text }}</div>
                 </div>
                 <div class="form-group">
                     <label for="last_name">Фамилия</label>
-                    <input type="text" class="form-control" id="last_name" name="last_name" placeholder="Фамилия" value="{{ request.POST.last_name }}">
+                    <input type="text" required="required" class="form-control" id="last_name" name="last_name" placeholder="Фамилия" value="{{ request.POST.last_name }}">
                     <div class="text-danger">{{ errors.last_name.as_text }}</div>
                 </div>
                 <div class="form-group">
                     <label for="fn">Факултетен номер</label>
-                    <input type="text" class="form-control" id="fn" name="fn" placeholder="ФН" value="{{ request.POST.fn }}">
+                    <input type="text" required="required" class="form-control" id="fn" name="fn" placeholder="ФН" value="{{ request.POST.fn }}">
                     <div class="text-danger">{{ errors.fn.as_text }}</div>
                 </div>
                 <button type="submit" class="btn btn-primary mt-2">Добави</button>

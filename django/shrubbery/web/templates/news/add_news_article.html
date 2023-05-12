@@ -3,7 +3,7 @@
     <h6 class="location-info"><i class="bi bi-globe"></i> <a href="/news">Новини</a> > <a href="/news/add">Създай новина</a></h6>
 {% endblock %}
 {% block body %}
-    <div class="card mt-2 d-inline-block">
+    <div class="card mt-2">
         <div class="card-header">
             <h5 class="card-title">Създай новина</h5>
         </div>
@@ -12,12 +12,12 @@
                 {% csrf_token %}
                 <div class="form-group">
                     <label for="title">Заглавие</label>
-                    <input type="text" class="form-control" id="title" name="title" placeholder="Заглавие" value="{{ request.POST.title }}">
+                    <input type="text" required="required" class="form-control" id="title" name="title" placeholder="Заглавие" value="{{ request.POST.title }}">
                     <div class="text-danger">{{ errors.title.as_text }}</div>
                 </div>
                 <div class="form-group">
                     <label for="content">Съдържание</label>
-                    <textarea name="content" class="form-control" id="content" placeholder="Съдържание">{{ request.POST.content }}</textarea>
+                    <textarea required="required" name="content" class="form-control" id="content" placeholder="Съдържание">{{ request.POST.content }}</textarea>
                     <div class="text-danger">{{ errors.content.as_text }}</div>
                 </div>
                 <button type="submit" name="edit" class="btn btn-primary mt-2">Създай</button>
