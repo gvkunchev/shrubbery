@@ -1,4 +1,3 @@
-Make proper translation for all error messages and get rid of the forms that are currently placed only for translating errors.
 Allow adding teachers
 Allow adding materials
 Add registration for students (email verification and so on)
