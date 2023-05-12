@@ -29,6 +29,9 @@
                 {% if info %}
                     <div class="text-info"><i class="bi bi-check-circle-fill"></i> {{ info }}</div>
                 {% endif %}
+                {% if error %}
+                    <div class="text-danger"><i class="bi bi-check-circle-fill"></i> {{ error }}</div>
+                {% endif %}
 
                 <button type="submit" name="edit" class="btn btn-primary mt-2">Запази</button>
 

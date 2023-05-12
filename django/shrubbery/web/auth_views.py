@@ -2,9 +2,12 @@ from django.contrib.auth import (authenticate, login, logout,
                                  update_session_auth_hash)
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.forms import PasswordChangeForm
+from django.utils.http import urlsafe_base64_decode
+from django.utils.encoding import force_str
 
-from users.forms import EditUserForm
+from users.forms import EditUserForm, PasswordSetForm
+from users.models import User
+from users.tokens import account_activation_token
 
 
 def login_(request):
@@ -30,6 +33,48 @@ def logout_(request):
     '''Logut.'''
     logout(request)
     return redirect('/')
+
+
+def activate(request):
+    """Activate an account."""
+    if request.method == 'GET':
+        try:
+            uidb64 = request.GET['uidb64']
+            token = request.GET['token']
+            uid = force_str(urlsafe_base64_decode(uidb64))
+            user = User.objects.get(pk=uid)
+        except:
+            user = None
+        if user is not None and account_activation_token.check_token(user, token):
+            return render(request, 'auth/activated.html', {'correct': True})
+        else:
+            return render(request, 'auth/activated.html', {'correct': False})
+    else:
+        try:
+            uidb64 = request.POST['uidb64']
+            token = request.POST['token']
+            uid = force_str(urlsafe_base64_decode(uidb64))
+            user = User.objects.get(pk=uid)
+        except Exception as e:
+            print(request.POST['uidb64'])
+            print(request.POST['token'])
+            user = None
+        if user is not None and account_activation_token.check_token(user, token):
+            form = PasswordSetForm(user, request.POST)
+            if form.is_valid():
+                user = form.save(commit=False)
+                user.is_active = True
+                user.save()
+                update_session_auth_hash(request, user)
+                return render(request, "home.html", {'welcome': True})
+            else:
+                context = {
+                    'correct': True,
+                    'errors': form.errors
+                }
+                return render(request, 'auth/activated.html', context)
+        else:
+            return render(request, 'auth/activated.html', {'correct': False})
 
 
 @login_required

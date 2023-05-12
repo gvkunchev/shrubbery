@@ -5,12 +5,24 @@
 {% endblock %}
 
 {% block body %}
-    <div class="card mt-2">
-        <div class="card-body">
-            <h5 class="card-title">Здравейте!</h5>
-            <p class="card-text">Това е сайтът на избираемия курс "Въведение в програмирането на Python" към <a href="https://www.fmi.uni-sofia.bg/" target="_blank">ФМИ София</a>.</p>
+    {% if welcome %}
+        <div class="card mt-2">
+            <div class="card-body">
+                <h5 class="card-title">Добре дошъл, {{ request.user.full_name }}!</h5>
+                <p class="card-text">
+                    Успешно активира своя акаунт и сложи парола.
+                    Не забравяй да разгледаш и останалите <a href="/settings">настройки на акаунта</a>.
+                </p>
+            </div>
         </div>
-    </div>
+    {% else %}
+        <div class="card mt-2">
+            <div class="card-body">
+                <h5 class="card-title">Здравейте!</h5>
+                <p class="card-text">Това е сайтът на избираемия курс "Въведение в програмирането на Python" към <a href="https://www.fmi.uni-sofia.bg/" target="_blank">ФМИ София</a>.</p>
+            </div>
+        </div>
+    {% endif %}
 
     <div class="card mt-2">
         <div class="card-header">Новини</div>

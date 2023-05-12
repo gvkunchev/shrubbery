@@ -7,6 +7,7 @@ from materials.forms import EditMaterialForm
 from news.forms import AddNewsArticleForm
 from news.models import NewsArticle
 from users.models import Student, Teacher
+from users.emails import send_activation_email
 from materials.models import Material
 
 from .view_decorators import is_teacher
@@ -126,12 +127,24 @@ def participant(request, participant):
                 }
             return render(request, "participants/participant.html", context)
         elif 'delete' in request.POST:
-            participant_obj.delete()
-            context = {
-                'participants': Student.objects.all(),
-                'info': 'Успешно изтрихте студент'
-            }
-            return render(request, "participants/participants.html", context)
+            if participant_obj.is_active:
+                context = {
+                    'participant': participant_obj,
+                    'error': ('Не можете да изтриете активен студент. '
+                              'Използвайте конзолата, за да го деактивирате.')
+                }
+                return render(request, "participants/participant.html", context)
+            else:
+                participant_obj.delete()
+                context = {
+                    'participants': Student.objects.all(),
+                    'info': 'Успешно изтрихте студент'
+                }
+                # Keeping the POST data will refill
+                # the inputs with it, which is useful on
+                # error, but should not be done on success
+                request.POST = {}
+                return render(request, "participants/participants.html", context)
         else:
             return redirect('web:missing')
     else:
@@ -157,12 +170,24 @@ def team_member(request, teacher):
             }
             return render(request, "team/team_member.html", context)
         elif 'delete' in request.POST:
-            teacher_obj.delete()
-            context = {
-                'team': Teacher.objects.all(),
-                'info': 'Успешно изтрихте учител'
-            }
-            return render(request, "team/team.html", context)
+            if teacher_obj.is_active:
+                context = {
+                    'participant': teacher_obj,
+                    'error': ('Не можете да изтриете активен учител. '
+                              'Използвайте конзолата, за да го деактивирате.')
+                }
+                return render(request, "team/team_member.html", context)
+            else:
+                teacher_obj.delete()
+                context = {
+                    'team': Student.objects.all(),
+                    'info': 'Успешно изтрихте учител'
+                }
+                # Keeping the POST data will refill
+                # the inputs with it, which is useful on
+                # error, but should not be done on success
+                request.POST = {}
+                return render(request, "team/team.html", context)
         else:
             return redirect('web:missing')
     else:
@@ -174,13 +199,14 @@ def add_teacher(request):
     '''Add new teacher.'''
     form = AddTeacherForm(request.POST)
     if form.is_valid():
-        student = form.save(commit=False)
-        student.is_active = False
-        student.save()
+        teacher = form.save(commit=False)
+        teacher.is_active = False
+        teacher.save()
         context = {
             'team': Teacher.objects.all(),
             'info': 'Учителят е добавен'
         }
+        send_activation_email(request, teacher)
         # Keeping the POST data will refill
         # the inputs with it, which is useful on
         # error, but should not be done on success

@@ -1,0 +1,32 @@
+{% extends "backbone/base.html" %}
+{% block location %}
+    <h6 class="location-info"><i class="bi bi-globe"></i> <a href="/activate">Активация</a></h6>
+{% endblock %}
+{% block body %}
+    {% if correct %}
+        <h6>Успешна активация. Моля създайте парола за своя акаунт.</h6>
+        <div class="card d-inline-block m-1 align-top">
+            <h5 class="card-header">Парола</h5>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    <input type="hidden" value="{{ request.GET.uidb64 }}" name="uidb64">
+                    <input type="hidden" value="{{ request.GET.token }}" name="token">
+                    <div class="form-group">
+                        <label for="new_password1">Нова парола</label>
+                        <input type="password" required="required" name="new_password1" class="form-control" id="new_password1" placeholder="Парола" value="">
+                        <div class="text-danger">{{ errors.new_password1.as_text }}</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="new_password2">Потвърди новата паролата</label>
+                        <input type="password" required="required" name="new_password2" class="form-control" id="new_password2" placeholder="Парола" value="">
+                        <div class="text-danger">{{ errors.new_password2.as_text }}</div>
+                    </div>
+                    <button type="submit" name="change_password" class="btn btn-primary mt-2">Готово</button>
+                </form>
+            </div>
+        </div>
+    {% else %}
+        Изглежда линкът, който използвате, е невалиден.
+    {% endif %}
+{% endblock %}

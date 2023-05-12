@@ -1,7 +1,19 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import PasswordChangeForm
 
 from .models import Student, Teacher, User
+
+
+class PasswordSetForm(PasswordChangeForm):
+
+    class Meta:
+        model = User
+        fields = ('new_password1', 'new_password1')
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['old_password'].required = False
 
 
 class AddStudentForm(UserCreationForm):

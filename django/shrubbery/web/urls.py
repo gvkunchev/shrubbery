@@ -33,4 +33,5 @@ urlpatterns = [
     re_path(r'^login$', auth_views.login_, name='login'),
     re_path(r'^logout$', auth_views.logout_, name='logout'),
     re_path(r'^settings$', auth_views.settings, name='settings'),
+    re_path(r'^activate$', auth_views.activate, name='activate'),
 ]
