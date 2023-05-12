@@ -130,8 +130,8 @@ def participant(request, participant):
             if participant_obj.is_active:
                 context = {
                     'participant': participant_obj,
-                    'error': ('Не можете да изтриете активен студент. '
-                              'Използвайте конзолата, за да го деактивирате.')
+                    'error': ('Не можеш да изтриеш активен студент. '
+                              'Използвай конзолата, за да го деактивираш.')
                 }
                 return render(request, "participants/participant.html", context)
             else:
@@ -173,8 +173,8 @@ def team_member(request, teacher):
             if teacher_obj.is_active:
                 context = {
                     'participant': teacher_obj,
-                    'error': ('Не можете да изтриете активен учител. '
-                              'Използвайте конзолата, за да го деактивирате.')
+                    'error': ('Не можеш да изтриеш активен учител. '
+                              'Използвай конзолата, за да го деактивираш.')
                 }
                 return render(request, "team/team_member.html", context)
             else:
