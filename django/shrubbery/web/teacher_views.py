@@ -1,10 +1,10 @@
 from django.shortcuts import render, redirect
 from django.core.exceptions import ObjectDoesNotExist
 
-from users.forms import AddStudentForm, EditStudentForm
+from users.forms import AddStudentForm, EditStudentForm, EditTeacherForm
 from news.forms import AddNewsArticleForm
 from news.models import NewsArticle
-from users.models import Student
+from users.models import Student, Teacher
 
 from .view_decorators import is_teacher
 
@@ -13,6 +13,12 @@ from .view_decorators import is_teacher
 def participants(request):
     '''List of participants.'''
     return render(request, "participants/participants.html", {'participants': Student.objects.all()})
+
+
+@is_teacher
+def team(request):
+    '''Team of teachers view.'''
+    return render(request, "team/team.html", {'team': Teacher.objects.all()})
 
 
 @is_teacher
@@ -113,6 +119,37 @@ def participant(request, participant):
             return redirect('web:missing')
     else:
         return render(request, "participants/participant.html", {'participant': participant_obj})
+
+
+@is_teacher
+def team_member(request, teacher):
+    '''Edit a single teacher.'''
+    try:
+        teacher_obj = Teacher.objects.get(pk=teacher)
+    except ObjectDoesNotExist:
+        return redirect('web:missing')
+    if request.method == 'POST':
+        if 'edit' in request.POST:
+            form = EditTeacherForm(request.POST, instance=teacher_obj)
+            if form.is_valid():
+                form.save()
+            context = {
+                'teacher': teacher_obj,
+                'errors': form.errors,
+                'info': 'Успешно редактирахте учител'
+            }
+            return render(request, "team/team_member.html", context)
+        elif 'delete' in request.POST:
+            teacher_obj.delete()
+            context = {
+                'team': Teacher.objects.all(),
+                'info': 'Успешно изтрихте учител'
+            }
+            return render(request, "team/team.html", context)
+        else:
+            return redirect('web:missing')
+    else:
+        return render(request, "team/team_member.html", {'teacher': teacher_obj})
 
 
 @is_teacher

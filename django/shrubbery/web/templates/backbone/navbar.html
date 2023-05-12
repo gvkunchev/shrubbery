@@ -7,6 +7,7 @@
 {% url 'web:teachers' as teachers_url %}
 {% url 'web:participants' as participants_url %}
 {% url 'web:settings' as settings_url %}
+{% url 'web:team' as team_url %}
 
 <nav class="navbar navbar-expand-lg">
 <div class="container-fluid">
@@ -52,6 +53,7 @@
                     </a>
                     <div class="dropdown-menu">
                         <a class="dropdown-item" href="{{ participants_url }}"><i class="bi bi-card-checklist text-primary"></i> Записани студенти</a>
+                        <a class="dropdown-item" href="{{ team_url }}"><i class="bi bi-card-checklist text-primary"></i> Учителски колектив</a>
                     </div>
                 </li>
             {% endif %}

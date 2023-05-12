@@ -1,0 +1,36 @@
+{% extends "backbone/base.html" %}
+{% block body %}
+    <h6 class="location-info"><i class="bi bi-globe"></i> <a href="/team">Учителски колектив</a></h6>
+    {% if team %}
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">Име</th>
+                    <th scope="col">Поща</th>
+                    <th scope="col">Активен</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for teacher in team %}
+                    <tr>
+                        <th scope="row">
+                            <a href="/team_member/{{ teacher.id }}">
+                                {{ teacher.full_name }}
+                            </a>
+                        </th>
+                        <td>{{ teacher.email }}</td>
+                        <td>
+                            {% if teacher.is_active %}
+                                <i class="bi bi-check-circle-fill text-success"></i>
+                            {% else %}
+                                <i class="bi bi-x-circle-fill text-danger"></i>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        Все още няма учители.
+    {% endif %}
+{% endblock %}
