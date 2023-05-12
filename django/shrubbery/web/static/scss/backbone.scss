@@ -50,3 +50,19 @@
     border-radius: 50%;
     border: 1px solid $gray-500;
 }
+
+.showdown-input {
+    min-height: 400px !important;
+}
+
+
+.modal-dialog {
+    width: 90% !important;
+    max-width: 90% !important;
+}
+
+#showdown-modal .modal-content,
+#showdown-modal .modal-body{
+    width: 100% !important;
+    max-width: 100% !important;
+}

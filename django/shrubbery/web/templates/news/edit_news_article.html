@@ -17,13 +17,14 @@
                 </div>
                 <div class="form-group">
                     <label for="content">Съдържание</label>
-                    <textarea name="content" class="form-control" id="content" placeholder="Съдържание">{% if request.POST.content %}{{ request.POST.content }}{% else %}{{ article.content }}{% endif %}</textarea>
+                    <textarea name="content" class="form-control showdown-input" id="content" placeholder="Съдържание">{% if request.POST.content %}{{ request.POST.content }}{% else %}{{ article.content }}{% endif %}</textarea>
                     <div class="text-danger">{{ errors.content.as_text }}</div>
                 </div>
                 {% if info %}
                     <div class="text-info"><i class="bi bi-check-circle-fill"></i> {{ info }}</div>
                 {% endif %}
                 <button type="submit" name="edit" class="btn btn-primary mt-2">Запази</button>
+                <button class="btn btn-secondary mt-2 showdown-preview" data-showdown-source="content"><i class="bi bi-eye-fill"></i> Преглед</button>
             </form>
         </div>
     </div>
