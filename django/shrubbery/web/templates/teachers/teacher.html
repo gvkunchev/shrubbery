@@ -1,6 +1,8 @@
 {% extends "backbone/base.html" %}
+{% block location %}
+    <h6 class="location-info"><i class="bi bi-globe"></i> <a href="/teachers">Учители</a> > <a href="/teacher/{{ teacher.id }}">{{ teacher.full_name }}</a></h6>
+{% endblock %}
 {% block body %}
-<h6 class="location-info"><i class="bi bi-globe"></i> <a href="/teachers">Учители</a> > <a href="/teacher/{{ teacher.id }}">{{ teacher.full_name }}</a></h6>
     <h4>{{ teacher.full_name }}</h4>
     {% if teach.image %}
         <img src="/static/{{ teacher.image }}" class="teacher-profile-image border"/>

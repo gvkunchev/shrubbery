@@ -1,6 +1,14 @@
 {% extends "backbone/base.html" %}
-{% block body %}
+{% block location %}
     <h6 class="location-info"><i class="bi bi-globe"></i> <a href="/teachers">Учители</a></h6>
+{% endblock %}
+{% block body %}
+    {% if request.user.is_teacher %}
+        <button type="button" class="btn btn-primary">
+            <a href="/team" class="text-reset text-decoration-none"><i class="bi bi-pencil-square"></i> Редактирай учителите</a>
+        </button>
+        <hr class="mt-2 mb-1"/>
+    {% endif %}
     {% if teachers %}
         {% for teacher in teachers %}
             <div class="card d-inline-block m-1 teacher-card">

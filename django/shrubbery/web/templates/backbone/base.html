@@ -33,7 +33,13 @@
     {% block navbar %}
         {% include "backbone/navbar.html" %}
     {% endblock %}
-
+    <hr class="mt-0 mb-2"/>
+    <div class="container-fluid">
+      {% block location %}
+          {# Add custom location when extending this template #}
+      {% endblock %}
+    </div>
+    <hr class="mt-0 mb-2"/>
     <div class="container-fluid">
       {% block body %}
           {# Add custom content when extending this template #}
