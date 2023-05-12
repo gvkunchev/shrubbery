@@ -8,6 +8,7 @@
 {% url 'web:participants' as participants_url %}
 {% url 'web:settings' as settings_url %}
 {% url 'web:team' as team_url %}
+{% url 'web:lectures' as lectures_url %}
 
 <nav class="navbar navbar-expand-lg">
 <div class="container-fluid">
@@ -15,13 +16,13 @@
         <div class="navbar-brand-wrapper">
             {% if request.user.is_authenticated %}
                 {% if request.user.image %}
-                    <img src="/static/{{ request.user.image }}" class="navbar-profile-picture"/>
+                    <img src="/static/{{ request.user.image }}" class="navbar-profile-picture" title="{{ request.user.first_name }} @ ФМИ"/>
                 {% else %}
-                    <img src="/static/img/blank-profile.png" class="navbar-profile-picture"/>
+                    <img src="/static/img/blank-profile.png" class="navbar-profile-picture" title="{{ request.user.first_name }} @ ФМИ"/>
                 {% endif %}
-                <img src="{% static 'img/python_logo.png' %}"  class="navbar-logo" />
-                {% else %}
-                    <img src="{% static 'img/python_logo.png' %}" />
+                <img src="{% static 'img/python_logo.png' %}"  class="navbar-logo" title="{{ request.user.first_name }} @ ФМИ"/>
+            {% else %}
+                <img src="{% static 'img/python_logo.png' %}" title="Python @ ФМИ" />
             {% endif %}
         </div>  
     </a>
@@ -53,7 +54,8 @@
                     </a>
                     <div class="dropdown-menu">
                         <a class="dropdown-item" href="{{ participants_url }}"><i class="bi bi-card-checklist text-primary"></i> Записани студенти</a>
-                        <a class="dropdown-item" href="{{ team_url }}"><i class="bi bi-card-checklist text-primary"></i> Учителски колектив</a>
+                        <a class="dropdown-item" href="{{ team_url }}"><i class="bi bi-people-fill text-primary"></i> Учителски колектив</a>
+                        <a class="dropdown-item" href="{{ lectures_url }}"><i class="bi bi-file-pdf-fill text-primary"></i> Лекции</a>
                     </div>
                 </li>
             {% endif %}

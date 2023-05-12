@@ -14,7 +14,7 @@
             <tbody>
                 {% for material in materials %}
                 <tr>
-                    <th scope="row">{{ material.id }}</th>
+                    <th scope="row">{{ forloop.counter }}</th>
                     <td>
                         <a href="static/{{ material.content }}" target="_blank">
                             {{ material.title }}

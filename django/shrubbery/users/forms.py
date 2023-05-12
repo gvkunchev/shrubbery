@@ -16,6 +16,18 @@ class AddStudentForm(UserCreationForm):
         self.fields['password2'].required = False
 
 
+class AddTeacherForm(UserCreationForm):
+
+    class Meta:
+        model = Teacher
+        fields = ('first_name', 'last_name', 'email')
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['password1'].required = False
+        self.fields['password2'].required = False
+
+
 class EditStudentForm(forms.ModelForm):
 
     class Meta:

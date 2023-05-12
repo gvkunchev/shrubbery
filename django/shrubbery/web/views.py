@@ -45,7 +45,8 @@ def student(request, student):
 
 def teachers(request):
     '''Teachers page.'''
-    return render(request, "teachers/teachers.html", {'teachers': Teacher.objects.all()})
+    teachers = Teacher.objects.all().filter(is_active=True)
+    return render(request, "teachers/teachers.html", {'teachers': teachers})
 
 
 def teacher(request, teacher):

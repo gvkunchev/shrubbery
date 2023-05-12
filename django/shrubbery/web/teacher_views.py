@@ -1,10 +1,13 @@
 from django.shortcuts import render, redirect
 from django.core.exceptions import ObjectDoesNotExist
 
-from users.forms import AddStudentForm, EditStudentForm, EditTeacherForm
+from users.forms import (AddStudentForm, EditStudentForm,
+                         EditTeacherForm, AddTeacherForm)
+from materials.forms import EditMaterialForm
 from news.forms import AddNewsArticleForm
 from news.models import NewsArticle
 from users.models import Student, Teacher
+from materials.models import Material
 
 from .view_decorators import is_teacher
 
@@ -22,6 +25,12 @@ def team(request):
 
 
 @is_teacher
+def lectures(request):
+    '''Lectures overview.'''
+    return render(request, "lectures/lectures.html", {'lectures': Material.objects.all()})
+
+
+@is_teacher
 def add_participant(request):
     '''Add new participant.'''
     form = AddStudentForm(request.POST)
@@ -34,6 +43,10 @@ def add_participant(request):
             'participants': Student.objects.all(),
             'info': 'Студентът е добавен'
         }
+        # Keeping the POST data will refill
+        # the inputs with it, which is useful on
+        # error, but should not be done on success
+        request.POST = {}
         return render(request, "participants/participants.html", context)
     else:
         context = {
@@ -102,11 +115,15 @@ def participant(request, participant):
             form = EditStudentForm(request.POST, instance=participant_obj)
             if form.is_valid():
                 form.save()
-            context = {
-                'participant': participant_obj,
-                'errors': form.errors,
-                'info': 'Успешно редактирахте студент'
-            }
+                context = {
+                    'participant': participant_obj,
+                    'info': 'Успешно редактирахте студент'
+                }
+            else:
+                context = {
+                    'participant': participant_obj,
+                    'errors': form.errors
+                }
             return render(request, "participants/participant.html", context)
         elif 'delete' in request.POST:
             participant_obj.delete()
@@ -150,6 +167,31 @@ def team_member(request, teacher):
             return redirect('web:missing')
     else:
         return render(request, "team/team_member.html", {'teacher': teacher_obj})
+
+
+@is_teacher
+def add_teacher(request):
+    '''Add new teacher.'''
+    form = AddTeacherForm(request.POST)
+    if form.is_valid():
+        student = form.save(commit=False)
+        student.is_active = False
+        student.save()
+        context = {
+            'team': Teacher.objects.all(),
+            'info': 'Учителят е добавен'
+        }
+        # Keeping the POST data will refill
+        # the inputs with it, which is useful on
+        # error, but should not be done on success
+        request.POST = {}
+        return render(request, "team/team.html", context)
+    else:
+        context = {
+            'team': Teacher.objects.all(),
+            'errors': form.errors
+        }
+        return render(request, "team/team.html", context)
 
 
 @is_teacher
@@ -207,3 +249,63 @@ def delete_news_article(request, article):
         return redirect('web:missing')
     article.delete()
     return redirect('web:news')
+
+
+@is_teacher
+def lecture(request, lecture):
+    '''Edit a single lecture.'''
+    try:
+        lecture_obj = Material.objects.get(pk=lecture)
+    except ObjectDoesNotExist:
+        return redirect('web:missing')
+    if request.method == 'POST':
+        if 'edit' in request.POST:
+            form = EditMaterialForm(request.POST, request.FILES, instance=lecture_obj)
+            if form.is_valid():
+                form.save()
+                context = {
+                    'lecture': lecture_obj,
+                    'info': 'Успешно редактирахте лекция'
+                }
+            else:
+                print(form.errors)
+                context = {
+                    'lecture': lecture_obj,
+                    'errors': form.errors,
+                }
+            return render(request, "lectures/lecture.html", context)
+        elif 'delete' in request.POST:
+            lecture_obj.delete()
+            context = {
+                'lectures': Material.objects.all(),
+                'info': 'Успешно изтрихте лекция'
+            }
+            return render(request, "lectures/lectures.html", context)
+        else:
+            return redirect('web:missing')
+    else:
+        return render(request, "lectures/lecture.html", {'lecture': lecture_obj})
+
+
+@is_teacher
+def add_lecture(request):
+    '''Add new lecture.'''
+    form = EditMaterialForm(request.POST, request.FILES)
+    if form.is_valid():
+        form.save()
+        context = {
+            'lectures': Material.objects.all(),
+            'info': 'Лекцията е добавена'
+        }
+        # Keeping the POST data will refill
+        # the inputs with it, which is useful on
+        # error, but should not be done on success
+        request.POST = {}
+        return render(request, "lectures/lectures.html", context)
+    else:
+        context = {
+            'lectures': Material.objects.all(),
+            'errors': form.errors
+        }
+        return render(request, "lectures/lectures.html", context)
+
