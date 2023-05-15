@@ -1,0 +1,5 @@
+#!/bin/bash
+
+python3 /var/birthday_organizer/manage.py migrate
+python3 /var/birthday_organizer/manage.py collectstatic --noinput --clear
+gunicorn -c gunicorn_conf.py

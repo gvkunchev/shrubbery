@@ -19,5 +19,6 @@ EXPOSE 80
 RUN mkdir -pv /var/log/gunicorn/
 RUN mkdir -pv /var/run/gunicorn/
 COPY gunicorn_conf.py /var/shrubbery
+COPY start /var/shrubbery
 WORKDIR /var/shrubbery
-CMD ["gunicorn", "-c", "gunicorn_conf.py"]
+CMD ["start"]

@@ -22,7 +22,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 if os.environ.get('BIRTHDAY_ORGANIZER_ENV') == 'prd':
-    SECRET_KEY = os.environ['DJANGO_KEY']
+    SECRET_KEY = os.environ['DJANGO_SECRET_KEY']
     ADMIN_ENABLED = False
 else:
     SECRET_KEY = "development-dummy-secret-key"
