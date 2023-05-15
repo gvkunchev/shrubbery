@@ -21,10 +21,19 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
+if os.environ.get('BIRTHDAY_ORGANIZER_ENV') == 'prd':
+    SECRET_KEY = os.environ['DJANGO_KEY']
+    ADMIN_ENABLED = False
+else:
+    SECRET_KEY = "development-dummy-secret-key"
+    ADMIN_ENABLED = True
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+if os.environ.get('BIRTHDAY_ORGANIZER_ENV') == 'prd':
+    ALLOWED_HOSTS = ['shrubbery.onrender.com', 'localhost']
+    CSRF_TRUSTED_ORIGINS = ['https://shrubbery.onrender.com']
+else:
+    ALLOWED_HOSTS = ['*']
 
 ALLOWED_HOSTS = ['*']
 
@@ -81,12 +90,24 @@ WSGI_APPLICATION = 'shrubbery.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+if os.environ.get('BIRTHDAY_ORGANIZER_ENV') == 'prd':
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'birthday_organizer',
+            'USER': os.environ['POSTGRES_USER'],
+            'PASSWORD': os.environ['POSTGRES_PASSWORD'],
+            'HOST': os.environ['POSTGRES_HOSTNAME'],
+            'PORT': '5432',
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
 
 
 # Password validation
