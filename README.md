@@ -11,7 +11,7 @@ Web site for the Python course in FMI
 
 ### Deploy
 * Inlcude the following env variables and external DB...
-  * BIRTHDAY_ORGANIZER_ENV='prd'
+  * SHRUBBERY_ENV='prd'
   * POSTGRES_HOSTNAME
   * POSTGRES_USER
   * POSTGRES_PASSWORD
