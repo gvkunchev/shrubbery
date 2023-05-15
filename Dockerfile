@@ -20,5 +20,6 @@ RUN mkdir -pv /var/log/gunicorn/
 RUN mkdir -pv /var/run/gunicorn/
 COPY gunicorn_conf.py /var/shrubbery
 COPY start /var/shrubbery
+RUN chmod +x /var/shrubbery/start
 WORKDIR /var/shrubbery
-CMD ["start"]
+CMD ["/bin/bash", "start"]
