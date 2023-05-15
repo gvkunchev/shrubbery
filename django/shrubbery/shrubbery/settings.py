@@ -94,7 +94,7 @@ if os.environ.get('SHRUBBERY_ENV') == 'prd':
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
-            'NAME': 'shrubbery',
+            'NAME': os.environ['POSTGRES_DB_NAME'],
             'USER': os.environ['POSTGRES_USER'],
             'PASSWORD': os.environ['POSTGRES_PASSWORD'],
             'HOST': os.environ['POSTGRES_HOSTNAME'],

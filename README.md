@@ -15,3 +15,4 @@ Web site for the Python course in FMI
   * POSTGRES_HOSTNAME
   * POSTGRES_USER
   * POSTGRES_PASSWORD
+  * POSTGRES_DB_NAME
