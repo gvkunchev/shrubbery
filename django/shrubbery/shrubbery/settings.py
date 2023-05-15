@@ -35,7 +35,10 @@ if os.environ.get('SHRUBBERY_ENV') == 'prd':
 else:
     ALLOWED_HOSTS = ['*']
 
-ALLOWED_HOSTS = ['*']
+if os.environ.get('SHRUBBERY_ENV') == 'prd':
+    DEBUG = False
+else:
+    DEBUG = True
 
 
 # Application definition
@@ -150,15 +153,20 @@ STATICFILES_FINDERS = [
     'sass_processor.finders.CssFinder',
 ]
 
-SASS_PROCESSOR_ROOT = BASE_DIR / 'static/scss'
 
 STATIC_URL = 'static/'
-STATIC_ROOT = BASE_DIR / 'static'
+#STATIC_ROOT = BASE_DIR / 'static'
 
 STATICFILES_DIRS = [
     BASE_DIR / "web/static",
+    BASE_DIR / "web/static/scss",
     BASE_DIR / "media",
 ]
+
+if os.environ.get('SHRUBBERY_ENV') == 'prd':
+    SASS_PROCESSOR_ROOT = BASE_DIR / 'static'
+else:
+    SASS_PROCESSOR_ROOT = BASE_DIR / 'web/static/scss'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field

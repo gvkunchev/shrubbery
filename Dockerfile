@@ -15,7 +15,7 @@ COPY django/shrubbery /var/shrubbery
 # Expose the port
 EXPOSE 80
 
-# Gunicorn
+# Prepare Gunicorn, migrate the DB and start 
 RUN mkdir -pv /var/log/gunicorn/
 RUN mkdir -pv /var/run/gunicorn/
 COPY gunicorn_conf.py /var/shrubbery
