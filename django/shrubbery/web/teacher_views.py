@@ -9,7 +9,7 @@ from news.models import NewsArticle
 from users.models import Student, Teacher
 from users.emails import send_activation_email
 from materials.models import Material
-from forum.models import Forum
+from forum.models import Forum, ForumComment
 from forum.forms import ForumForm
 
 from .view_decorators import is_teacher
@@ -374,3 +374,15 @@ def delete_forum(request, forum):
         return redirect('web:missing')
     forum.delete()
     return redirect('web:forums')
+
+
+@is_teacher
+def delete_forum_comment(request, comment):
+    '''Delete forum.'''
+    try:
+        comment = ForumComment.objects.get(pk=comment)
+    except ObjectDoesNotExist:
+        return redirect('web:missing')
+    forum = comment.forum
+    comment.delete()
+    return redirect(f'/forum/{forum.pk}')

@@ -40,4 +40,5 @@ $(document).ready(function(){
 
     confirmDeleteLink($('.confirm-delete-news-article'), $('#confirm_delete_news_article_modal'));
     confirmDeleteLink($('.confirm-delete-forum'), $('#confirm_delete_forum_modal'));
+    confirmDeleteLink($('.confirm-delete-forum-comment'), $('#confirm_delete_forum_comment_modal'));
 })

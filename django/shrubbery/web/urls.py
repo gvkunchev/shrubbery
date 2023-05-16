@@ -19,6 +19,7 @@ urlpatterns = [
     re_path(r'^forum/delete/(?P<forum>\d+)$', teacher_views.delete_forum, name='delete_forum'),
     re_path(r'^forum/edit/(?P<forum>\d+)$', teacher_views.edit_forum, name='edit_forum'),
     re_path(r'^edit_forum_comment/(?P<comment>\d+)$', views.edit_forum_comment, name='edit_forum_comment'),
+    re_path(r'^delete_forum_comment/(?P<comment>\d+)$', teacher_views.delete_forum_comment, name='delete_forum_comment'),
     re_path(r'^add_forum$', views.add_forum, name='add_forum'),
     re_path(r'^add_forum_comment$', auth_views.add_forum_comment, name='add_forum_comment'),
     re_path(r'^forum/(?P<forum>\d+)$', views.forum, name='forum'),

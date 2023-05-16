@@ -132,7 +132,8 @@ def edit_forum_comment(request, comment):
         form = ForumCommentForm(data, instance=comment)
         if form.is_valid():
             form.save()
-            return redirect(f'/forum/{comment.forum.pk}#comment{ comment.pk }')
+            page = request.POST.get('page')
+            return redirect(f'/forum/{comment.forum.pk}?page={page}#comment{comment.pk}')
         else:
             context = {
                 'comment': comment,

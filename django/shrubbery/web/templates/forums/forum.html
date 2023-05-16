@@ -76,7 +76,7 @@
                             <br/>
                             <div class="showdown-trigger">{{ comment.content }}</div>
                             {% if request.user.is_teacher or request.user.id == comment.author.id %}
-                                <a href="/edit_forum_comment/{{ comment.pk }}">Редактирай</a>
+                                <a href="/edit_forum_comment/{{ comment.pk }}?page={{ request.GET.page }}">Редактирай</a>
                             {% endif %}
                         </td></tr>
                     {% endfor %}

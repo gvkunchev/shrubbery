@@ -9301,7 +9301,7 @@ textarea.form-control-lg {
 .showdown-input.showdown-input-small {
   min-height: 200px !important; }
 
-.modal-dialog {
+#showdown-modal .modal-dialog {
   width: 90% !important;
   max-width: 90% !important; }
 
