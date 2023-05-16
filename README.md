@@ -10,7 +10,7 @@ Web site for the Python course in FMI
 * Start with python django/shrubbery/manage.py runserver 0.0.0.0:8080
 
 ### Deploy
-* Inlcude the following env variables and external DB...
+* Inlcude the following env variables and external Postgre DB ...
   * SHRUBBERY_ENV='prd'
   * POSTGRES_HOSTNAME
   * POSTGRES_USER
