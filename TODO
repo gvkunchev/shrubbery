@@ -6,5 +6,4 @@ Add challanges
 Add activity monitoring
 Add email alerts
 Add settings for email alerts
-Dockerize (Needs Apache and proper handling of /madia and /static)
 * Consider whether homewors can have discussion fields so that we don't need to make separate forum topics
