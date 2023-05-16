@@ -15,8 +15,8 @@ class NewsArticle(models.Model):
     @property
     def human_date(self):
         """Date format used for parsing templates."""
-        return self.date.strftime("%d.%m.%Y %H:%M")
-    
+        return self.date.astimezone(timezone.get_current_timezone()).strftime("%d.%m.%Y %H:%M")
+
     def __str__(self):
         """String representation for the admin panel."""
         return f"{self.author} - {self.human_date} - {self.title}"
