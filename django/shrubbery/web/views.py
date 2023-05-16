@@ -5,8 +5,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from news.models import NewsArticle
 from materials.models import Material
 from users.models import Student, Teacher
-from forum.models import Forum, ForumComment
-from forum.forms import ForumForm, ForumCommentForm
+from forum.models import Forum
 
 
 def missing(request, exception=None):
@@ -93,52 +92,3 @@ def forum(request, forum):
         return redirect('web:missing')
     return render(request, "forums/forum.html", {'forum': forum, 'comments': page_obj})
 
-
-def add_forum(request):
-    '''Add new forum.'''
-    if request.method == 'POST':
-        data = {
-            'title': request.POST.get('title'),
-            'content': request.POST.get('content'),
-            'author': request.user
-        }
-        form = ForumForm(data)
-        if form.is_valid():
-            forum = form.save()
-            return redirect(f'/forum/{forum.pk}')
-        else:
-            context = {
-                'errors': form.errors
-            }
-            return render(request, "forums/add_forum.html", context)
-    else:
-        return render(request, "forums/add_forum.html")
-
-
-def edit_forum_comment(request, comment):
-    '''Edit forum comment.'''
-    try:
-        comment = ForumComment.objects.get(pk=comment)
-    except ObjectDoesNotExist:
-        return redirect('web:missing')
-    if not (request.user.is_teacher or comment.author.pk == request.user.pk):
-        return redirect('web:missing')
-    if request.method == 'POST':
-        data = {
-            'forum': comment.forum,
-            'content': request.POST.get('content'),
-            'author': comment.author
-        }
-        form = ForumCommentForm(data, instance=comment)
-        if form.is_valid():
-            form.save()
-            page = request.POST.get('page')
-            return redirect(f'/forum/{comment.forum.pk}?page={page}#comment{comment.pk}')
-        else:
-            context = {
-                'comment': comment,
-                'errors': form.errors
-            }
-            return render(request, "forums/edit_forum_comment.html", context)
-    else:
-        return render(request, "forums/edit_forum_comment.html", {'comment': comment})

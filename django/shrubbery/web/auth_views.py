@@ -8,12 +8,12 @@ from django.contrib.auth.forms import PasswordChangeForm
 from django.core.exceptions import ObjectDoesNotExist
 
 from users.forms import EditUserForm, PasswordSetForm, RegisterStudent
-from forum.forms import ForumCommentForm
+from forum.forms import ForumForm, ForumCommentForm
 
 from users.emails import send_activation_email
 from users.models import User, Student
 from users.tokens import account_activation_token
-from forum.models import Forum
+from forum.models import Forum, ForumComment
 
 
 def login_(request):
@@ -182,3 +182,53 @@ def add_forum_comment(request):
     if form.is_valid():
         form.save()
     return redirect('web:forum', forum=forum.pk)
+
+
+def add_forum(request):
+    '''Add new forum.'''
+    if request.method == 'POST':
+        data = {
+            'title': request.POST.get('title'),
+            'content': request.POST.get('content'),
+            'author': request.user
+        }
+        form = ForumForm(data)
+        if form.is_valid():
+            forum = form.save()
+            return redirect(f'/forum/{forum.pk}')
+        else:
+            context = {
+                'errors': form.errors
+            }
+            return render(request, "forums/add_forum.html", context)
+    else:
+        return render(request, "forums/add_forum.html")
+
+
+def edit_forum_comment(request, comment):
+    '''Edit forum comment.'''
+    try:
+        comment = ForumComment.objects.get(pk=comment)
+    except ObjectDoesNotExist:
+        return redirect('web:missing')
+    if not (request.user.is_teacher or comment.author.pk == request.user.pk):
+        return redirect('web:missing')
+    if request.method == 'POST':
+        data = {
+            'forum': comment.forum,
+            'content': request.POST.get('content'),
+            'author': comment.author
+        }
+        form = ForumCommentForm(data, instance=comment)
+        if form.is_valid():
+            form.save()
+            page = request.POST.get('page')
+            return redirect(f'/forum/{comment.forum.pk}?page={page}#comment{comment.pk}')
+        else:
+            context = {
+                'comment': comment,
+                'errors': form.errors
+            }
+            return render(request, "forums/edit_forum_comment.html", context)
+    else:
+        return render(request, "forums/edit_forum_comment.html", {'comment': comment})
