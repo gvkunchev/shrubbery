@@ -16,7 +16,7 @@
         <div class="navbar-brand-wrapper">
             {% if request.user.is_authenticated %}
                 {% if request.user.image %}
-                    <img src="/static/{{ request.user.image }}" class="navbar-profile-picture" title="{{ request.user.first_name }} @ ФМИ"/>
+                    <img src="/media/{{ request.user.image }}" class="navbar-profile-picture" title="{{ request.user.first_name }} @ ФМИ"/>
                 {% else %}
                     <img src="/static/img/blank-profile.png" class="navbar-profile-picture" title="{{ request.user.first_name }} @ ФМИ"/>
                 {% endif %}

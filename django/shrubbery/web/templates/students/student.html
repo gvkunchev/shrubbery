@@ -5,7 +5,7 @@
 {% block body %}
     <h4>{{ student.full_name }}</h4>
     {% if student.image %}
-        <img src="/static/{{ student.image }}" class="student-profile-image border"/>
+        <img src="/media/{{ student.image }}" class="student-profile-image border"/>
     {% else %}
         <img src="/static/img/blank-profile.png" class="student-profile-image border"/>
     {% endif %}
