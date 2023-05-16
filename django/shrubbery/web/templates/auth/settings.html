@@ -44,7 +44,7 @@
                 <div class="form-group">
                     <label for="image">Снимка</label>
                     {% if request.user.image %}
-                        <img src="/static/{{ request.user.image }}" class="thumbnail-profile-picture my-2"/>
+                        <img src="/media/{{ request.user.image }}" class="thumbnail-profile-picture my-2"/>
                     {% else %}
                         <img src="/static/img/blank-profile.png" class="thumbnail-profile-picture my-2"/>
                     {% endif %}
