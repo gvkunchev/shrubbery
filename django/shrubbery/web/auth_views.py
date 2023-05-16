@@ -5,11 +5,15 @@ from django.contrib.auth.decorators import login_required
 from django.utils.http import urlsafe_base64_decode
 from django.utils.encoding import force_str
 from django.contrib.auth.forms import PasswordChangeForm
+from django.core.exceptions import ObjectDoesNotExist
 
 from users.forms import EditUserForm, PasswordSetForm, RegisterStudent
+from forum.forms import ForumCommentForm
+
 from users.emails import send_activation_email
 from users.models import User, Student
 from users.tokens import account_activation_token
+from forum.models import Forum
 
 
 def login_(request):
@@ -157,3 +161,24 @@ def register(request):
         return render(request, "auth/register.html", context)
     else:
         return render(request, "auth/register.html")
+
+
+@login_required
+def add_forum_comment(request):
+    '''Add forum comment.'''
+    if request.method != 'POST':
+            return redirect('web:missing')
+    try:
+        print(request.POST)
+        forum = Forum.objects.get(pk=request.POST.get('forum'))
+    except ObjectDoesNotExist:
+            return redirect('web:missing')
+    data = {
+        'content': request.POST.get('content'),
+        'forum': request.POST.get('forum'),
+        'author': request.user
+    }
+    form = ForumCommentForm(data)
+    if form.is_valid():
+        form.save()
+    return redirect('web:forum', forum=forum.pk)

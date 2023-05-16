@@ -1,0 +1,20 @@
+{% extends "backbone/base.html" %}
+{% block location %}
+    <h6 class="location-info"><i class="bi bi-globe"></i> <a href="/forums">Форум</a> > <a href="/forum/{{ comment.forum.pk }}">{{ comment.forum.title }}</a> > <a href="/edit_forum_comment/{{ цоммент.pk }}">Редактирай коментар</a></h6>
+{% endblock %}
+{% block body %}
+    <div class="card mt-2">
+        <div class="card-header">
+            <h5 class="card-title">Редактирай коментар</h5>
+        </div>
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                <textarea name="content" class="form-control showdown-input" id="content" placeholder="Съдържание">{% if request.POST.content %}{{ request.POST.content }}{% else %}{{ comment.content }}{% endif %}</textarea>
+                <div class="text-danger">{{ errors.content.as_text }}</div>
+                <button type="submit" name="edit" class="btn btn-primary mt-2">Запази</button>
+                <button class="btn btn-secondary mt-2 showdown-preview" data-showdown-source="content"><i class="bi bi-eye-fill"></i> Преглед</button>
+            </form>
+        </div>
+    </div>
+{% endblock %}

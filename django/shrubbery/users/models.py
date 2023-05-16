@@ -86,7 +86,7 @@ class User(AbstractUser):
     def save(self, *args, **kwargs):
         """Clean up on save."""
         old_image = self.image.path if self.image else None
-        super().save(args, kwargs)
+        super(User, self).save(*args, **kwargs)
         new_image = self.image.path if self.image else None
         if new_image and old_image != new_image:
             self._resize_image()

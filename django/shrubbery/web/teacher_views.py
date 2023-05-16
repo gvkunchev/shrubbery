@@ -9,6 +9,8 @@ from news.models import NewsArticle
 from users.models import Student, Teacher
 from users.emails import send_activation_email
 from materials.models import Material
+from forum.models import Forum
+from forum.forms import ForumForm
 
 from .view_decorators import is_teacher
 
@@ -335,3 +337,40 @@ def add_lecture(request):
         }
         return render(request, "lectures/lectures.html", context)
 
+
+@is_teacher
+def edit_forum(request, forum):
+    '''Edit forum.'''
+    try:
+        forum = Forum.objects.get(pk=forum)
+    except ObjectDoesNotExist:
+        return redirect('web:missing')
+    if request.method == 'POST':
+        data = {
+            'title': request.POST.get('title'),
+            'content': request.POST.get('content'),
+            'author': request.user
+        }
+        form = ForumForm(data, instance=forum)
+        if form.is_valid():
+            form.save()
+            return redirect(f'/forum/{forum.pk}')
+        else:
+            context = {
+                'forum': forum,
+                'errors': form.errors
+            }
+            return render(request, "forums/edit_forum.html", context)
+    else:
+        return render(request, "forums/edit_forum.html", {'forum': forum})
+
+
+@is_teacher
+def delete_forum(request, forum):
+    '''Delete forum.'''
+    try:
+        forum = Forum.objects.get(pk=forum)
+    except ObjectDoesNotExist:
+        return redirect('web:missing')
+    forum.delete()
+    return redirect('web:forums')

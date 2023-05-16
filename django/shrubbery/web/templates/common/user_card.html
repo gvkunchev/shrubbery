@@ -1,0 +1,18 @@
+{% if user.is_student %}
+    <a href="/student/{{ user.pk }}" target="_blank">
+{% else %}
+    <a href="/teacher/{{ user.pk }}" target="_blank">
+{% endif %}
+<div class="card d-inline-block p-2">
+    {% if user.image %}
+        <img src="/media/{{ user.image }}" class="card-img-top thumbnail-profile-picture mx-1"/>
+    {% else %}
+        <img src="/static/img/blank-profile.png" class="card-img-top thumbnail-profile-picture mx-1"/>
+    {% endif %}
+    <div class="d-inline-block align-middle">
+        {{ user.full_name }}
+        <br/>
+        <h6 class="fw-lighter">{{ date }}</h6>
+    </div>
+</div>
+</a>

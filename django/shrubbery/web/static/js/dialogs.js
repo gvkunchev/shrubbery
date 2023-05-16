@@ -1,7 +1,7 @@
 $(document).ready(function(){
 
-    // Confirmation dialogs for deletion of user/lecture
-    function confirmDelete(trigger, modal){
+    // Confirmation dialogs for deletion and submitting
+    function confirmDeleteSubmit(trigger, modal){
         trigger.click(function(e){
             modal.modal('show');
             e.preventDefault();
@@ -19,19 +19,25 @@ $(document).ready(function(){
             trigger.parents('form').submit();
         })
     }
-    confirmDelete($('.confirm-delete-user'), $('#confirm_delete_user_modal'));
-    confirmDelete($('.confirm-delete-lecture'), $('#confirm_delete_lecture_modal'));
+    confirmDeleteSubmit($('.confirm-delete-user'), $('#confirm_delete_user_modal'));
+    confirmDeleteSubmit($('.confirm-delete-lecture'), $('#confirm_delete_lecture_modal'));
 
-    // Confirm deleting a news article
-    $('.confirm-delete-news-article').click(function(e){
-        $('#confirm_delete_news_article_modal').modal('show');
-        e.preventDefault();
-    })
-    $('#confirm_delete_news_article_modal').find('.btn-no').bind('click', function(){
-        $('#confirm_delete_news_article_modal').modal('hide');
-    })
-    $('#confirm_delete_news_article_modal').find('.btn-yes').bind('click', function(){
-        $('#confirm_delete_news_article_modal').modal('hide');
-        window.location = $('.confirm-delete-news-article').attr('href');
-    })
+
+    // Confirmation dialogs for deletion and redirecting
+    function confirmDeleteLink(trigger, modal){
+        $(trigger).click(function(e){
+            $(modal).modal('show');
+            e.preventDefault();
+        })
+        $(modal).find('.btn-no').bind('click', function(){
+            $(modal).modal('hide');
+        })
+        $(modal).find('.btn-yes').bind('click', function(){
+            $(modal).modal('hide');
+            window.location = $(trigger).attr('href');
+        })
+    }
+
+    confirmDeleteLink($('.confirm-delete-news-article'), $('#confirm_delete_news_article_modal'));
+    confirmDeleteLink($('.confirm-delete-forum'), $('#confirm_delete_forum_modal'));
 })

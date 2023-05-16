@@ -16,13 +16,26 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='NewsArticle',
+            name='Forum',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('date', models.DateTimeField(default=django.utils.timezone.now)),
                 ('title', models.TextField()),
                 ('content', models.TextField()),
                 ('author', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to=settings.AUTH_USER_MODEL)),
+            ],
+            options={
+                'ordering': ('-date',),
+            },
+        ),
+        migrations.CreateModel(
+            name='ForumComment',
+            fields=[
+                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('date', models.DateTimeField(default=django.utils.timezone.now)),
+                ('content', models.TextField()),
+                ('author', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to=settings.AUTH_USER_MODEL)),
+                ('forum', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='forum.forum')),
             ],
             options={
                 'ordering': ('-date',),
