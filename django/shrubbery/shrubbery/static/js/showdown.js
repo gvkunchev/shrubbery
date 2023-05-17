@@ -1,4 +1,5 @@
 $(document).ready(function(){
+
     var showDownConverter = new showdown.Converter();
     showDownConverter.setOption('emoji', true);
     
@@ -18,4 +19,5 @@ $(document).ready(function(){
     $('#showdown-modal').find('button').bind('click', function(){
         $('#showdown-modal').modal('hide');
     })
+    
 })
