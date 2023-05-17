@@ -4,11 +4,7 @@
     <a href="/teacher/{{ user.pk }}" target="_blank">
 {% endif %}
 <div class="card d-inline-block p-2">
-    {% if user.image %}
-        <img src="/media/{{ user.image }}" class="card-img-top thumbnail-profile-picture mx-1"/>
-    {% else %}
-        <img src="/static/img/blank-profile.png" class="card-img-top thumbnail-profile-picture mx-1"/>
-    {% endif %}
+    <img src="{% include 'common/profile_picture' with user=user %}" class="card-img-top thumbnail-profile-picture mx-1"/>
     <div class="d-inline-block align-middle">
         {{ user.full_name }}
         <br/>

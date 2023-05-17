@@ -16,11 +16,7 @@
     <a class="navbar-brand" href="/">
         <div class="navbar-brand-wrapper">
             {% if request.user.is_authenticated %}
-                {% if request.user.image %}
-                    <img src="/media/{{ request.user.image }}" class="navbar-profile-picture" title="{{ request.user.first_name }} @ ФМИ"/>
-                {% else %}
-                    <img src="/static/img/blank-profile.png" class="navbar-profile-picture" title="{{ request.user.first_name }} @ ФМИ"/>
-                {% endif %}
+                <img src="{% include 'common/profile_picture' with user=request.user %}" class="navbar-profile-picture" title="{{ request.user.first_name }} @ ФМИ"/>
                 <img src="{% static 'img/python_logo.png' %}"  class="navbar-logo" title="{{ request.user.first_name }} @ ФМИ"/>
             {% else %}
                 <img src="{% static 'img/python_logo.png' %}" title="Python @ ФМИ" />

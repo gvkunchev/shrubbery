@@ -25,7 +25,7 @@
             <h4 class="card-title">{{ forum.title }}</h4>
         </div>
         <div class="card-body">
-            {% include 'common/user_card.html' with user=forum.author date=forum.human_date %}
+            {% include 'common/user_dated_card.html' with user=forum.author date=forum.human_date %}
             <div class="showdown-trigger">{{ forum.content }}</div>
         </div>
     </div>
@@ -56,7 +56,7 @@
 
                     {% for comment in comments %}
                         <tr><td id="comment{{ comment.pk }}">
-                            {% include 'common/user_card.html' with user=comment.author date=comment.human_date %}
+                            {% include 'common/user_dated_card.html' with user=comment.author date=comment.human_date %}
                             <br/>
                             <div class="showdown-trigger">{{ comment.content }}</div>
                             {% if request.user.is_teacher or request.user.id == comment.author.id %}

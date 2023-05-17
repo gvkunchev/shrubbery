@@ -24,7 +24,7 @@ def lecture(request, lecture):
     try:
         lecture_obj = Material.objects.get(pk=lecture)
     except ObjectDoesNotExist:
-        return redirect('shrubbery:missing')
+        return redirect('missing')
     if request.method == 'POST':
         if 'edit' in request.POST:
             form = MaterialForm(request.POST, request.FILES, instance=lecture_obj)
@@ -49,7 +49,7 @@ def lecture(request, lecture):
             }
             return render(request, "lectures/lectures.html", context)
         else:
-            return redirect('shrubbery:missing')
+            return redirect('missing')
     else:
         return render(request, "lectures/lecture.html", {'lecture': lecture_obj})
 

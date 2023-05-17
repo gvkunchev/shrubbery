@@ -136,9 +136,9 @@ def settings(request):
             # There is already front-end validation that requires inputing these fields.
             # This is just in case.
             if 'first_name' not in request.POST or request.POST['first_name'] == '':
-                return redirect('shrubbery:missing')
+                return redirect('missing')
             if 'last_name' not in request.POST or request.POST['last_name'] == '':
-                return redirect('shrubbery:missing')
+                return redirect('missing')
             form = EditUserForm(request.POST, request.FILES, instance=request.user)
             context = {}
             if form.is_valid():
@@ -165,7 +165,7 @@ def settings(request):
                 }
             return render(request, "settings.html", context)
         else:
-            return redirect('shrubbery:missing')
+            return redirect('missing')
     else:
         return render(request, "settings.html")
 
@@ -188,7 +188,7 @@ def student(request, student):
         if not student.is_active:
             raise ObjectDoesNotExist
     except ObjectDoesNotExist:
-        return redirect('shrubbery:missing')
+        return redirect('missing')
     return render(request, "students/student.html", {'student': student})
 
 
@@ -205,7 +205,7 @@ def teacher(request, teacher):
     try:
         teacher = Teacher.objects.get(pk=teacher)
     except ObjectDoesNotExist:
-        return redirect('shrubbery:missing')
+        return redirect('missing')
     return render(request, "teachers/teacher.html", {'teacher': teacher})
 
 
@@ -223,7 +223,7 @@ def participant(request, participant):
     try:
         participant_obj = Student.objects.get(pk=participant)
     except ObjectDoesNotExist:
-        return redirect('shrubbery:missing')
+        return redirect('missing')
     if request.method == 'POST':
         if 'edit' in request.POST:
             form = EditStudentForm(request.POST, instance=participant_obj)
@@ -259,7 +259,7 @@ def participant(request, participant):
                 request.POST = {}
                 return render(request, "participants/participants.html", context)
         else:
-            return redirect('shrubbery:missing')
+            return redirect('missing')
     else:
         return render(request, "participants/participant.html", {'participant': participant_obj})
 
@@ -351,7 +351,7 @@ def team_member(request, teacher):
     try:
         teacher_obj = Teacher.objects.get(pk=teacher)
     except ObjectDoesNotExist:
-        return redirect('shrubbery:missing')
+        return redirect('missing')
     if request.method == 'POST':
         if 'edit' in request.POST:
             form = EditTeacherForm(request.POST, instance=teacher_obj)
@@ -383,7 +383,7 @@ def team_member(request, teacher):
                 request.POST = {}
                 return render(request, "team/team.html", context)
         else:
-            return redirect('shrubbery:missing')
+            return redirect('missing')
     else:
         return render(request, "team/team_member.html", {'teacher': teacher_obj})
 

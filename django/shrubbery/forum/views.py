@@ -22,7 +22,7 @@ def forum(request, forum):
         page_number = request.GET.get("page")
         page_obj = paginator.get_page(page_number)
     except ObjectDoesNotExist:
-        return redirect('shrubbery:missing')
+        return redirect('missing')
     return render(request, "forums/forum.html", {'forum': forum, 'comments': page_obj})
 
 
@@ -54,7 +54,7 @@ def delete_forum(request, forum):
     try:
         forum = Forum.objects.get(pk=forum)
     except ObjectDoesNotExist:
-        return redirect('shrubbery:missing')
+        return redirect('missing')
     forum.delete()
     return redirect('forum:forums')
 
@@ -65,7 +65,7 @@ def edit_forum(request, forum):
     try:
         forum = Forum.objects.get(pk=forum)
     except ObjectDoesNotExist:
-        return redirect('shrubbery:missing')
+        return redirect('missing')
     if request.method == 'POST':
         data = {
             'title': request.POST.get('title'),
@@ -90,11 +90,11 @@ def edit_forum(request, forum):
 def add_forum_comment(request):
     '''Add forum comment.'''
     if request.method != 'POST':
-            return redirect('shrubbery:missing')
+            return redirect('missing')
     try:
         forum = Forum.objects.get(pk=request.POST.get('forum'))
     except ObjectDoesNotExist:
-            return redirect('shrubbery:missing')
+            return redirect('missing')
     data = {
         'content': request.POST.get('content'),
         'forum': request.POST.get('forum'),
@@ -112,9 +112,9 @@ def edit_forum_comment(request, comment):
     try:
         comment = ForumComment.objects.get(pk=comment)
     except ObjectDoesNotExist:
-        return redirect('shrubbery:missing')
+        return redirect('missing')
     if not (request.user.is_teacher or comment.author.pk == request.user.pk):
-        return redirect('shrubbery:missing')
+        return redirect('missing')
     if request.method == 'POST':
         data = {
             'forum': comment.forum,
@@ -142,7 +142,7 @@ def delete_forum_comment(request, comment):
     try:
         comment = ForumComment.objects.get(pk=comment)
     except ObjectDoesNotExist:
-        return redirect('shrubbery:missing')
+        return redirect('missing')
     forum = comment.forum
     comment.delete()
     return redirect(f'/forum/{forum.pk}')

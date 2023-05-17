@@ -22,7 +22,7 @@ def news_article(request, article):
     try:
         article = NewsArticle.objects.get(pk=article)
     except ObjectDoesNotExist:
-        return redirect('shrubbery:missing')
+        return redirect('missing')
     return render(request, "news/news_article.html", {'article': article})
 
 
@@ -51,7 +51,7 @@ def delete_news_article(request, article):
     try:
         article = NewsArticle.objects.get(pk=article)
     except ObjectDoesNotExist:
-        return redirect('shrubbery:missing')
+        return redirect('missing')
     article.delete()
     return redirect('news:news')
 
@@ -62,7 +62,7 @@ def edit_news_article(request, article):
     try:
         article = NewsArticle.objects.get(pk=article)
     except ObjectDoesNotExist:
-        return redirect('shrubbery:missing')
+        return redirect('missing')
     if request.method == 'POST':
         data = {
             'title': request.POST.get('title'),
