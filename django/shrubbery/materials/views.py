@@ -4,7 +4,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from shrubbery.view_decorators import is_teacher
 
 from .models import Material
-from .forms import EditMaterialForm
+from .forms import MaterialForm
 
 
 def materials(request):
@@ -27,7 +27,7 @@ def lecture(request, lecture):
         return redirect('shrubbery:missing')
     if request.method == 'POST':
         if 'edit' in request.POST:
-            form = EditMaterialForm(request.POST, request.FILES, instance=lecture_obj)
+            form = MaterialForm(request.POST, request.FILES, instance=lecture_obj)
             if form.is_valid():
                 form.save()
                 context = {
@@ -57,7 +57,7 @@ def lecture(request, lecture):
 @is_teacher
 def add_lecture(request):
     '''Add new lecture.'''
-    form = EditMaterialForm(request.POST, request.FILES)
+    form = MaterialForm(request.POST, request.FILES)
     if form.is_valid():
         form.save()
         context = {
