@@ -42,11 +42,7 @@
                 <hr/>
                 <div class="form-group">
                     <label for="image">Снимка</label>
-                    {% if request.user.image %}
-                        <img src="/media/{{ request.user.image }}" class="thumbnail-profile-picture m-2"/>
-                    {% else %}
-                        <img src="/static/img/blank-profile.png" class="thumbnail-profile-picture m-2"/>
-                    {% endif %}
+                    <img src="{% include 'common/profile_picture' with user=request.user %}" class="thumbnail-profile-picture m-2"/>
                     <br/>
                     {% if request.user.image %}
                         <input type="checkbox" name="image_remove" id="image_remove" class="form-check-input"/>
