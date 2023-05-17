@@ -5,6 +5,7 @@ Add challanges
 Add activity monitoring
 Add email alerts
 Add settings for email alerts
+Ensure the navbar is fitting everywhere
 Consider adding responses to forum comments
 Add a method of uplodaing files to /media so that they can be later used in homework definitions
 * Consider whether homewors can have discussion fields so that we don't need to make separate forum topics
