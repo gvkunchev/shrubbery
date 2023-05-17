@@ -43,9 +43,14 @@
                 <div class="form-group">
                     <label for="image">Снимка</label>
                     {% if request.user.image %}
-                        <img src="/media/{{ request.user.image }}" class="thumbnail-profile-picture my-2"/>
+                        <img src="/media/{{ request.user.image }}" class="thumbnail-profile-picture m-2"/>
                     {% else %}
-                        <img src="/static/img/blank-profile.png" class="thumbnail-profile-picture my-2"/>
+                        <img src="/static/img/blank-profile.png" class="thumbnail-profile-picture m-2"/>
+                    {% endif %}
+                    <br/>
+                    {% if request.user.image %}
+                        <input type="checkbox" name="image_remove" id="image_remove" class="form-check-input"/>
+                        <label for="image_remove" class="mx-2">Изтрий снимката</label>
                     {% endif %}
                     <input type="file" name="image" class="form-control" id="image" accept=".png, .jpeg, .jpg"/>
                     <div class="text-danger">{{ errors.image.as_text }}</div>

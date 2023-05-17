@@ -146,6 +146,9 @@ def settings(request):
                 context = {
                     'settings_info': 'Настройките са запазени'
                 }
+                if request.POST.get('image_remove'):
+                    request.user.image = None
+                    request.user.save()
             else:
                 context = {
                     'errors': form.errors

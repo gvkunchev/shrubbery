@@ -2,8 +2,8 @@
     {% for article in news %}
         <div class="card mt-2">
             <div class="card-header">
-                <span class="fs-6 fw-lighter">{{ article.human_date }}</span>
                 <h5 class="card-title"><a href="news/{{ article.id }}">{{ article.title }}</a></h5>
+                <span class="fs-6 fw-lighter">{{ article.human_date }}</span>
             </div>
             {% if not no_content %}
                 <div class="card-body">
