@@ -1,15 +1,15 @@
 {% load static %}
 
-{% url 'web:home' as home_url %}
-{% url 'web:news' as news_url %}
-{% url 'web:materials' as materials_url %}
-{% url 'web:students' as students_url %}
-{% url 'web:teachers' as teachers_url %}
-{% url 'web:participants' as participants_url %}
-{% url 'web:settings' as settings_url %}
-{% url 'web:team' as team_url %}
-{% url 'web:lectures' as lectures_url %}
-{% url 'web:forums' as forums_url %}
+{% url 'home' as home_url %}
+{% url 'news:news' as news_url %}
+{% url 'materials:materials' as materials_url %}
+{% url 'users:students' as students_url %}
+{% url 'users:teachers' as teachers_url %}
+{% url 'users:participants' as participants_url %}
+{% url 'users:settings' as settings_url %}
+{% url 'users:team' as team_url %}
+{% url 'materials:lectures' as lectures_url %}
+{% url 'forum:forums' as forums_url %}
 
 <nav class="navbar navbar-expand-lg">
 <div class="container-fluid">
@@ -61,6 +61,7 @@
                         <a class="dropdown-item" href="{{ team_url }}"><i class="bi bi-people-fill text-primary"></i> Учителски колектив</a>
                         <a class="dropdown-item" href="{{ lectures_url }}"><i class="bi bi-file-pdf-fill text-primary"></i> Лекции</a>
                         <a class="dropdown-item" href="/news/add"><i class="bi bi-newspaper text-primary"></i> Създай новина</a>
+                        <a class="dropdown-item" href="/forum/add"><i class="bi bi-chat-right-text-fill text-primary"></i> Създай форум тема</a>
                     </div>
                 </li>
             {% endif %}

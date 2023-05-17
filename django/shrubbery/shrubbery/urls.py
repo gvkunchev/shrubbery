@@ -15,18 +15,27 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.conf import settings
+from django.urls import re_path
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 
+from . import views
+
+
+handler404 = 'shrubbery.views.missing'
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('web.urls'))
+    path('', include('news.urls')),
+    path('', include('forum.urls')),
+    path('', include('users.urls')),
+    path('', include('materials.urls')),
+    re_path(r'^$', views.home, name='home'),
+    re_path(r'^missing$', views.missing, name='missing')
 ]
+
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
-handler404 = 'web.views.missing'

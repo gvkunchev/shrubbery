@@ -8,7 +8,7 @@
             <h5 class="card-title">Добави студент</h5>
         </div>
         <div class="card-body">
-            <form method="post" action="/add_participant">
+            <form method="post" action="/participant/add">
                 {% csrf_token %}
                 <div class="form-group">
                     <label for="first_name">Име</label>
@@ -38,7 +38,7 @@
             <div class="mb-2" style="max-width: 350px">
                 <i class="bi bi-info-circle-fill"></i> Качи .csv файл с един ред за всеки студент. Всеки ред трябва да има три стойности - име, фамилия, факултетен номер.
             </div>
-            <form action="add_participants" method="POST" enctype="multipart/form-data" class="form-horizontal"> 
+            <form action="participants/add" method="POST" enctype="multipart/form-data" class="form-horizontal"> 
                 {% csrf_token %}
                 <input type="file" accept=".csv" name="csv_file" required="True" class="form-control" data-buttonText="Your label here.">
                 <div class="text-danger">{{ errors.csv }}</div>

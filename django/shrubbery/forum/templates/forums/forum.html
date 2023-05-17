@@ -58,7 +58,7 @@
                     {% if request.user.is_authenticated %}
                     <tr>
                         <td>
-                            <form method="post" action="/add_forum_comment">
+                            <form method="post" action="/forum_comment/add">
                                 {% csrf_token %}
                                 <input type="hidden" name="forum" value="{{ forum.pk }}">
                                 <textarea required="required" name="content" class="form-control showdown-input showdown-input-small" id="content" placeholder="Отговор"></textarea>
@@ -76,7 +76,7 @@
                             <br/>
                             <div class="showdown-trigger">{{ comment.content }}</div>
                             {% if request.user.is_teacher or request.user.id == comment.author.id %}
-                                <a href="/edit_forum_comment/{{ comment.pk }}?page={{ request.GET.page }}">Редактирай</a>
+                                <a href="/forum_comment/edit/{{ comment.pk }}?page={{ request.GET.page }}">Редактирай</a>
                             {% endif %}
                         </td></tr>
                     {% endfor %}

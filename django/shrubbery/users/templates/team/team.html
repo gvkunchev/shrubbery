@@ -8,7 +8,7 @@
             <h5 class="card-title">Добави учител</h5>
         </div>
         <div class="card-body">
-            <form method="post" action="/add_teacher">
+            <form method="post" action="/team/member/add">
                 {% csrf_token %}
                 <div class="form-group">
                     <label for="first_name">Име</label>
@@ -47,7 +47,7 @@
                 {% for teacher in team %}
                     <tr>
                         <th scope="row">
-                            <a href="/team_member/{{ teacher.id }}">
+                            <a href="/team/member/{{ teacher.id }}">
                                 {{ teacher.full_name }}
                             </a>
                         </th>

@@ -9,7 +9,7 @@
             <h5 class="card-title">Добави лекция</h5>
         </div>
         <div class="card-body">
-            <form method="post" action="/add_lecture" enctype="multipart/form-data">
+            <form method="post" action="/lecture/add" enctype="multipart/form-data">
                 {% csrf_token %}
                 <div class="form-group">
                     <label for="first_name">Име</label>

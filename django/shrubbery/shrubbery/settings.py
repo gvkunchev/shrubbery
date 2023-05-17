@@ -55,8 +55,7 @@ INSTALLED_APPS = [
     'users',
     'news',
     'materials',
-    'forum',
-    'web'
+    'forum'
 ]
 
 MIDDLEWARE = [
@@ -76,7 +75,7 @@ ROOT_URLCONF = 'shrubbery.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'shrubbery/templates', 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -162,15 +161,15 @@ STATIC_URL = 'static/'
 STATIC_ROOT = BASE_DIR / 'static'
 
 STATICFILES_DIRS = [
-    BASE_DIR / "web/static",
-    BASE_DIR / "web/static/scss",
+    BASE_DIR / "shrubbery/static",
+    BASE_DIR / "shrubbery/static/scss",
     BASE_DIR / "media",
 ]
 
 if os.environ.get('SHRUBBERY_ENV') == 'prd':
     SASS_PROCESSOR_ROOT = BASE_DIR / 'static'
 else:
-    SASS_PROCESSOR_ROOT = BASE_DIR / 'web/static/scss'
+    SASS_PROCESSOR_ROOT = BASE_DIR / 'shrubbery/static/scss'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field

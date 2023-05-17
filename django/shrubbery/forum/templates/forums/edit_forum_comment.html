@@ -1,11 +1,11 @@
 {% extends "backbone/base.html" %}
 {% block location %}
-    <h6 class="location-info"><i class="bi bi-globe"></i> <a href="/forums">Форум</a> > <a href="/forum/{{ comment.forum.pk }}">{{ comment.forum.title }}</a> > <a href="/edit_forum_comment/{{ comment.pk }}">Редактирай коментар</a></h6>
+    <h6 class="location-info"><i class="bi bi-globe"></i> <a href="/forums">Форум</a> > <a href="/forum/{{ comment.forum.pk }}">{{ comment.forum.title }}</a> > <a href="/forum_comment/edit/{{ comment.pk }}">Редактирай коментар</a></h6>
 {% endblock %}
 {% block body %}
 
     {% if request.user.is_teacher %}
-    <a href="/delete_forum_comment/{{ comment.pk }}" class="text-reset text-decoration-none confirm-delete-forum-comment">
+    <a href="/forum_comment/delete/{{ comment.pk }}" class="text-reset text-decoration-none confirm-delete-forum-comment">
         <button type="button" class="btn btn-danger">
             <i class="bi bi-x-circle-fill"></i> Изтрий
         </button>

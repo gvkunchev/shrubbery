@@ -16,6 +16,13 @@ class PasswordSetForm(PasswordChangeForm):
         self.fields['old_password'].required = False
 
 
+class EditUserForm(forms.ModelForm):
+
+    class Meta:
+        model = User
+        fields = ('first_name', 'last_name', 'github', 'image', 'dark_theme')
+
+
 class AddStudentForm(UserCreationForm):
 
     class Meta:
@@ -35,6 +42,13 @@ class RegisterStudent(forms.ModelForm):
         fields = ('first_name', 'last_name', 'fn', 'email')
 
 
+class EditStudentForm(forms.ModelForm):
+
+    class Meta:
+        model = Student
+        fields = ('first_name', 'last_name', 'fn')
+
+
 class AddTeacherForm(UserCreationForm):
 
     class Meta:
@@ -47,21 +61,8 @@ class AddTeacherForm(UserCreationForm):
         self.fields['password2'].required = False
 
 
-class EditStudentForm(forms.ModelForm):
-
-    class Meta:
-        model = Student
-        fields = ('first_name', 'last_name', 'fn')
-
 class EditTeacherForm(forms.ModelForm):
 
     class Meta:
         model = Teacher
         fields = ('first_name', 'last_name')
-
-
-class EditUserForm(forms.ModelForm):
-
-    class Meta:
-        model = User
-        fields = ('first_name', 'last_name', 'github', 'image', 'dark_theme')
