@@ -2,6 +2,8 @@ from django.db import models
 from django.utils import timezone
 from users.models import User
 
+from points.models import PointsGiver
+
 
 class Forum(models.Model):
     date = models.DateTimeField(default=timezone.now)
@@ -32,11 +34,12 @@ class Forum(models.Model):
         return self.forumcomment_set.first()
 
 
-class ForumComment(models.Model):
+class ForumComment(PointsGiver):
     date = models.DateTimeField(default=timezone.now)
     author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     forum = models.ForeignKey(Forum, on_delete=models.CASCADE)
     content = models.TextField()
+    starred = models.BooleanField(default=False)
 
     class Meta:
         ordering = ('-date', )
@@ -49,3 +52,15 @@ class ForumComment(models.Model):
     def __str__(self):
         """String representation for the admin panel."""
         return f"{self.author} - {self.human_date}"
+
+    def _update_points(self):
+        """Update points assigned if starred."""
+        if self.starred:
+            self.points = 1
+        else:
+            self.points = 0
+
+    def save(self, *args, **kwargs):
+        """Decorate saving with points assignments."""
+        super(ForumComment, self).save(*args, **kwargs)
+        self._update_points()

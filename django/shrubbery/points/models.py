@@ -3,7 +3,7 @@ from django.db import models
 
 class PointsGiver(models.Model):
 
-    points = models.IntegerField()
+    points = models.IntegerField(default=0)
 
     class Meta:
         abstract = True

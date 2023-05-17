@@ -31,13 +31,13 @@ class ForumCommentAdmin(admin.ModelAdmin):
     fieldsets = (
             (None, {
                 "fields": (
-                   ('date', 'author', 'forum', 'content')
+                   ('date', 'author', 'forum', 'content', 'starred')
                 ),
             }),
         )
     add_fieldsets = (
         (None, {
-            'fields': ('date', 'author', 'forum', 'content')
+            'fields': ('date', 'author', 'forum', 'content', 'starred')
         }),
     )
 

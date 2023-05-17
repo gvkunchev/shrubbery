@@ -9257,6 +9257,9 @@ textarea.form-control-lg {
 .navbar-brand img {
   height: 2em; }
 
+.nav-item {
+  white-space: nowrap; }
+
 .navbar-separator > a::before {
   content: '|';
   padding-right: 15px;
@@ -9309,6 +9312,21 @@ textarea.form-control-lg {
 #showdown-modal .modal-body {
   width: 100% !important;
   max-width: 100% !important; }
+
+.star {
+  position: absolute;
+  bottom: -0.5em;
+  right: -0.5em;
+  font-size: 2em;
+  color: #ffc107; }
+
+.hidden {
+  display: none; }
+
+.ajax-toggle-trigger {
+  display: none; }
+  .ajax-toggle-trigger.active {
+    display: inline; }
 
 .student-card {
   max-width: 250px; }

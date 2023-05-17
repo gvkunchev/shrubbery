@@ -26,8 +26,8 @@
                 <input type="hidden" name="page" value="{% if request.GET.page %}{{ request.GET.page }}{% else %}1{% endif %}">
                 <textarea name="content" class="form-control showdown-input" id="content" placeholder="Съдържание">{% if request.POST.content %}{{ request.POST.content }}{% else %}{{ comment.content }}{% endif %}</textarea>
                 <div class="text-danger">{{ errors.content.as_text }}</div>
-                <button type="submit" name="edit" class="btn btn-primary mt-2">Запази</button>
-                <button class="btn btn-secondary mt-2 showdown-preview" data-showdown-source="content"><i class="bi bi-eye-fill"></i> Преглед</button>
+                <button type="submit" name="edit" class="btn btn-primary mt-2 mx-1">Запази</button>
+                <button class="btn btn-secondary mt-2 mx-1 showdown-preview" data-showdown-source="content"><i class="bi bi-eye-fill"></i> Преглед</button>
             </form>
         </div>
     </div>

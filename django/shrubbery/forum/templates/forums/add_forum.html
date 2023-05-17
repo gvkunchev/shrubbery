@@ -20,8 +20,8 @@
                     <textarea required="required" name="content" class="form-control showdown-input" id="content" placeholder="Съдържание">{{ request.POST.content }}</textarea>
                     <div class="text-danger">{{ errors.content.as_text }}</div>
                 </div>
-                <button type="submit" name="edit" class="btn btn-primary mt-2">Създай</button>
-                <button class="btn btn-secondary mt-2 showdown-preview" data-showdown-source="content"><i class="bi bi-eye-fill"></i> Преглед</button>
+                <button type="submit" name="edit" class="btn btn-primary mt-2 mx-1">Създай</button>
+                <button class="btn btn-secondary mt-2 mx-1 showdown-preview" data-showdown-source="content"><i class="bi bi-eye-fill"></i> Преглед</button>
             </form>
         </div>
     </div>

@@ -33,9 +33,9 @@
                     <div class="text-danger"><i class="bi bi-x-circle-fill"></i> {{ error }}</div>
                 {% endif %}
 
-                <button type="submit" name="edit" class="btn btn-primary mt-2">Запази</button>
+                <button type="submit" name="edit" class="btn btn-primary mt-2 mx-1">Запази</button>
 
-                <button type="submit" name="delete" class="btn btn-danger mt-2 confirm-delete-user">Изтрий</button>
+                <button type="submit" name="delete" class="btn btn-danger mt-2 mx-1 confirm-delete-user">Изтрий</button>
                 
                 {% include 'common/delete_modal.html' with content='Сигурен ли си, че искаш да изтриеш този студент?' id='confirm_delete_user_modal' %}
 
