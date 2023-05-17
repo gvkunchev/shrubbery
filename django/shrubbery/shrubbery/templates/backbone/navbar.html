@@ -2,6 +2,7 @@
 
 {% url 'home' as home_url %}
 {% url 'news:news' as news_url %}
+{% url 'news:add_news_article' as add_news_url %}
 {% url 'materials:materials' as materials_url %}
 {% url 'users:students' as students_url %}
 {% url 'users:teachers' as teachers_url %}
@@ -10,6 +11,7 @@
 {% url 'users:team' as team_url %}
 {% url 'materials:lectures' as lectures_url %}
 {% url 'forum:forums' as forums_url %}
+{% url 'forum:add_forum' as add_forum_url %}
 {% url 'vouchers:vouchers' as vouchers_url %}
 {% url 'vouchers:redeemed' as redeemed_url %}
 
@@ -61,12 +63,12 @@
                         <i class="bi bi-person-fill-lock text-primary"></i> Администрация
                     </a>
                     <div class="dropdown-menu">
-                        <a class="dropdown-item" href="{{ participants_url }}"><i class="bi bi-card-checklist text-primary"></i> Записани студенти</a>
-                        <a class="dropdown-item" href="{{ team_url }}"><i class="bi bi-people-fill text-primary"></i> Учителски колектив</a>
-                        <a class="dropdown-item" href="{{ lectures_url }}"><i class="bi bi-file-pdf-fill text-primary"></i> Лекции</a>
-                        <a class="dropdown-item" href="{{ vouchers_url }}"><i class="bi bi-upc text-primary"></i> Ваучери</a>
-                        <a class="dropdown-item" href="/news/add"><i class="bi bi-newspaper text-primary"></i> Създай новина</a>
-                        <a class="dropdown-item" href="/forum/add"><i class="bi bi-chat-right-text-fill text-primary"></i> Създай форум тема</a>
+                        <a class="dropdown-item {% if request.path == participants_url %}active{% endif %}" href="{{ participants_url }}"><i class="bi bi-card-checklist {% if request.path != participants_url %}text-primary{% endif %}"></i> Записани студенти</a>
+                        <a class="dropdown-item {% if request.path == team_url %}active{% endif %}" href="{{ team_url }}"><i class="bi bi-people-fill {% if request.path != team_url %}text-primary{% endif %}"></i> Учителски колектив</a>
+                        <a class="dropdown-item {% if request.path == lectures_url %}active{% endif %}" href="{{ lectures_url }}"><i class="bi bi-file-pdf-fill {% if request.path != lectures_url %}text-primary{% endif %}"></i> Лекции</a>
+                        <a class="dropdown-item {% if request.path == vouchers_url %}active{% endif %}" href="{{ vouchers_url }}"><i class="bi bi-upc {% if request.path != vouchers_url %}text-primary{% endif %}"></i> Ваучери</a>
+                        <a class="dropdown-item {% if request.path == add_news_url %}active{% endif %}" href="{{ add_news_url }}"><i class="bi bi-newspaper {% if request.path != add_news_url %}text-primary{% endif %}"></i> Създай новина</a>
+                        <a class="dropdown-item {% if request.path == add_forum_url %}active{% endif %}" href="{{ add_forum_url }}"><i class="bi bi-chat-right-text-fill {% if request.path != add_forum_url %}text-primary{% endif %}"></i> Създай форум тема</a>
                     </div>
                 </li>
             {% endif %}
