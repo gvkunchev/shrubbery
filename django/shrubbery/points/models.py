@@ -6,4 +6,4 @@ class PointsGiver(models.Model):
     points = models.IntegerField()
 
     class Meta:
-        abstract = True 
+        abstract = True
