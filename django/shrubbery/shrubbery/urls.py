@@ -32,6 +32,7 @@ urlpatterns = [
     path('', include('forum.urls')),
     path('', include('users.urls')),
     path('', include('materials.urls')),
+    path('', include('vouchers.urls')),
     re_path(r'^$', views.home, name='home'),
     re_path(r'^missing$', views.missing, name='missing')
 ]

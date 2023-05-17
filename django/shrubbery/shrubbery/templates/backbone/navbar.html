@@ -10,6 +10,9 @@
 {% url 'users:team' as team_url %}
 {% url 'materials:lectures' as lectures_url %}
 {% url 'forum:forums' as forums_url %}
+{% url 'vouchers:vouchers' as vouchers_url %}
+{% url 'vouchers:redeemed' as redeemed_url %}
+
 
 <nav class="navbar navbar-expand-lg">
 <div class="container-fluid">
@@ -35,6 +38,11 @@
             <li class="nav-item">
                 <a class="nav-link {% if request.path == news_url %}active{% endif %}" href="{{ news_url }}"><i class="bi bi-newspaper text-primary"></i> Новини</a>
             </li>
+            {% if request.user.is_student %}
+                <li class="nav-item">
+                    <a class="nav-link {% if request.path == redeemed_url %}active{% endif %}" href="{{ redeemed_url }}"><i class="bi bi-upc text-primary"></i> Ваучери</a>
+                </li>
+            {% endif %}
             <li class="nav-item">
                 <a class="nav-link {% if request.path == materials_url %}active{% endif %}" href="{{ materials_url }}"><i class="bi bi-book-fill text-primary"></i> Материали</a>
             </li>
@@ -56,6 +64,7 @@
                         <a class="dropdown-item" href="{{ participants_url }}"><i class="bi bi-card-checklist text-primary"></i> Записани студенти</a>
                         <a class="dropdown-item" href="{{ team_url }}"><i class="bi bi-people-fill text-primary"></i> Учителски колектив</a>
                         <a class="dropdown-item" href="{{ lectures_url }}"><i class="bi bi-file-pdf-fill text-primary"></i> Лекции</a>
+                        <a class="dropdown-item" href="{{ vouchers_url }}"><i class="bi bi-upc text-primary"></i> Ваучери</a>
                         <a class="dropdown-item" href="/news/add"><i class="bi bi-newspaper text-primary"></i> Създай новина</a>
                         <a class="dropdown-item" href="/forum/add"><i class="bi bi-chat-right-text-fill text-primary"></i> Създай форум тема</a>
                     </div>

@@ -6,7 +6,7 @@ class ForumAdmin(admin.ModelAdmin):
     model = Forum
     ordering = ('date', 'author')
     search_fields = ('date', 'author', 'title', 'content')
-    list_display = ('date', 'author', 'title')
+    list_display = ('title', 'date', 'author')
     list_filter = ('author', )
     fieldsets = (
             (None, {

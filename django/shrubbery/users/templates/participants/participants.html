@@ -40,7 +40,7 @@
             </div>
             <form action="participants/add" method="POST" enctype="multipart/form-data" class="form-horizontal"> 
                 {% csrf_token %}
-                <input type="file" accept=".csv" name="csv_file" required="True" class="form-control" data-buttonText="Your label here.">
+                <input type="file" accept=".csv" name="csv_file" required="True" class="form-control">
                 <div class="text-danger">{{ errors.csv }}</div>
                 <div class="text-danger">
                     {% if errors.csv_list %}

@@ -20,6 +20,7 @@ $(document).ready(function(){
         })
     }
     confirmDeleteSubmit($('.confirm-delete-user'), $('#confirm_delete_user_modal'));
+    confirmDeleteSubmit($('.confirm-delete-vouchers'), $('#confirm_delete_vouchers_modal'));
     confirmDeleteSubmit($('.confirm-delete-lecture'), $('#confirm_delete_lecture_modal'));
 
 
