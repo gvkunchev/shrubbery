@@ -17,23 +17,7 @@
             </button>
         </a>
         <hr class="mt-2 mb-1"/>
-        <!-- Modal -->
-        <div class="modal fade" id="confirm_delete_forum_modal" tabindex="-1" role="dialog">
-            <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Потвърждение</h5>
-                </div>
-                <div class="modal-body">
-                    Сигурен ли си, че искаш да изтриеш този форум?
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary btn-no" data-dismiss="modal">Не</button>
-                    <button type="button" class="btn btn-danger btn-yes" data-dismiss="modal">Да</button>
-                </div>
-            </div>
-            </div>
-        </div>
+        {% include 'common/delete_modal.html' with content='Сигурен ли си, че искаш да изтриеш този форум?' id='confirm_delete_forum_modal' %}
     {% endif %}
 
     <div class="card mt-2">

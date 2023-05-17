@@ -33,23 +33,8 @@
                 <button type="submit" name="edit" class="btn btn-primary mt-2">Запази</button>
 
                 <button type="submit" name="delete" class="btn btn-danger mt-2 confirm-delete-lecture">Изтрий</button>
-                <!-- Modal -->
-                <div class="modal fade" id="confirm_delete_lecture_modal" tabindex="-1" role="dialog">
-                    <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title">Потвърждение</h5>
-                        </div>
-                        <div class="modal-body">
-                            Сигурен ли си, че искаш да изтриеш тази лекция?
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary btn-no" data-dismiss="modal">Не</button>
-                            <button type="button" class="btn btn-danger btn-yes" data-dismiss="modal">Да</button>
-                        </div>
-                    </div>
-                    </div>
-                </div>
+
+                {% include 'common/delete_modal.html' with content='Сигурен ли си, че искаш да изтриеш тази лекция?' id='confirm_delete_lecture_modal' %}
 
             </form>
         </div>
