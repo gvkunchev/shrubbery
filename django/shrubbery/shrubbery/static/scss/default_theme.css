@@ -9368,4 +9368,21 @@ textarea.form-control-lg {
 .teacher-profile-image {
   max-width: 250px; }
 
+.scoreboard-table {
+  max-width: 600px; }
+
+.scoreboard-image-wrapper {
+  position: relative;
+  display: inline-block; }
+  .scoreboard-image-wrapper .medal {
+    width: 1em;
+    position: absolute;
+    right: -0.3em;
+    bottom: -0.3em; }
+  .scoreboard-image-wrapper .small-profile-picture {
+    width: 2em;
+    height: 2em;
+    border-radius: 50%;
+    border: 1px solid #adb5bd; }
+
 /*# sourceMappingURL=default_theme.css.map */

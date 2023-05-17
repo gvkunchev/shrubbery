@@ -1,0 +1,37 @@
+{% extends "backbone/base.html" %}
+{% block location %}
+    <h6 class="location-info"><i class="bi bi-globe"></i> <a href="/points">Точки</a></h6>
+{% endblock %}
+{% block body %}
+
+    {% if data %}
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">Име</th>
+                    <th scope="col">Факултетен номер</th>
+                    <th scope="col">Профилна снимка</th>
+                    <th scope="col">Коментари</th>
+                    <th scope="col">Общо</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in data %}
+                <tr>
+                    <th scope="row">
+                        <a href="/student/{{ row.student.pk }}" target="_blank">
+                            {{ row.student.full_name }}
+                        </a>
+                    </th>
+                    <td>{{ row.student.fn }}</td>
+                    <td>{{ row.profile_picture }}</td>
+                    <td>{{ row.comments }}</td>
+                    <td>{{ row.total }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        Все още няма записани студенти.
+    {% endif %}
+{% endblock %}

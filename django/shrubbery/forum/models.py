@@ -21,7 +21,7 @@ class Forum(models.Model):
 
     def __str__(self):
         """String representation for the admin panel."""
-        return f"{self.author} - {self.human_date} - {self.title}"
+        return f"{self.title} - {self.author} - {self.human_date}"
 
     @property
     def comments(self):
@@ -53,14 +53,15 @@ class ForumComment(PointsGiver):
         """String representation for the admin panel."""
         return f"{self.author} - {self.human_date}"
 
-    def _update_points(self):
+    def _update_points(self, *args, **kwargs):
         """Update points assigned if starred."""
         if self.starred:
             self.points = 1
         else:
             self.points = 0
+        super(ForumComment, self).save(*args, **kwargs)
 
     def save(self, *args, **kwargs):
         """Decorate saving with points assignments."""
         super(ForumComment, self).save(*args, **kwargs)
-        self._update_points()
+        self._update_points(*args, **kwargs)

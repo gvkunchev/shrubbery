@@ -14,6 +14,8 @@
 {% url 'forum:add_forum' as add_forum_url %}
 {% url 'vouchers:vouchers' as vouchers_url %}
 {% url 'vouchers:redeemed' as redeemed_url %}
+{% url 'points:points' as points_url %}
+{% url 'points:scoreboard' as scoreboard_url %}
 
 
 <nav class="navbar navbar-expand-lg">
@@ -52,6 +54,9 @@
                 <a class="nav-link {% if request.path == forums_url %}active{% endif %}" href="{{ forums_url }}"><i class="bi bi-chat-right-text-fill text-primary"></i> Форум</a>
             </li>
             <li class="nav-item">
+                <a class="nav-link {% if request.path == scoreboard_url %}active{% endif %}" href="{{ scoreboard_url }}"><i class="bi bi-trophy-fill text-primary"></i> Класиране</a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link {% if request.path == students_url %}active{% endif %}" href="{{ students_url }}"><i class="bi bi-person-fill text-primary"></i> Студенти</a>
             </li>
             <li class="nav-item">
@@ -67,6 +72,7 @@
                         <a class="dropdown-item {% if request.path == team_url %}active{% endif %}" href="{{ team_url }}"><i class="bi bi-people-fill {% if request.path != team_url %}text-primary{% endif %}"></i> Учителски колектив</a>
                         <a class="dropdown-item {% if request.path == lectures_url %}active{% endif %}" href="{{ lectures_url }}"><i class="bi bi-file-pdf-fill {% if request.path != lectures_url %}text-primary{% endif %}"></i> Лекции</a>
                         <a class="dropdown-item {% if request.path == vouchers_url %}active{% endif %}" href="{{ vouchers_url }}"><i class="bi bi-upc {% if request.path != vouchers_url %}text-primary{% endif %}"></i> Ваучери</a>
+                        <a class="dropdown-item {% if request.path == points_url %}active{% endif %}" href="{{ points_url }}"><i class="bi bi-star-fill {% if request.path != points_url %}text-primary{% endif %}"></i> Точки</a>
                         <a class="dropdown-item {% if request.path == add_news_url %}active{% endif %}" href="{{ add_news_url }}"><i class="bi bi-newspaper {% if request.path != add_news_url %}text-primary{% endif %}"></i> Създай новина</a>
                         <a class="dropdown-item {% if request.path == add_forum_url %}active{% endif %}" href="{{ add_forum_url }}"><i class="bi bi-chat-right-text-fill {% if request.path != add_forum_url %}text-primary{% endif %}"></i> Създай форум тема</a>
                     </div>
