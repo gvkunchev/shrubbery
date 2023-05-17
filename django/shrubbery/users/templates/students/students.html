@@ -38,6 +38,11 @@
                             <i class="bi bi-github"></i> Няма
                         {% endif %}
                     </li>
+                    {% if request.user.is_teacher %}
+                        <li class="list-group-item text-truncate">
+                            <i class="bi bi-hash"></i> {{ student.fn }}
+                        </li>
+                    {% endif %}
                 </ul>
             </div>
         {% endfor %}
