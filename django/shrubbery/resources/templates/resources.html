@@ -1,0 +1,76 @@
+{% extends "backbone/base.html" %}
+{% load static %}
+{% block location %}
+    <h6 class="location-info"><i class="bi bi-globe"></i> <a href="/resources">Ресурси</a></h6>
+{% endblock %}
+{% block body %}
+    <div class="card mt-2 d-inline-block">
+        <div class="card-header">
+            <h5 class="card-title">Добави ресурс</h5>
+        </div>
+        <div class="card-body">
+            <div class="mb-2" style="max-width: 350px">
+                <i class="bi bi-info-circle-fill"></i> Качи файл и вземи линк за него, за да го използваш във форум, домашно или друга тема в сайта.
+            </div>
+            <form method="post" action="/resource/add" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="image">Файл</label>
+                    <input type="file" required="required" name="content" class="form-control" id="content"/>
+                    <div class="text-danger">{{ errors.content.as_text }}</div>
+                </div>
+                <button type="submit" class="btn btn-primary mt-2">Добави</button>
+            </form>
+        </div>
+    </div>
+
+    {% if info %}
+        <div class="text-info">
+            <i class="bi bi-check-circle-fill"></i> {{ info }}
+            <span class="m-2 clipboard-trigger" data-toggle="tooltip" title="Копирай">
+                <input type="text" class="hidden" value="{{ request.get_host }}/media/{{ resource.content }}">
+                <i class="bi bi-clipboard-check-fill"></i>
+            </span>
+        </div>
+    {% endif %}
+    
+    {% if resources %}
+        <form action="/resource/remove" method="POST">
+            {% csrf_token %}
+            <button type="submit" name="edit" class="btn btn-danger mt-2 confirm-delete-resources">Изтрий избраните</button>
+            {% include 'common/delete_modal.html' with content='Сигурен ли си, че искаш да изтриеш тези ресурси?' id='confirm_delete_resources_modal' %}
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th scope="col"></th>
+                        <th scope="col">Име</th>
+                        <th scope="col">Линк</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for resource in resources %}
+                    <tr>
+                        <td>
+                            <input type="checkbox" name="resource_{{ resource.pk }}" class="form-check-input"/>
+                        </td>
+                        <td>
+                            {{ resource.content }}
+                        </td>
+                        <td>
+                            <span class="m-2 clipboard-trigger" data-toggle="tooltip" title="Копирай">
+                                <input type="text" class="hidden" value="{{ request.get_host }}/media/{{ resource.content }}">
+                                <i class="bi bi-clipboard-check-fill"></i>
+                            </span>
+                            <a href="media/{{ resource.content }}" target="_blank">
+                                {{ request.get_host }}/media/{{ resource.content }}
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </form>
+    {% else %}
+        <br/>Все още няма никакви ресурси.
+    {% endif %}
+{% endblock %}

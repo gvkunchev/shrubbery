@@ -1,0 +1,28 @@
+{% extends "backbone/base.html" %}
+{% block location %}
+    <h6 class="location-info"><i class="bi bi-globe"></i> <a href="/news">Новини</a> > <a href="/news/add">Създай новина</a></h6>
+{% endblock %}
+{% block body %}
+    <div class="card mt-2">
+        <div class="card-header">
+            <h5 class="card-title">Създай новина</h5>
+        </div>
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="title">Заглавие</label>
+                    <input type="text" required="required" class="form-control" id="title" name="title" placeholder="Заглавие" value="{{ request.POST.title }}">
+                    <div class="text-danger">{{ errors.title.as_text }}</div>
+                </div>
+                <div class="form-group">
+                    <label for="content">Съдържание</label>
+                    <textarea required="required" name="content" class="form-control showdown-input" id="content" placeholder="Съдържание">{{ request.POST.content }}</textarea>
+                    <div class="text-danger">{{ errors.content.as_text }}</div>
+                </div>
+                <button type="submit" name="edit" class="btn btn-primary mt-2 mx-1">Създай</button>
+                <button class="btn btn-secondary mt-2 mx-1 showdown-preview" data-showdown-source="content"><i class="bi bi-eye-fill"></i> Преглед</button>
+            </form>
+        </div>
+    </div>
+{% endblock %}

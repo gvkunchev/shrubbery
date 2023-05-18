@@ -1,0 +1,51 @@
+{% extends "backbone/base.html" %}
+{% load static %}
+{% block location %}
+    <h6 class="location-info"><i class="bi bi-globe"></i> <a href="/scoreboard">Класиране</a></h6>
+{% endblock %}
+{% block body %}
+
+    {% if data %}
+        <table class="table table-hover scoreboard-table">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col"></th>
+                    <th scope="col">Име</th>
+                    <th scope="col">Точки</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in data %}
+                <tr>
+                    <th scope="row">{{ row.rank }}</th>
+                    <td>
+                        <a href="/student/{{ row.student.pk }}" target="_blank">
+                            <span class="scoreboard-image-wrapper">
+                                <img src="{% include 'common/profile_picture' %}" class="small-profile-picture">
+                                {% if row.rank == 1 %}
+                                    <img src="{% static 'img/gold_medal.png' %}" class="medal">
+                                {% endif %}
+                                {% if row.rank == 2 %}
+                                    <img src="{% static 'img/silver_medal.png' %}" class="medal">
+                                {% endif %}
+                                {% if row.rank == 3 %}
+                                    <img src="{% static 'img/bronze_medal.png' %}" class="medal">
+                                {% endif %}
+                            </span>
+                        </a>
+                    </td>
+                    <td>
+                        <a href="/student/{{ row.student.pk }}" target="_blank">
+                            {{ row.student.full_name }}
+                        </a>
+                    </td>
+                    <td>{{ row.total }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        Все още няма записани студенти.
+    {% endif %}
+{% endblock %}

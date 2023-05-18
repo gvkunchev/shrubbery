@@ -1,0 +1,29 @@
+{% extends "backbone/base.html" %}
+{% block location %}
+    <h6 class="location-info"><i class="bi bi-globe"></i> <a href="/news">Новини</a> > <a href="/news/{{ article.pk }}">{{ article.title }}</a></h6>
+{% endblock %}
+{% block body %}
+    {% if request.user.is_teacher %}
+        <a href="/news/edit/{{ article.pk }}" class="text-reset text-decoration-none">
+            <button type="button" class="btn btn-primary">
+                <i class="bi bi-pencil-square"></i> Редактирай
+            </button>
+        </a>
+        <a href="/news/delete/{{ article.pk }}" class="text-reset text-decoration-none confirm-delete-news-article">
+            <button type="button" class="btn btn-danger">
+                <i class="bi bi-x-circle-fill"></i> Изтрий
+            </button>
+        </a>
+        <hr class="mt-2 mb-1"/>
+        {% include 'common/delete_modal.html' with content='Сигурен ли си, че искаш да изтриеш тази новина?' id='confirm_delete_news_article_modal' %}
+    {% endif %}
+    <h4>{{ article.title }}</h4>
+    <h6 class="fw-lighter">{{ article.human_date }}</h6>
+    <div class="showdown-trigger">{{ article.content }}</div>
+    <hr class="mt-2 mb-1"/>
+    <a href="/news" class="text-reset text-decoration-none">
+        <button type="button" class="btn btn-primary">
+            <i class="bi bi-arrow-left-circle-fill"></i> Обратно към всички новини
+        </button>
+    </a>
+{% endblock %}

@@ -1,0 +1,16 @@
+<li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle
+              {% for item in items %}
+                  {% if item.0 in request.path %}
+                      active
+                  {% endif %}
+              {% endfor %}
+             " href="#" data-toggle="dropdown">
+        {{ text }}
+    </a>
+    <div class="dropdown-menu">
+        {% for item in items %}
+            <a class="dropdown-item {% if request.path == item.0 %}active{% endif %}" href="{{ item.0 }}">{{ item.1 }}</a>
+        {% endfor %}
+    </div>
+</li>

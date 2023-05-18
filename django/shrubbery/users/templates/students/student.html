@@ -1,0 +1,38 @@
+{% extends "backbone/base.html" %}
+{% block location %}
+    <h6 class="location-info"><i class="bi bi-globe"></i> <a href="/students">Студенти</a> > <a href="/student/{{ student.id }}">{{ student.full_name }}</a></h6>
+{% endblock %}
+{% block body %}
+    <h4>{{ student.full_name }}</h4>
+    {% if student.image %}
+        <img src="/media/{{ student.image }}" class="student-profile-image border"/>
+    {% else %}
+        <img src="/static/img/blank-profile.png" class="student-profile-image border"/>
+    {% endif %}
+    <h6>
+        <i class="bi bi-envelope-at-fill"></i>
+        <a href="mailto:{{ student.email }}">{{ student.email }}</a>
+    </h6>
+    <h6>
+        {% if student.github != "" %}
+            <i class="bi bi-github"></i>
+            <a href="https://github.com/" target="_blank">{{ student.github }}</a>
+        {% else %}
+            <i class="bi bi-github"></i> Няма
+        {% endif %}
+    </h6>
+    <h6>
+        {% if request.user.is_teacher %}
+            <li class="list-group-item text-truncate">
+                <i class="bi bi-hash"></i> {{ student.fn }}
+            </li>
+        {% endif %}
+    </h6>
+
+    <hr class="mt-2 mb-1"/>
+    <a href="/students" class="text-reset text-decoration-none">
+        <button type="button" class="btn btn-primary">
+            <i class="bi bi-arrow-left-circle-fill"></i> Обратно към всички студенти
+        </button>
+    </a>
+{% endblock %}

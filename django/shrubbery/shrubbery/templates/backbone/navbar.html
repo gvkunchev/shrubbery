@@ -1,0 +1,73 @@
+{% load static %}
+{% load extras %}
+
+{% url 'home' as home_url %}
+{% url 'news:news' as news_url %}
+{% url 'news:add_news_article' as add_news_url %}
+{% url 'materials:materials' as materials_url %}
+{% url 'users:students' as students_url %}
+{% url 'users:teachers' as teachers_url %}
+{% url 'users:participants' as participants_url %}
+{% url 'users:settings' as settings_url %}
+{% url 'users:team' as team_url %}
+{% url 'materials:lectures' as lectures_url %}
+{% url 'forum:forums' as forums_url %}
+{% url 'forum:add_forum' as add_forum_url %}
+{% url 'vouchers:vouchers' as vouchers_url %}
+{% url 'vouchers:redeemed' as redeemed_url %}
+{% url 'points:points' as points_url %}
+{% url 'points:scoreboard' as scoreboard_url %}
+{% url 'resources:resources' as resources_url %}
+{% url 'exams:exams' as exams_url %}
+
+
+<nav class="navbar navbar-expand-lg">
+<div class="container-fluid">
+    <a class="navbar-brand" href="/">
+        <div class="navbar-brand-wrapper">
+            {% if request.user.is_authenticated %}
+                <img src="{% include 'common/profile_picture' with user=request.user %}" class="navbar-profile-picture" title="{{ request.user.first_name }} @ ФМИ"/>
+                <img src="{% static 'img/python_logo.png' %}"  class="navbar-logo" title="{{ request.user.first_name }} @ ФМИ"/>
+            {% else %}
+                <img src="{% static 'img/python_logo.png' %}" title="Python @ ФМИ" />
+            {% endif %}
+        </div>  
+    </a>
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" >
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            {% include 'common/navbar_inline_link.html' with url=home_url text='<i class="bi bi-house-fill text-primary"></i> Начало' %}
+            {% include 'common/navbar_inline_link.html' with url=news_url text='<i class="bi bi-newspaper text-primary"></i> Новини' %}
+            {% if request.user.is_student %}
+                {% include 'common/navbar_inline_link.html' with url=redeemed_url text='<i class="bi bi-upc text-primary"></i> Ваучери' %}
+            {% endif %}
+            {% include 'common/navbar_inline_link.html' with url=materials_url text='<i class="bi bi-book-fill text-primary"></i> Материали' %}
+            {% include 'common/navbar_inline_link.html' with url=forums_url text='<i class="bi bi-chat-right-text-fill text-primary"></i> Форум' %}
+            {% include 'common/navbar_inline_link.html' with url=scoreboard_url text='<i class="bi bi-trophy-fill text-primary"></i> Класиране' %}
+
+            {% create_list students_url teachers_url as users_urls_list %}
+            {% create_list '<i class="bi bi-person-fill"></i> Студенти' '<i class="bi bi-mortarboard-fill"></i> Учители' as users_texts_list %}
+            {% zip users_urls_list users_texts_list as users_items %}
+            {% include 'common/navbar_dropdown.html' with text='<i class="bi bi-person-fill-lock text-primary"></i> Потребители' items=users_items %}
+
+            {% if request.user.is_teacher %}
+                {% create_list participants_url team_url lectures_url vouchers_url exams_url points_url resources_url add_news_url add_forum_url as admin_urls_list %}
+                {% create_list '<i class="bi bi-card-checklist"></i> Записани студенти' '<i class="bi bi-people-fill"></i> Учителски колектив' '<i class="bi bi-file-pdf-fill"></i> Лекции' '<i class="bi bi-upc"></i> Ваучери' '<i class="bi bi-vector-pen"></i> Изпити' '<i class="bi bi-star-fill"></i> Точки' '<i class="bi bi-folder-symlink-fill"></i> Ресурси' '<i class="bi bi-newspaper"></i> Създай новина' '<i class="bi bi-chat-right-text-fill"></i> Създай форум тема' as admin_texts_list %}
+                {% zip admin_urls_list admin_texts_list as admin_items %}
+                {% include 'common/navbar_dropdown.html' with text='<i class="bi bi-person-fill-lock text-primary"></i> Администрация' items=admin_items %}
+            {% endif %}
+
+            {% if not request.user.is_authenticated %}
+                {% include 'common/navbar_inline_link.html' with url='/register' text='<i class="bi bi-journal-arrow-up text-primary"></i> Регистрация' %}
+                {% include 'common/navbar_inline_link.html' with url='/login' text='<i class="bi bi-door-closed text-primary"></i> Вход' %}
+            {% else %}
+                {% include 'common/navbar_inline_link.html' with url=settings_url text='<i class="bi bi-gear text-primary"></i> Настройки' %}
+                {% include 'common/navbar_inline_link.html' with url='/logout' text='<i class="bi bi-door-open text-primary"></i> Изход' %}
+            {% endif %}
+        </ul>
+    </div>
+</div>
+</nav>

@@ -1,0 +1,105 @@
+{% extends "backbone/base.html" %}
+{% block location %}
+    <h6 class="location-info"><i class="bi bi-globe"></i> <a href="/participants">Записани студенти</a></h6>
+{% endblock %}
+{% block body %}
+    <div class="card mt-2 d-inline-block">
+        <div class="card-header">
+            <h5 class="card-title">Добави студент</h5>
+        </div>
+        <div class="card-body">
+            <form method="post" action="/participant/add">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="first_name">Име</label>
+                    <input type="text" required="required" class="form-control" id="first_name" name="first_name" placeholder="Име" value="{{ request.POST.first_name }}">
+                    <div class="text-danger">{{ errors.first_name.as_text }}</div>
+                </div>
+                <div class="form-group">
+                    <label for="last_name">Фамилия</label>
+                    <input type="text" required="required" class="form-control" id="last_name" name="last_name" placeholder="Фамилия" value="{{ request.POST.last_name }}">
+                    <div class="text-danger">{{ errors.last_name.as_text }}</div>
+                </div>
+                <div class="form-group">
+                    <label for="fn">Факултетен номер</label>
+                    <input type="text" required="required" class="form-control" id="fn" name="fn" placeholder="ФН" value="{{ request.POST.fn }}">
+                    <div class="text-danger">{{ errors.fn.as_text }}</div>
+                </div>
+                <button type="submit" class="btn btn-primary mt-2">Добави</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="card mt-2 mx-2 d-inline-block align-top">
+        <div class="card-header">
+            <h5 class="card-title">Добави списък със студенти</h5>
+        </div>
+        <div class="card-body">
+            <div class="mb-2" style="max-width: 350px">
+                <i class="bi bi-info-circle-fill"></i> Качи .csv файл с един ред за всеки студент. Всеки ред трябва да има три стойности - име, фамилия, факултетен номер.
+            </div>
+            <form action="/participants/add" method="POST" enctype="multipart/form-data" class="form-horizontal"> 
+                {% csrf_token %}
+                <input type="file" accept=".csv" name="csv_file" required="True" class="form-control">
+                <div class="text-danger">{{ errors.csv }}</div>
+                <div class="text-danger">
+                    {% if errors.csv_list %}
+                        <ul>
+                            {% for error in errors.csv_list %}
+                                <li>
+                                    <ul>
+                                        <li>Индекс: {{ error.0 }}</li>
+                                        <li>Стойност: {{ error.1 }}</li>
+                                        <li>Грешка: {{ error.2 }}</li>
+                                    </ul>
+                                <br/>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </div>
+                <button class="btn btn-primary mt-2">Добави</button>
+            </form>
+        </div>
+    </div>
+    
+    {% if info %}
+        <div class="text-info"><i class="bi bi-check-circle-fill"></i> {{ info }}</div>
+    {% endif %}
+
+    {% if participants %}
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">Име</th>
+                    <th scope="col">Факултетен номер</th>
+                    <th scope="col">Поща</th>
+                    <th scope="col">Активен</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for participant in participants %}
+                    <tr>
+                        <th scope="row">
+                            <a href="/participant/{{ participant.id }}">
+                                {{ participant.full_name }}
+                            </a>
+                        </th>
+                        <td>
+                            {{ participant.fn }}
+                        </td>
+                        <td>{{ participant.email }}</td>
+                        <td>
+                            {% if participant.is_active %}
+                                <i class="bi bi-check-circle-fill text-success"></i>
+                            {% else %}
+                                <i class="bi bi-x-circle-fill text-danger"></i>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <br/>Все още няма записани студенти.
+    {% endif %}
+{% endblock %}

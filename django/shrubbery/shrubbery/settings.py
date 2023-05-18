@@ -50,12 +50,17 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_minify_html',
     'django_bootstrap5',
     'sass_processor',
+    'resources',
+    'exams',
+    'vouchers',
+    'points',
     'users',
     'news',
     'materials',
-    'web'
+    'forum'
 ]
 
 MIDDLEWARE = [
@@ -68,6 +73,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django_minify_html.middleware.MinifyHtmlMiddleware'
 ]
 
 ROOT_URLCONF = 'shrubbery.urls'
@@ -75,7 +81,7 @@ ROOT_URLCONF = 'shrubbery.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'shrubbery/templates', 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -84,6 +90,9 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
+            'libraries': {
+                'extras': 'shrubbery.templatetags.extras',
+            },
         },
     },
 ]
@@ -161,15 +170,15 @@ STATIC_URL = 'static/'
 STATIC_ROOT = BASE_DIR / 'static'
 
 STATICFILES_DIRS = [
-    BASE_DIR / "web/static",
-    BASE_DIR / "web/static/scss",
+    BASE_DIR / "shrubbery/static",
+    BASE_DIR / "shrubbery/static/scss",
     BASE_DIR / "media",
 ]
 
 if os.environ.get('SHRUBBERY_ENV') == 'prd':
     SASS_PROCESSOR_ROOT = BASE_DIR / 'static'
 else:
-    SASS_PROCESSOR_ROOT = BASE_DIR / 'web/static/scss'
+    SASS_PROCESSOR_ROOT = BASE_DIR / 'shrubbery/static/scss'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field

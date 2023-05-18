@@ -1,0 +1,61 @@
+{% extends "backbone/base.html" %}
+{% block location %}
+    <h6 class="location-info"><i class="bi bi-globe"></i> <a href="/students">Студенти</a></h6>
+{% endblock %}
+{% block body %}
+    {% if request.user.is_teacher %}
+        <a href="/participants" class="text-reset text-decoration-none">
+            <button type="button" class="btn btn-primary">
+                <i class="bi bi-pencil-square"></i> Редактирай студентите
+            </button>
+        </a>
+        <hr class="mt-2 mb-1"/>
+    {% endif %}
+
+    {% if students %}
+        {% for student in students %}
+            <div class="card d-inline-block m-1 student-card">
+                <a href="/student/{{ student.id }}">
+                    {% if student.image %}
+                        <img src="media/{{ student.image }}" class="card-img-top"/>
+                    {% else %}
+                        <img src="static/img/blank-profile.png" class="card-img-top"/>
+                    {% endif %}
+                </a>
+                <div class="card-body">
+                    <h5 class="card-title"><a href="/student/{{ student.id }}">{{ student.full_name }}</a></h5>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item text-truncate">
+                        <i class="bi bi-envelope-at-fill"></i>
+                        <a href="mailto:{{ student.email }}">{{ student.email }}</a>
+                    </li>
+                    <li class="list-group-item text-truncate">
+                        {% if student.github != "" %}
+                            <i class="bi bi-github"></i>
+                            <a href="https://github.com/" target="_blank">{{ student.github }}</a>
+                        {% else %}
+                            <i class="bi bi-github"></i> Няма
+                        {% endif %}
+                    </li>
+                    {% if request.user.is_teacher %}
+                        <li class="list-group-item text-truncate">
+                            <i class="bi bi-hash"></i> {{ student.fn }}
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        {% endfor %}
+        {% if students.paginator.num_pages > 1 %}
+            <nav class="mt-2">
+                <ul class="pagination justify-content-center">
+                    {% for page in students.paginator.page_range %}
+                        <li class="page-item"><a class="page-link {% if page == students.number %}active{% endif %}" href="?page={{ page }}">{{ page }}</a></li>
+                    {% endfor %}
+                </ul>
+            </nav>
+        {% endif %}
+    {% else %}
+        Все още няма регистрирани студенти.
+    {% endif %}
+{% endblock %}

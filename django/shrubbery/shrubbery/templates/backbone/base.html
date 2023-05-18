@@ -1,0 +1,59 @@
+{% load sass_tags %}
+{% load static %}
+<!doctype html>
+<html lang="en" {% if request.user and request.user.dark_theme %}data-bs-theme="dark"{% endif %}>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{% static 'bootstrap/bootstrap-icons.css' %}">
+    
+    <link href="{% sass_src  'default_theme.scss' %}" rel="stylesheet" type="text/css">
+
+    {% block css %}
+        {# Add custom content when extending this template #}
+    {% endblock %}
+
+    <script src="{% static 'js/jquery-3.7.0.min.js' %}"></script>
+    <script src="{% static 'js/popper.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'js/showdown.min.js' %}"></script>
+    <script src="{% static 'js/showdown.js' %}"></script>
+    <script src="{% static 'js/controls.js' %}"></script>
+    <script src="{% static 'js/clipboard.js' %}"></script>
+    <script src="{% static 'js/tooltip.js' %}"></script>
+    <script src="{% static 'js/dialogs.js' %}"></script>
+    <script src="{% static 'js/ajax.js' %}"></script>
+
+    {% block javascript %}
+        {# Add custom content when extending this template #}
+    {% endblock %}
+
+    <link href="{% static 'img/python_logo.png' %}" rel="icon" type="image/png">
+
+    {% block title %}
+        <title>Python @ ФМИ</title>
+    {% endblock %}
+  </head>
+  <body class="d-flex flex-column min-vh-100">
+    {% block navbar %}
+        {% include "backbone/navbar.html" %}
+    {% endblock %}
+    <hr class="mt-0 mb-2"/>
+    <div class="container-fluid">
+      {% block location %}
+          {# Add custom location when extending this template #}
+      {% endblock %}
+    </div>
+    <hr class="mt-0 mb-2"/>
+    <div class="container-fluid">
+      {% block body %}
+          {# Add custom content when extending this template #}
+      {% endblock %}
+    </div>
+
+    {% include 'common/close_modal.html' with content='showdown placeholder' %}
+
+    <footer class="mt-auto text-center fs-6 text fw-lighter">Някои права запазени</footer>
+  </body>
+</html>

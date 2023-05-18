@@ -1,0 +1,15 @@
+{% if user.is_student %}
+    <a href="/student/{{ user.pk }}" target="_blank">
+{% else %}
+    <a href="/teacher/{{ user.pk }}" target="_blank">
+{% endif %}
+<div class="card d-inline-block p-2">
+    <img src="{% include 'common/profile_picture' with user=user %}" class="card-img-top thumbnail-profile-picture mx-1"/>
+    <div class="d-inline-block align-middle">
+        {{ user.full_name }}
+        <br/>
+        <h6 class="fw-lighter">{{ date }}</h6>
+    </div>
+    <div class="star {% if not add_star %}hidden{% endif %} ajax-toggle-target"><i class="bi bi-star-fill"></i></div>
+</div>
+</a>

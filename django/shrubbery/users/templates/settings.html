@@ -1,0 +1,91 @@
+{% extends "backbone/base.html" %}
+{% block location %}
+    <h6 class="location-info"><i class="bi bi-globe"></i> <a href="/settings">Настройки</a></h6>
+{% endblock %}
+{% block body %}
+    <div class="card d-inline-block m-1">
+        <h5 class="card-header">Информация</h5>
+        <div class="card-body">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="email">Електронна поща</label>
+                    <input type="text" disabled="disabled" class="form-control" id="email" placeholder="Електронна поща" value="{{ request.user.email }}">
+                </div>
+                {% if request.user.is_student %}
+                    <div class="form-group">
+                        <label for="fn">Факултетен номер</label>
+                        <input type="text" disabled="disabled" class="form-control" id="fn" placeholder="Факултетен номер" value="{{ request.user.fn }}">
+                    </div>
+                {% endif %}
+                <div class="form-group">
+                    <label for="first_name">Име</label>
+                    <input type="text" required="required" class="form-control" id="first_name" name="first_name" placeholder="Име" value="{% if request.POST.first_name %}{{ request.POST.first_name }}{% else %}{{ request.user.first_name }}{% endif %}">
+                    <div class="text-danger">{{ errors.first_name.as_text }}</div>
+                </div>
+                <div class="form-group">
+                    <label for="last_name">Фамилия</label>
+                    <input type="text" required="required" class="form-control" id="last_name" name="last_name" placeholder="Фамилия" value="{% if request.POST.last_name %}{{ request.POST.last_name }}{% else %}{{ request.user.last_name }}{% endif %}">
+                    <div class="text-danger">{{ errors.last_name.as_text }}</div>
+                </div>
+                <div class="form-group">
+                    <label for="github">GitHub</label>
+                    <input type="text" name="github" class="form-control" id="github" placeholder="GitHub акаунт" value="{% if request.POST.github %}{{ request.POST.github }}{% else %}{{ request.user.github }}{% endif %}">
+                    <div class="text-danger">{{ errors.github.as_text }}</div>
+                </div>
+                <div class="form-group">
+                    <div class="form-check mt-2">
+                        <label class="form-check-label" for="dark_theme">
+                        <input class="form-check-input" name="dark_theme" type="checkbox" {% if request.user.dark_theme %}checked="checked"{% endif %} id="dark_theme">Тъмна тема</label>
+                    </div>
+                </div>
+                <hr/>
+                <div class="form-group">
+                    <label for="image">Снимка</label>
+                    <img src="{% include 'common/profile_picture' with user=request.user %}" class="thumbnail-profile-picture m-2"/>
+                    <br/>
+                    {% if request.user.image %}
+                        <input type="checkbox" name="image_remove" id="image_remove" class="form-check-input"/>
+                        <label for="image_remove" class="mx-2">Изтрий снимката</label>
+                    {% endif %}
+                    <input type="file" name="image" class="form-control" id="image" accept=".png, .jpeg, .jpg"/>
+                    <div class="text-danger">{{ errors.image.as_text }}</div>
+                </div>
+                {% if settings_info %}
+                    <div class="text-info"><i class="bi bi-check-circle-fill"></i> {{ settings_info }}</div>
+                {% endif %}
+                {% if settings_error %}
+                    <div class="text-danger"><i class="bi bi-check-circle-fill"></i> {{ settings_info }}</div>
+                {% endif %}
+                <button type="submit" name="personal_info" class="btn btn-primary mt-2">Запази</button>
+            </form>
+        </div>
+    </div>
+    <div class="card d-inline-block m-1 align-top">
+        <h5 class="card-header">Парола</h5>
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="old_password">Текуща парола</label>
+                    <input type="password" required="required" name="old_password" class="form-control" id="old_password" placeholder="Парола" value="">
+                    <div class="text-danger">{{ errors.old_password.as_text }}</div>
+                </div>
+                <div class="form-group">
+                    <label for="new_password1">Нова парола</label>
+                    <input type="password" required="required" name="new_password1" class="form-control" id="new_password1" placeholder="Парола" value="">
+                    <div class="text-danger">{{ errors.new_password1.as_text }}</div>
+                </div>
+                <div class="form-group">
+                    <label for="new_password2">Потвърди новата паролата</label>
+                    <input type="password" required="required" name="new_password2" class="form-control" id="new_password2" placeholder="Парола" value="">
+                    <div class="text-danger">{{ errors.new_password2.as_text }}</div>
+                </div>
+                {% if password_info %}
+                    <div class="text-info"><i class="bi bi-check-circle-fill"></i> {{ password_info }}</div>
+                {% endif %}
+                <button type="submit" name="change_password" class="btn btn-primary mt-2">Смени</button>
+            </form>
+        </div>
+    </div>
+{% endblock %}

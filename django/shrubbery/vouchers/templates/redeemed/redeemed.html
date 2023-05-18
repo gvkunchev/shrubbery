@@ -1,0 +1,55 @@
+{% extends "backbone/base.html" %}
+{% load static %}
+{% block location %}
+    <h6 class="location-info"><i class="bi bi-globe"></i> <a href="/redeemed">Ваучери</a></h6>
+{% endblock %}
+{% block body %}
+
+    <div class="card mt-2 d-inline-block">
+        <div class="card-header">
+            <h5 class="card-title">Добави ваучер</h5>
+        </div>
+        <div class="card-body">
+            <form method="post" action="/redeem">
+                {% csrf_token %}
+                <div class="form-group">
+                    <input type="text" required="required" class="form-control" name="token" placeholder="Токен">
+                    {% if error %}
+                        <div class="text-danger"><i class="bi bi-x-circle-fill"></i> {{ error }}</div>
+                    {% endif %}
+                    {% if info %}
+                        <div class="text-info"><i class="bi bi-check-circle-fill"></i> {{ info }}</div>
+                    {% endif %}
+                </div>
+                <button type="submit" class="btn btn-primary mt-2">Заяви</button>
+            </form>
+        </div>
+    </div>
+
+    {% if vouchers %}
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">Токен</th>
+                    <th scope="col">Заявен на</th>
+                    <th scope="col">Точки</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for voucher in vouchers %}
+                <tr>
+                    <td>
+                        {{ voucher.token }}
+                    </td>
+                    <td>
+                        {{ voucher.human_date }}
+                    </td>
+                    <td>{{ voucher.points }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <br/>Все още не сте заявили никакви ваучери.
+    {% endif %}
+{% endblock %}

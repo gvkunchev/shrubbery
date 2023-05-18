@@ -1,0 +1,95 @@
+{% extends "backbone/base.html" %}
+{% load static %}
+{% block location %}
+    <h6 class="location-info"><i class="bi bi-globe"></i> <a href="/forums">Форум</a> > <a href="/forum/{{ forum.pk }}">{{ forum.title }}</a></h6>
+{% endblock %}
+{% block body %}
+
+    {% if request.user.is_teacher %}
+        <a href="/forum/edit/{{ forum.pk }}" class="text-reset text-decoration-none">
+            <button type="button" class="btn btn-primary">
+                <i class="bi bi-pencil-square"></i> Редактирай
+            </button>
+        </a>
+        <a href="/forum/delete/{{ forum.pk }}" class="text-reset text-decoration-none confirm-delete-forum">
+            <button type="button" class="btn btn-danger">
+                <i class="bi bi-x-circle-fill"></i> Изтрий
+            </button>
+        </a>
+        <hr class="mt-2 mb-1"/>
+        {% include 'common/delete_modal.html' with content='Сигурен ли си, че искаш да изтриеш този форум?' id='confirm_delete_forum_modal' %}
+    {% endif %}
+
+    <div class="card mt-2">
+        <div class="card-header">
+            <h4 class="card-title">{{ forum.title }}</h4>
+        </div>
+        <div class="card-body">
+            {% include 'common/user_dated_card.html' with user=forum.author date=forum.human_date %}
+            <div class="showdown-trigger">{{ forum.content }}</div>
+        </div>
+    </div>
+
+
+    <div class="card mt-2">
+        <div class="card-header">
+            <h6 class="card-title">Дискусия</h6>
+        </div>
+        <div class="card-body">
+
+            <table class="table table-hover">
+                <tbody>
+                    {% if request.user.is_authenticated %}
+                    <tr>
+                        <td>
+                            <form method="post" action="/forum_comment/add">
+                                {% csrf_token %}
+                                <input type="hidden" name="forum" value="{{ forum.pk }}">
+                                <textarea required="required" name="content" class="form-control showdown-input showdown-input-small" id="content" placeholder="Отговор"></textarea>
+                                <button type="submit" class="btn btn-primary mt-2 mx-1">Отговори</button>
+                                <button class="btn btn-secondary mt-2 mx-1 showdown-preview" data-showdown-source="content"><i class="bi bi-eye-fill"></i> Преглед</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endif %}
+
+
+                    {% for comment in comments %}
+                        <tr><td id="comment{{ comment.pk }}" class="ajax-toggle-container">
+                            {% include 'common/user_dated_card.html' with user=comment.author date=comment.human_date add_star=comment.starred %}
+                            <br/>
+                            <div class="showdown-trigger">{{ comment.content }}</div>
+                            {% if request.user.is_teacher %}
+                                <span class="ajax-toggle">
+                                    <a href="/forum_comment/{{ comment.pk }}/star/add?page={{ request.GET.page }}" class="ajax-toggle-trigger {% if not comment.starred %}active{% endif %}">Добави звездата</a>
+                                    <a href="/forum_comment/{{ comment.pk }}/star/remove?page={{ request.GET.page }}" class="ajax-toggle-trigger {% if comment.starred %}active{% endif %}">Махни звездата</a>
+                                </span>
+                            {% endif %}
+                            {% if request.user.is_teacher or request.user.id == comment.author.id %}
+                                <a href="/forum_comment/edit/{{ comment.pk }}?page={{ request.GET.page }}">Редактирай</a>
+                            {% endif %}
+                        </td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    {% if comments.paginator.num_pages > 1 %}
+        <nav class="mt-2">
+            <ul class="pagination justify-content-center">
+                {% for page in comments.paginator.page_range %}
+                    <li class="page-item"><a class="page-link {% if page == comments.number %}active{% endif %}" href="?page={{ page }}">{{ page }}</a></li>
+                {% endfor %}
+            </ul>
+        </nav>
+    {% endif %}
+
+    <hr class="mt-2 mb-1"/>
+    <a href="/forums" class="text-reset text-decoration-none">
+        <button type="button" class="btn btn-primary">
+            <i class="bi bi-arrow-left-circle-fill"></i> Обратно към всички форуми
+        </button>
+    </a>
+
+{% endblock %}

@@ -1,0 +1,134 @@
+{% extends "backbone/base.html" %}
+{% block location %}
+    <h6 class="location-info"><i class="bi bi-globe"></i> <a href="/exams">Изпити</a> > <a href="/exam/{{ exam.pk }}">{{ exam.title }}</a></h6>
+{% endblock %}
+{% block body %}
+
+    <a href="/exam/edit/{{ exam.pk }}" class="text-reset text-decoration-none">
+        <button type="button" class="btn btn-primary">
+            <i class="bi bi-pencil-square"></i> Редактирай
+        </button>
+    </a>
+    <a href="/exam/delete/{{ exam.pk }}" class="text-reset text-decoration-none confirm-delete-exam">
+        <button type="button" class="btn btn-danger">
+            <i class="bi bi-x-circle-fill"></i> Изтрий
+        </button>
+    </a>
+    {% include 'common/delete_modal.html' with content='Сигурен ли си, че искаш да изтриеш този изпит?' id='confirm_delete_exam_modal' %}
+
+    <br/>
+
+    <div class="card mt-2 mx-2 d-inline-block align-top">
+        <div class="card-header">
+            <h5 class="card-title">Добави списък с резултати</h5>
+        </div>
+        <div class="card-body">
+            <div class="mb-2" style="max-width: 350px">
+                <i class="bi bi-info-circle-fill"></i> Качи .csv файл с един ред за всеки студент. Всеки ред трябва да има две стойности - факултетен номер, резултат. Ако резултат за този факултетен номер вече съществува, ще бъде презаписан.
+            </div>
+            <form action="/exam/results/add" method="POST" enctype="multipart/form-data" class="form-horizontal"> 
+                {% csrf_token %}
+                <input type="hidden" name="exam" value="{{ exam.pk }}" />
+                <input type="file" accept=".csv" name="csv_file" required="True" class="form-control">
+                <div class="text-danger">{{ errors.csv }}</div>
+                <div class="text-danger">
+                    {% if errors.csv_list %}
+                        <ul>
+                            {% for error in errors.csv_list %}
+                                <li>
+                                    <ul>
+                                        <li>Индекс: {{ error.0 }}</li>
+                                        <li>Стойност: {{ error.1 }}</li>
+                                        <li>Грешка: {{ error.2 }}</li>
+                                    </ul>
+                                <br/>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </div>
+                {% if error_csv %}
+                    <div class="text-danger"><i class="bi bi-x-circle-fill"></i> {{ error_csv }}</div>
+                {% endif %}
+                <button class="btn btn-primary mt-2">Добави</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="card mt-2 d-inline-block">
+        <div class="card-header">
+            <h5 class="card-title">Добави резултат</h5>
+        </div>
+        <div class="card-body">
+            <form method="post" action="/exam/result/add">
+                {% csrf_token %}
+                <input type="hidden" name="exam" value="{{ exam.pk }}" />
+                <div class="form-group">
+                    <label for="fn">Факултетен номер</label>
+                    <input type="text" required="required" class="form-control" id="fn" name="fn" placeholder="Факултетен номер" value="{{ request.POST.fn }}">
+                    <div class="text-danger">{{ errors.fn.as_text }}</div>
+                </div>
+                <div class="form-group">
+                    <label for="points">Точки</label>
+                    <input type="text" required="required" class="form-control" id="points" name="points" placeholder="Точки" value="{{ request.POST.points }}">
+                    <div class="text-danger">{{ errors.points.as_text }}</div>
+                </div>
+                {% if error_single_result %}
+                    <div class="text-danger"><i class="bi bi-x-circle-fill"></i> {{ error_single_result }}</div>
+                {% endif %}
+                <button type="submit" class="btn btn-primary mt-2">Добави</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="card m-1 mt-3">
+        <h5 class="card-header">Резултати</h5>
+        <h6 class="card-header">{{ exam.title }} - {{ exam.date }}</h6>
+        <div class="card-body">
+            {% if info %}
+                <div class="text-info"><i class="bi bi-check-circle-fill"></i> {{ info }}</div>
+            {% endif %}
+            {% if results %}
+                <form action="/exam/results/delete" method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="exam" value="{{ exam.pk }}" />
+                    <button type="submit" name="edit" class="btn btn-danger mt-2 confirm-delete-exam-results">Изтрий избраните</button>
+                    {% include 'common/delete_modal.html' with content='Сигурен ли си, че искаш да изтриеш тези резултати?' id='confirm_delete_exam_results_modal' %}
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th scope="col"><i class="bi bi-check2-square text-primary select-all-trigger" data-toggle="tooltip" title="Обърни селекцията"></i></th>
+                                <th scope="col">Име</th>
+                                <th scope="col">Факултетен номер</th>
+                                <th scope="col">Точки</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for result in results %}
+                            <tr>
+                                <td>
+                                    <input type="checkbox" name="exam_result_{{ result.pk }}" class="form-check-input"/>
+                                </td>
+                                <td>
+                                    <a href="/student/{{ result.owner.pk }}" target="_blank">
+                                        {{ result.owner.full_name }}
+                                    </a>
+                                </td>
+                                <td>
+                                    {{ result.owner.fn }}
+                                </td>
+                                <td>
+                                    {{ result.points }}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </form>
+            {% else %}
+                <br/>Все още няма резултати.
+            {% endif %}
+        </div>
+    </div>
+    
+
+{% endblock %}

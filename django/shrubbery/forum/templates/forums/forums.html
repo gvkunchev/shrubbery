@@ -1,0 +1,61 @@
+{% extends "backbone/base.html" %}
+{% load static %}
+{% block location %}
+    <h6 class="location-info"><i class="bi bi-globe"></i> <a href="/forums">Форум</a></h6>
+{% endblock %}
+{% block body %}
+
+    <a href="/forum/add" class="text-reset text-decoration-none">
+        <button type="button" class="btn btn-primary">
+            <i class="bi bi-plus-circle-fill"></i> Създай тема
+        </button>
+    </a>
+    <hr class="mt-2 mb-1"/>
+
+    {% if forums %}
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">Тема</th>
+                    <th scope="col">Отговори</th>
+                    <th scope="col">Последен отговор</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for forum in forums %}
+                <tr>
+                    <th scope="row">
+                        <a href="/forum/{{ forum.id }}">
+                            {{ forum.title }}
+                        </a>
+                    </th>
+                    <td>
+                        {{ forum.comments|length }}
+                    </td>
+                    <td>
+                        {% if forum.latest_comment %}
+                            <a href="/forum/{{ forum.id }}#comment{{ forum.latest_comment.pk }}">
+                                {{ forum.latest_comment.human_date }}
+                            </a>
+                            от 
+                            {% if forum.latest_comment.author.is_student %}
+                                <a href="/student/{{ forum.latest_comment.author.pk }}" target="_blank">
+                                    {{ forum.latest_comment.author.full_name }}
+                                </a>
+                            {% else %}
+                                <a href="/teacher/{{ forum.latest_comment.author.pk }}" target="_blank">
+                                    {{ forum.latest_comment.author.full_name }}
+                                </a>
+                            {% endif %}
+                        {% else %}
+                            -
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        Все още няма никакви форуми.
+    {% endif %}
+{% endblock %}

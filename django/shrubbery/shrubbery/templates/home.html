@@ -1,0 +1,67 @@
+{% extends "backbone/base.html" %}
+
+{% block location %}
+    <h6 class="location-info"><i class="bi bi-globe"></i> <a href="/">Начало</a></h6>
+{% endblock %}
+
+{% block body %}
+    {% if welcome %}
+        <div class="card mt-2">
+            <div class="card-body">
+                <h5 class="card-title">Добре дошъл, {{ request.user.full_name }}!</h5>
+                <p class="card-text">
+                    Успешно активира своя акаунт и сложи парола.
+                    Не забравяй да разгледаш и останалите <a href="/settings">настройки на акаунта</a>.
+                </p>
+            </div>
+        </div>
+    {% else %}
+        {% if not request.user.is_authenticated %}
+            <div class="card mt-2">
+                <div class="card-body">
+                    <h5 class="card-title">Здравейте!</h5>
+                    <p class="card-text">Това е сайтът на избираемия курс "Въведение в програмирането на Python" към <a href="https://www.fmi.uni-sofia.bg/" target="_blank">ФМИ София</a>.</p>
+                </div>
+            </div>
+        {% endif %}
+    {% endif %}
+
+    {% if ranking %}
+        <div class="card mt-2 d-inline-block">
+            <div class="card-header">Позиция в класацията</div>
+            <div class="card-body">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item"><i class="bi bi-trophy-fill text-primary"></i> Място: {{ ranking.rank }} / {{ ranking.student_count }}</li>
+                    <li class="list-group-item"><i class="bi bi-star-fill text-primary"></i> Точки: {{ ranking.total }}</li>
+                </ul>
+            </div>
+        </div>
+    {% endif %}
+
+    <div class="card mt-2">
+        <div class="card-header">Новини</div>
+        <div class="card-body">
+            <p class="card-text">{% include "news/news_list.html" with no_content=True %}</p>
+        </div>
+    </div>
+
+    <div class="card mt-2">
+        <div class="card-header">Сайтове на предишни издания на курса</div>
+        <div class="card-body">
+            <p class="card-text">
+                Ако търсите сайтовете на някои от предишните издания на курса, може да ги намерите тук:
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item rounded">Летен семестър на учебната 2015/2016 година - <a href="http://2016.fmi.py-bg.net" target="_blank">2016.fmi.py-bg.net</a></li>
+                    <li class="list-group-item rounded">Летен семестър на учебната 2014/2015 година - <a href="http://2015.fmi.py-bg.net" target="_blank">2015.fmi.py-bg.net</a></li>
+                    <li class="list-group-item rounded">Летен семестър на учебната 2013/2014 година - <a href="http://2014.fmi.py-bg.net" target="_blank">2014.fmi.py-bg.net</a></li>
+                    <li class="list-group-item rounded">Летен семестър на учебната 2012/2013 година - <a href="http://2013.fmi.py-bg.net" target="_blank">2013.fmi.py-bg.net</a></li>
+                    <li class="list-group-item rounded">Летен семестър на учебната 2011/2012 година - <a href="http://2012.fmi.py-bg.net" target="_blank">2012.fmi.py-bg.net</a></li>
+                    <li class="list-group-item rounded">Летен семестър на учебната 2010/2011 година - <a href="http://2011.fmi.py-bg.net" target="_blank">2011.fmi.py-bg.net</a></li>
+                    <li class="list-group-item rounded">Летен семестър на учебната 2009/2010 година - <a href="http://2010.fmi.py-bg.net" target="_blank">2010.fmi.py-bg.net</a></li>
+                    <li class="list-group-item rounded">Летен семестър на учебната 2008/09 и на учебната 2007/08 - <a href="http://oldfmi.py-bg.net" target="_blank">oldfmi.py-bg.net</a></li>
+                </ul>
+            </p>
+        </div>
+    </div>
+
+{% endblock %}

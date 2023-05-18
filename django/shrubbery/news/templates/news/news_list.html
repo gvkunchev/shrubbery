@@ -1,0 +1,17 @@
+{% if news %}
+    {% for article in news %}
+        <div class="card mt-2">
+            <div class="card-header">
+                <h5 class="card-title"><a href="news/{{ article.id }}">{{ article.title }}</a></h5>
+                <span class="fs-6 fw-lighter">{{ article.human_date }}</span>
+            </div>
+            {% if not no_content %}
+                <div class="card-body">
+                    <div class="card-text showdown-trigger">{{ article.content }}</div>
+                </div>
+            {% endif %}
+        </div>
+    {% endfor %}
+{% else %}
+    Все още няма никакви новини.
+{% endif %}

@@ -5,7 +5,11 @@ from PIL import Image
 
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.core.exceptions import ObjectDoesNotExist
+
 from .model_managers import UserManager
+
+from points.models import PointsGiver
 
 
 def rename_profile_picture(instance, filename):
@@ -17,6 +21,11 @@ def rename_profile_picture(instance, filename):
         while os.path.exists(os.path.join(upload_to, filename)):
             filename = f'{uuid4().hex}.{ext}'
     return os.path.join(upload_to, filename)
+
+
+class ProfilePicturePoints(PointsGiver):
+
+    owner = models.ForeignKey('Student', on_delete=models.CASCADE)
 
 
 class User(AbstractUser):
@@ -82,14 +91,35 @@ class User(AbstractUser):
                 # paste into background with left/right spacing
                 thumb.paste(resized_original, ((width-resized_original.width)//2, 0))
         thumb.save(self.image.path)
+    
+    def _update_profile_picture_points(self):
+        """Assign or remove points based on profile picture existence."""
+        if not self.is_student:
+            return False
+        if self.image:
+            try:
+                # User already has points - no action needed
+                ProfilePicturePoints.objects.get(owner=self)
+            except ObjectDoesNotExist:
+                # User has no points yet - assign points
+                owner = Student.objects.get(pk=self.pk)
+                ProfilePicturePoints.objects.create(owner=owner, points=1)
+        else:
+            try:
+                # User has points - remove them
+                profile_picture_points = ProfilePicturePoints.objects.get(owner=self)
+                profile_picture_points.delete()
+            except ObjectDoesNotExist:
+                pass # User have no points anyway
 
     def save(self, *args, **kwargs):
-        """Clean up on save."""
+        """Decorate saving with cleanup and points assignments."""
         old_image = self.image.path if self.image else None
-        super().save(args, kwargs)
+        super(User, self).save(*args, **kwargs)
         new_image = self.image.path if self.image else None
         if new_image and old_image != new_image:
             self._resize_image()
+        self._update_profile_picture_points()
 
 
 class Student(User):

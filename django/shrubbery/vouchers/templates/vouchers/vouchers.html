@@ -1,0 +1,93 @@
+{% extends "backbone/base.html" %}
+{% load static %}
+{% block location %}
+    <h6 class="location-info"><i class="bi bi-globe"></i> <a href="/vouchers">Ваучери</a></h6>
+{% endblock %}
+{% block body %}
+
+    <div class="card mt-2 d-inline-block align-top">
+        <div class="card-header">
+            <h5 class="card-title">Добави ваучери</h5>
+        </div>
+        <div class="card-body">
+            <div class="mb-2" style="max-width: 350px">
+                <i class="bi bi-info-circle-fill"></i> Качи .csv файл с един ред за всеки ваучер. Всеки ред трябва да има две стойности - токен, точки.
+            </div>
+            <form action="/vouchers/add" method="POST" enctype="multipart/form-data" class="form-horizontal"> 
+                {% csrf_token %}
+                <input type="file" accept=".csv" name="csv_file" required="True" class="form-control">
+                <div class="text-danger">{{ errors.csv }}</div>
+                <div class="text-danger">
+                    {% if errors.csv_list %}
+                        <ul>
+                            {% for error in errors.csv_list %}
+                                <li>
+                                    <ul>
+                                        <li>Индекс: {{ error.0 }}</li>
+                                        <li>Стойност: {{ error.1 }}</li>
+                                        <li>Грешка: {{ error.2 }}</li>
+                                    </ul>
+                                <br/>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </div>
+                <button class="btn btn-primary mt-2">Добави</button>
+            </form>
+        </div>
+    </div>
+
+    {% if info %}
+        <div class="text-info"><i class="bi bi-check-circle-fill"></i> {{ info }}</div>
+    {% endif %}
+
+    {% if vouchers %}
+        <form action="/vouchers/remove" method="POST">
+            {% csrf_token %}
+            <button type="submit" name="edit" class="btn btn-danger mt-2 confirm-delete-vouchers">Изтрий избраните</button>
+            {% include 'common/delete_modal.html' with content='Сигурен ли си, че искаш да изтриеш тези ваучери?' id='confirm_delete_vouchers_modal' %}
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th scope="col"></th>
+                        <th scope="col">Токен</th>
+                        <th scope="col">Заявен от</th>
+                        <th scope="col">Заявен на</th>
+                        <th scope="col">Точки</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for voucher in vouchers %}
+                    <tr>
+                        <td>
+                            <input type="checkbox" name="voucher_{{ voucher.pk }}" class="form-check-input"/>
+                        </td>
+                        <td>
+                            {{ voucher.token }}
+                        </td>
+                        <td>
+                            {% if voucher.owner %}
+                                <a href="student/{{ voucher.owner.pk }}" target="_blank">
+                                    {{ voucher.owner.full_name }}
+                                </a>
+                            {% else %}
+                                -
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if voucher.owner %}
+                                {{ voucher.human_date }}
+                            {% else %}
+                                -
+                            {% endif %}
+                        </td>
+                        <td>{{ voucher.points }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </form>
+    {% else %}
+        <br/>Все още няма никакви ваучери.
+    {% endif %}
+{% endblock %}
