@@ -9,6 +9,9 @@
             <h5 class="card-title">Добави ресурс</h5>
         </div>
         <div class="card-body">
+            <div class="mb-2" style="max-width: 350px">
+                <i class="bi bi-info-circle-fill"></i> Качи файл и вземи линк за него, за да го използваш във форум, домашно или друга тема в сайта.
+            </div>
             <form method="post" action="/resource/add" enctype="multipart/form-data">
                 {% csrf_token %}
                 <div class="form-group">
