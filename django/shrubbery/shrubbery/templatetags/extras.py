@@ -15,3 +15,10 @@ def zip_many(*args):
 def get_exam_results(data, exam):
     key = f'exam_{exam.pk}'
     return data.get(key, '-')
+
+@register.filter()
+def activate_link(request_path, url):
+    """Determine whether to active a link in the navbar ot not."""
+    if url == '/':
+        return request_path == '/'
+    return url.rstrip('s') in request_path

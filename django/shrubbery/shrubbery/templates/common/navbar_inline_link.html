@@ -1,3 +1,4 @@
+{% load extras %}
 <li class="nav-item">
-    <a class="nav-link {% if request.path == url %}active{% endif %}" href="{{ url }}">{{ text }}</a>
+    <a class="nav-link {% if request.path|activate_link:url %}active{% endif %}" href="{{ url }}">{{ text }}</a>
 </li>
