@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'django_minify_html',
     'django_bootstrap5',
     'sass_processor',
+    'resources',
     'vouchers',
     'points',
     'users',

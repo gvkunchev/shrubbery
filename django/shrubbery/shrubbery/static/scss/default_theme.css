@@ -9331,6 +9331,9 @@ textarea.form-control-lg {
 .dropdown-item:not(.active) .bi {
   color: #0d6efd; }
 
+[data-toggle="tooltip"] {
+  cursor: pointer; }
+
 .student-card {
   max-width: 250px; }
 

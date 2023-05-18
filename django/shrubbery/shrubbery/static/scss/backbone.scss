@@ -98,3 +98,7 @@
 .dropdown-item:not(.active) .bi{
     color: $primary;
 }
+
+[data-toggle="tooltip"] {
+    cursor: pointer;
+}
