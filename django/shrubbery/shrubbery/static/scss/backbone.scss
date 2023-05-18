@@ -94,3 +94,7 @@
         display: inline;
     }
 }
+
+.dropdown-item:not(.active) .bi{
+    color: $primary;
+}

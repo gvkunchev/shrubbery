@@ -9328,6 +9328,9 @@ textarea.form-control-lg {
   .ajax-toggle-trigger.active {
     display: inline; }
 
+.dropdown-item:not(.active) .bi {
+  color: #0d6efd; }
+
 .student-card {
   max-width: 250px; }
 

@@ -1,4 +1,5 @@
 {% load static %}
+{% load extras %}
 
 {% url 'home' as home_url %}
 {% url 'news:news' as news_url %}
@@ -36,62 +37,33 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item">
-                <a class="nav-link {% if request.path == home_url %}active{% endif %}" href="{{ home_url }}"><i class="bi bi-house-fill text-primary"></i> Начало</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link {% if request.path == news_url %}active{% endif %}" href="{{ news_url }}"><i class="bi bi-newspaper text-primary"></i> Новини</a>
-            </li>
+            {% include 'common/navbar_inline_link.html' with url=home_url text='<i class="bi bi-house-fill text-primary"></i> Начало' %}
+            {% include 'common/navbar_inline_link.html' with url=news_url text='<i class="bi bi-newspaper text-primary"></i> Новини' %}
             {% if request.user.is_student %}
-                <li class="nav-item">
-                    <a class="nav-link {% if request.path == redeemed_url %}active{% endif %}" href="{{ redeemed_url }}"><i class="bi bi-upc text-primary"></i> Ваучери</a>
-                </li>
+                {% include 'common/navbar_inline_link.html' with url=redeemed_url text='<i class="bi bi-upc text-primary"></i> Ваучери' %}
             {% endif %}
-            <li class="nav-item">
-                <a class="nav-link {% if request.path == materials_url %}active{% endif %}" href="{{ materials_url }}"><i class="bi bi-book-fill text-primary"></i> Материали</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link {% if request.path == forums_url %}active{% endif %}" href="{{ forums_url }}"><i class="bi bi-chat-right-text-fill text-primary"></i> Форум</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link {% if request.path == scoreboard_url %}active{% endif %}" href="{{ scoreboard_url }}"><i class="bi bi-trophy-fill text-primary"></i> Класиране</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link {% if request.path == students_url %}active{% endif %}" href="{{ students_url }}"><i class="bi bi-person-fill text-primary"></i> Студенти</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link {% if request.path == teachers_url %}active{% endif %}" href="{{ teachers_url }}"><i class="bi bi-mortarboard-fill text-primary"></i> Учители</a>
-            </li>
+            {% include 'common/navbar_inline_link.html' with url=materials_url text='<i class="bi bi-book-fill text-primary"></i> Материали' %}
+            {% include 'common/navbar_inline_link.html' with url=forums_url text='<i class="bi bi-chat-right-text-fill text-primary"></i> Форум' %}
+            {% include 'common/navbar_inline_link.html' with url=scoreboard_url text='<i class="bi bi-trophy-fill text-primary"></i> Класиране' %}
+
+            {% create_list students_url teachers_url as users_urls_list %}
+            {% create_list '<i class="bi bi-person-fill"></i> Студенти' '<i class="bi bi-mortarboard-fill"></i> Учители' as users_texts_list %}
+            {% zip users_urls_list users_texts_list as users_items %}
+            {% include 'common/navbar_dropdown.html' with text='<i class="bi bi-person-fill-lock text-primary"></i> Потребители' items=users_items %}
+
             {% if request.user.is_teacher %}
-                <li class="nav-item dropdown navbar-separator">
-                    <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">
-                        <i class="bi bi-person-fill-lock text-primary"></i> Администрация
-                    </a>
-                    <div class="dropdown-menu">
-                        <a class="dropdown-item {% if request.path == participants_url %}active{% endif %}" href="{{ participants_url }}"><i class="bi bi-card-checklist {% if request.path != participants_url %}text-primary{% endif %}"></i> Записани студенти</a>
-                        <a class="dropdown-item {% if request.path == team_url %}active{% endif %}" href="{{ team_url }}"><i class="bi bi-people-fill {% if request.path != team_url %}text-primary{% endif %}"></i> Учителски колектив</a>
-                        <a class="dropdown-item {% if request.path == lectures_url %}active{% endif %}" href="{{ lectures_url }}"><i class="bi bi-file-pdf-fill {% if request.path != lectures_url %}text-primary{% endif %}"></i> Лекции</a>
-                        <a class="dropdown-item {% if request.path == vouchers_url %}active{% endif %}" href="{{ vouchers_url }}"><i class="bi bi-upc {% if request.path != vouchers_url %}text-primary{% endif %}"></i> Ваучери</a>
-                        <a class="dropdown-item {% if request.path == points_url %}active{% endif %}" href="{{ points_url }}"><i class="bi bi-star-fill {% if request.path != points_url %}text-primary{% endif %}"></i> Точки</a>
-                        <a class="dropdown-item {% if request.path == add_news_url %}active{% endif %}" href="{{ add_news_url }}"><i class="bi bi-newspaper {% if request.path != add_news_url %}text-primary{% endif %}"></i> Създай новина</a>
-                        <a class="dropdown-item {% if request.path == add_forum_url %}active{% endif %}" href="{{ add_forum_url }}"><i class="bi bi-chat-right-text-fill {% if request.path != add_forum_url %}text-primary{% endif %}"></i> Създай форум тема</a>
-                    </div>
-                </li>
+                {% create_list participants_url team_url lectures_url vouchers_url points_url add_news_url add_forum_url as admin_urls_list %}
+                {% create_list '<i class="bi bi-card-checklist"></i> Записани студенти' '<i class="bi bi-people-fill"></i> Учителски колектив' '<i class="bi bi-file-pdf-fill"></i> Лекции' '<i class="bi bi-upc"></i> Ваучери' '<i class="bi bi-star-fill"></i> Точки' '<i class="bi bi-newspaper"></i> Създай новина' '<i class="bi bi-chat-right-text-fill"></i> Създай форум тема' as admin_texts_list %}
+                {% zip admin_urls_list admin_texts_list as admin_items %}
+                {% include 'common/navbar_dropdown.html' with text='<i class="bi bi-person-fill-lock text-primary"></i> Администрация' items=admin_items %}
             {% endif %}
+
             {% if not request.user.is_authenticated %}
-                <li class="nav-item navbar-separator">
-                    <a class="nav-link" href="/register"><i class="bi bi-journal-arrow-up text-primary"></i> Регистрация</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/login"><i class="bi bi-door-closed text-primary"></i> Вход</a>
-                </li>
+                {% include 'common/navbar_inline_link.html' with url='/register' text='<i class="bi bi-journal-arrow-up text-primary"></i> Регистрация' %}
+                {% include 'common/navbar_inline_link.html' with url='/login' text='<i class="bi bi-door-closed text-primary"></i> Вход' %}
             {% else %}
-                <li class="nav-item navbar-separator">
-                    <a class="nav-link" href="{{ settings_url }}"><i class="bi bi-gear text-primary"></i> Настройки</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/logout"><i class="bi bi-door-open text-primary"></i> Изход</a>
-                </li>
+                {% include 'common/navbar_inline_link.html' with url=settings_url text='<i class="bi bi-gear text-primary"></i> Настройки' %}
+                {% include 'common/navbar_inline_link.html' with url='/logout' text='<i class="bi bi-door-open text-primary"></i> Изход' %}
             {% endif %}
         </ul>
     </div>
