@@ -1,0 +1,28 @@
+{% extends "backbone/base.html" %}
+{% block location %}
+    <h6 class="location-info"><i class="bi bi-globe"></i> <a href="/exams">Изпити</a> > <a href="/exam/{{ exam.pk }}">{{ exam.title }}</a> > <a href="/exam/edit/{{ exam.pk }}">Редактирай</a></h6>
+{% endblock %}
+{% block body %}
+    <div class="card mt-2 d-inline-block">
+        <div class="card-header">
+            <h5 class="card-title">Редактирай изпит</h5>
+        </div>
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="title">Заглавие</label>
+                    <input type="text" required="required" class="form-control" id="title" name="title" placeholder="Заглавие" value="{% if request.POST.title %}{{ request.POST.title }}{% else %}{{ exam.title }}{% endif %}">
+                    <div class="text-danger">{{ errors.title.as_text }}</div>
+                </div>
+                <div class="form-group">
+                    <label for="date">Дата</label>
+                    <input type="date" required="required" class="form-control" id="date" name="date" placeholder="Дата" value="{% if request.POST.date %}{{ request.POST.date }}{% else %}{{ exam.parsable_date }}{% endif %}">
+                    <div class="text-danger">{{ errors.date.as_text }}</div>
+                </div>
+                <button type="submit" class="btn btn-primary mt-2">Запази</button>
+            </form>
+        </div>
+    </div>
+        
+{% endblock %}

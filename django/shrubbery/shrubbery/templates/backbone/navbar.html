@@ -18,6 +18,7 @@
 {% url 'points:points' as points_url %}
 {% url 'points:scoreboard' as scoreboard_url %}
 {% url 'resources:resources' as resources_url %}
+{% url 'exams:exams' as exams_url %}
 
 
 <nav class="navbar navbar-expand-lg">
@@ -53,8 +54,8 @@
             {% include 'common/navbar_dropdown.html' with text='<i class="bi bi-person-fill-lock text-primary"></i> Потребители' items=users_items %}
 
             {% if request.user.is_teacher %}
-                {% create_list participants_url team_url lectures_url vouchers_url points_url resources_url add_news_url add_forum_url as admin_urls_list %}
-                {% create_list '<i class="bi bi-card-checklist"></i> Записани студенти' '<i class="bi bi-people-fill"></i> Учителски колектив' '<i class="bi bi-file-pdf-fill"></i> Лекции' '<i class="bi bi-upc"></i> Ваучери' '<i class="bi bi-star-fill"></i> Точки' '<i class="bi bi-folder-symlink-fill"></i> Ресурси' '<i class="bi bi-newspaper"></i> Създай новина' '<i class="bi bi-chat-right-text-fill"></i> Създай форум тема' as admin_texts_list %}
+                {% create_list participants_url team_url lectures_url vouchers_url exams_url points_url resources_url add_news_url add_forum_url as admin_urls_list %}
+                {% create_list '<i class="bi bi-card-checklist"></i> Записани студенти' '<i class="bi bi-people-fill"></i> Учителски колектив' '<i class="bi bi-file-pdf-fill"></i> Лекции' '<i class="bi bi-upc"></i> Ваучери' '<i class="bi bi-vector-pen"></i> Изпити' '<i class="bi bi-star-fill"></i> Точки' '<i class="bi bi-folder-symlink-fill"></i> Ресурси' '<i class="bi bi-newspaper"></i> Създай новина' '<i class="bi bi-chat-right-text-fill"></i> Създай форум тема' as admin_texts_list %}
                 {% zip admin_urls_list admin_texts_list as admin_items %}
                 {% include 'common/navbar_dropdown.html' with text='<i class="bi bi-person-fill-lock text-primary"></i> Администрация' items=admin_items %}
             {% endif %}

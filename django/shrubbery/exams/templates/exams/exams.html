@@ -1,0 +1,59 @@
+{% extends "backbone/base.html" %}
+{% block location %}
+    <h6 class="location-info"><i class="bi bi-globe"></i> <a href="/exams">Изпити</a></h6>
+{% endblock %}
+{% block body %}
+    <div class="card mt-2 d-inline-block">
+        <div class="card-header">
+            <h5 class="card-title">Добави изпит</h5>
+        </div>
+        <div class="card-body">
+            <form method="post" action="/exam/add">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="title">Заглавие</label>
+                    <input type="text" required="required" class="form-control" id="title" name="title" placeholder="Заглавие" value="{{ request.POST.title }}">
+                    <div class="text-danger">{{ errors.title.as_text }}</div>
+                </div>
+                <div class="form-group">
+                    <label for="date">Дата</label>
+                    <input type="date" required="required" class="form-control" id="date" name="date" placeholder="Дата" value="{{ request.POST.date }}">
+                    <div class="text-danger">{{ errors.date.as_text }}</div>
+                </div>
+                <button type="submit" class="btn btn-primary mt-2">Добави</button>
+            </form>
+        </div>
+    </div>
+
+    {% if info %}
+        <div class="text-info"><i class="bi bi-check-circle-fill"></i> {{ info }}</div>
+    {% endif %}
+
+    {% if exams %}
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col">Заглавие</th>
+                <th scope="col">Дата</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for exam in exams %}
+                <tr>
+                    <th scope="row">
+                        <a href="/exam/{{ exam.pk }}">
+                            {{ exam.title }}
+                        </a>
+                    </th>
+                    <td>
+                        {{ exam.date }}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+        <br/>Все още няма въведени изпити.
+    {% endif %}
+
+{% endblock %}

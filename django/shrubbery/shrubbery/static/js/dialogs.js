@@ -23,6 +23,7 @@ $(document).ready(function(){
     confirmDeleteSubmit($('.confirm-delete-resources'), $('#confirm_delete_resources_modal'));
     confirmDeleteSubmit($('.confirm-delete-vouchers'), $('#confirm_delete_vouchers_modal'));
     confirmDeleteSubmit($('.confirm-delete-lecture'), $('#confirm_delete_lecture_modal'));
+    confirmDeleteSubmit($('.confirm-delete-exam-results'), $('#confirm_delete_exam_results_modal'));
 
 
     // Confirmation dialogs for deletion and redirecting
@@ -42,5 +43,6 @@ $(document).ready(function(){
     confirmDeleteLink($('.confirm-delete-news-article'), $('#confirm_delete_news_article_modal'));
     confirmDeleteLink($('.confirm-delete-forum'), $('#confirm_delete_forum_modal'));
     confirmDeleteLink($('.confirm-delete-forum-comment'), $('#confirm_delete_forum_comment_modal'));
+    confirmDeleteLink($('.confirm-delete-exam'), $('#confirm_delete_exam_modal'));
     
 })
