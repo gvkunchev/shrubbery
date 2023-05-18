@@ -1,4 +1,5 @@
 {% extends "backbone/base.html" %}
+{% load extras %}
 {% block location %}
     <h6 class="location-info"><i class="bi bi-globe"></i> <a href="/points">Точки</a></h6>
 {% endblock %}
@@ -8,12 +9,18 @@
         <table class="table table-hover">
             <thead>
                 <tr>
-                    <th scope="col">Име</th>
-                    <th scope="col">Факултетен номер</th>
-                    <th scope="col">Профилна снимка</th>
-                    <th scope="col">Ваучери</th>
-                    <th scope="col">Коментари</th>
-                    <th scope="col">Общо</th>
+                    <th class="align-middle" scope="col" rowspan="2">Име</th>
+                    <th class="align-middle" scope="col" rowspan="2">Факултетен номер</th>
+                    <th class="align-middle text-center" scope="col" rowspan="2">Профилна снимка</th>
+                    <th class="align-middle text-center" scope="col" rowspan="2">Ваучери</th>
+                    <th class="align-middle text-center" scope="col" rowspan="2">Коментари</th>
+                    <th class="align-middle text-center" scope="col" colspan="{{ exams|length }}">Изпити</th>
+                    <th class="align-middle text-center" scope="col" rowspan="2">Общо</th>
+                </tr>
+                <tr>
+                    {% for exam in exams %}
+                        <th class="align-middle text-center" scope="col">{{ exam.title }}</th>
+                    {% endfor %}
                 </tr>
             </thead>
             <tbody>
@@ -25,10 +32,14 @@
                         </a>
                     </th>
                     <td>{{ row.student.fn }}</td>
-                    <td>{{ row.profile_picture }}</td>
-                    <td>{{ row.vouchers }}</td>
-                    <td>{{ row.comments }}</td>
-                    <td>{{ row.total }}</td>
+                    <td class="text-center">{{ row.profile_picture }}</td>
+                    <td class="text-center">{{ row.vouchers }}</td>
+                    <td class="text-center">{{ row.comments }}</td>
+
+                    {% for exam in exams %}
+                        <th class="align-middle text-center" scope="col">{% get_exam_results row exam %}</th>
+                    {% endfor %}
+                    <td class="text-center">{{ row.total }}</td>
                 </tr>
                 {% endfor %}
             </tbody>

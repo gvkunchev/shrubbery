@@ -22,6 +22,9 @@ def get_point_summary(user):
     # Vouchers
     for voucher in user.voucher_set.values():
         points['vouchers'] += voucher.get('points', 0)
+    # Exams
+    for exam in user.examresult_set.values():
+        points[f"exam_{exam.get('exam_id')}"] = exam.get('points', 0)
     # Total
     points['total'] = sum(points.values())
     return points
