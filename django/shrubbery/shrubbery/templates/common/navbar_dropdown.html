@@ -1,7 +1,8 @@
+{% load extras %}
 <li class="nav-item dropdown">
     <a class="nav-link dropdown-toggle
               {% for item in items %}
-                  {% if item.0 in request.path %}
+                  {% if request.path|activate_link:item.0 %}
                       active
                   {% endif %}
               {% endfor %}
@@ -10,7 +11,7 @@
     </a>
     <div class="dropdown-menu">
         {% for item in items %}
-            <a class="dropdown-item {% if request.path == item.0 %}active{% endif %}" href="{{ item.0 }}">{{ item.1 }}</a>
+            <a class="dropdown-item {% if request.path|activate_link:item.0 %}active{% endif %}" href="{{ item.0 }}">{{ item.1 }}</a>
         {% endfor %}
     </div>
 </li>
