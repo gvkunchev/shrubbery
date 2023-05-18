@@ -22,7 +22,7 @@
                     <td>
                         <a href="/student/{{ row.student.pk }}" target="_blank">
                             <span class="scoreboard-image-wrapper">
-                                <img src="{% include 'common/profile_picture' %}" class="small-profile-picture">
+                                <img src="{% include 'common/profile_picture' with user=row.student %}" class="small-profile-picture">
                                 {% if row.rank == 1 %}
                                     <img src="{% static 'img/gold_medal.png' %}" class="medal">
                                 {% endif %}
