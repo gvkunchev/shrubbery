@@ -1,5 +1,6 @@
 from django.shortcuts import render
 
+from points.getters import get_rank_and_points
 from news.models import NewsArticle
 
 
@@ -11,4 +12,11 @@ def missing(request, exception=None):
 def home(request):
     '''Home page.'''
     MAX_NEWS = 5
-    return render(request, "home.html", {'news': NewsArticle.objects.all()[:MAX_NEWS]})
+    context = {
+        'news': NewsArticle.objects.all()[:MAX_NEWS]
+    }
+    if request.user.is_authenticated and request.user.is_student:
+        context.update({
+            'ranking': get_rank_and_points(request.user)
+        })
+    return render(request, "home.html", context)

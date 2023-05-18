@@ -26,6 +26,18 @@
         {% endif %}
     {% endif %}
 
+    {% if ranking %}
+        <div class="card mt-2 d-inline-block">
+            <div class="card-header">Позиция в класацията</div>
+            <div class="card-body">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item"><i class="bi bi-trophy-fill text-primary"></i> Място: {{ ranking.rank }} / {{ ranking.student_count }}</li>
+                    <li class="list-group-item"><i class="bi bi-star-fill text-primary"></i> Точки: {{ ranking.total }}</li>
+                </ul>
+            </div>
+        </div>
+    {% endif %}
+
     <div class="card mt-2">
         <div class="card-header">Новини</div>
         <div class="card-body">
