@@ -16,8 +16,10 @@
         <hr class="mt-2 mb-1"/>
     {% endif %}
     
-    TODO
-
+    {% autoescape off %}
+        {{ content }}
+    {% endautoescape %}
+    
     <hr class="mt-2 mb-1"/>
     {% if not request.user.is_authenticated or request.user.is_student %}
         {% if homework.hidden or not homework.verified %}

@@ -42,7 +42,8 @@ def homework_solution(request, homework, solution):
         return redirect('missing')
     context = {
         'homework': homework,
-        'solution': solution
+        'solution': solution,
+        'content': solution.get_content()
     }
     return render(request, "homework_solutions/solution.html", context)
 

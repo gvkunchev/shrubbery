@@ -9,6 +9,8 @@ from homeworks.models import Homework
 from users.models import User
 from points.models import PointsGiver
 
+from .pygment import pygmentize
+
 
 def validate_py_extension(value):
     if not value.name.endswith('.py'):
@@ -55,6 +57,14 @@ class HomeworkSolution(PointsGiver):
         history.save()
         self.upload_date = timezone.now()
         self.save()
+
+    def get_content(self):
+        """Get content from a solution file."""
+        try:
+            with open(os.path.join(settings.MEDIA_ROOT, self.content.path)) as f:
+                return pygmentize(f.read())
+        except:
+            return "Грешка при четене на файла с решение."
 
     @property
     def human_upload_date(self):
