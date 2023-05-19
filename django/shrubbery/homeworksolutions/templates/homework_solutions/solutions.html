@@ -1,0 +1,59 @@
+{% extends "backbone/base.html" %}
+{% load static %}
+
+{% block location %}
+    <h6 class="location-info"><i class="bi bi-globe"></i> <a href="/homeworks">Домашни</a> > <a href="/homework/{{ homework.pk }}">{{ homework.title }}</a> > <a href="/homework/{{ homework.pk }}/solutions">Решения</a></h6>
+{% endblock %}
+
+{% block body %}
+    
+
+    <div class="card mt-2">
+        <div class="card-header">
+            <h5 class="card-title">{{ homework.title }}</h5>
+        </div>
+        <div class="card-header">
+            <h7 class="card-title">Решения ({{ solutions|length }})</h7>
+        </div>
+        <div class="card-body">
+            {% if solutions %}
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col">Име</th>
+                            <th scope="col">Точки</th>
+                            <th scope="col">Информация</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for solution in solutions %}
+                            <tr>
+                                <th scope="row">
+                                    <a href="/homework/{{ homework.pk }}/solution/{{ solution.pk }}">
+                                        {{ solution.author.full_name }}
+                                    </a>
+                                </th>
+                                <td>
+                                    TODO
+                                </td>
+                                <td>
+                                    TODO
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                Все още няма предадени решения.
+            {% endif %}
+        </div>
+    </div>
+
+    <hr class="mt-2 mb-1"/>
+    <a href="/homework/{{ homework.pk }}" class="text-reset text-decoration-none">
+        <button type="button" class="btn btn-primary">
+            <i class="bi bi-arrow-left-circle-fill"></i> Обратно към домашното
+        </button>
+    </a>
+
+{% endblock %}

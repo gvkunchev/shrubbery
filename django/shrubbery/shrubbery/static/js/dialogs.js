@@ -44,5 +44,7 @@ $(document).ready(function(){
     confirmDeleteLink($('.confirm-delete-forum'), $('#confirm_delete_forum_modal'));
     confirmDeleteLink($('.confirm-delete-forum-comment'), $('#confirm_delete_forum_comment_modal'));
     confirmDeleteLink($('.confirm-delete-exam'), $('#confirm_delete_exam_modal'));
+    confirmDeleteLink($('.confirm-delete-homework'), $('#confirm_delete_homework_modal'));
+    confirmDeleteLink($('.confirm-delete-homework-comment'), $('#confirm_delete_homework_comment_modal'));
     
 })

@@ -53,6 +53,8 @@ INSTALLED_APPS = [
     'django_bootstrap5',
     'sass_processor',
     'resources',
+    'homeworks',
+    'homeworksolutions',
     'exams',
     'vouchers',
     'points',

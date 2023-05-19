@@ -1,0 +1,114 @@
+{% extends "backbone/base.html" %}
+{% load static %}
+
+
+{% block location %}
+    <h6 class="location-info"><i class="bi bi-globe"></i> <a href="/homeworks">Домашни</a> > <a href="/homework/{{ homework.pk }}">{{ homework.title }}</a></h6>
+{% endblock %}
+
+{% block body %}
+
+    {% if request.user.is_teacher or homework.verified and not homework.hidden %}
+        <a href="/homework/{{ homework.pk }}/solutions" class="text-reset text-decoration-none">
+            <button type="button" class="btn btn-primary">
+                <i class="bi bi-file-code-fill"></i> Виж решенията
+            </button>
+        </a>
+    {% endif %}
+
+    {% if request.user.is_teacher %}
+        <a href="/homework/edit/{{ homework.pk }}" class="text-reset text-decoration-none">
+            <button type="button" class="btn btn-primary">
+                <i class="bi bi-pencil-square"></i> Редактирай
+            </button>
+        </a>
+        <a href="/homework/delete/{{ homework.pk }}" class="text-reset text-decoration-none confirm-delete-homework">
+            <button type="button" class="btn btn-danger">
+                <i class="bi bi-x-circle-fill"></i> Изтрий
+            </button>
+        </a>
+        {% include 'common/delete_modal.html' with content='Сигурен ли си, че искаш да изтриеш това домашно?' id='confirm_delete_homework_modal' %}
+    {% endif %}
+    <hr class="mt-2 mb-1"/>
+
+    <div class="card mt-2">
+        <div class="card-header">
+            <h5 class="card-title">{{ homework.title }}</h5>
+        </div>
+        <div class="card-body">
+            <div class="card-text">
+                <i class="bi bi-flag-fill text-primary"></i> Краен срок: {{ homework.human_deadline }}
+            </div>
+            <div class="card-text">
+                <i class="bi bi-check-circle-fill text-primary"></i> Точки: {{ homework.points }}
+            </div>
+            <hr/>
+            <div class="card-text">
+                <div class="showdown-trigger">{{ homework.content }}</div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="card mt-2">
+        <div class="card-header">
+            <h6 class="card-title">Дискусия</h6>
+        </div>
+        <div class="card-body">
+
+            <table class="table table-hover">
+                <tbody>
+                    {% if request.user.is_authenticated %}
+                    <tr>
+                        <td>
+                            <form method="post" action="/homework_comment/add">
+                                {% csrf_token %}
+                                <input type="hidden" name="homework" value="{{ homework.pk }}">
+                                <textarea required="required" name="content" class="form-control showdown-input showdown-input-small" id="content" placeholder="Отговор"></textarea>
+                                <button type="submit" class="btn btn-primary mt-2 mx-1">Отговори</button>
+                                <button class="btn btn-secondary mt-2 mx-1 showdown-preview" data-showdown-source="content"><i class="bi bi-eye-fill"></i> Преглед</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endif %}
+
+
+                    {% for comment in comments %}
+                        <tr><td id="comment{{ comment.pk }}" class="ajax-toggle-container">
+                            {% include 'common/user_dated_card.html' with user=comment.author date=comment.human_date add_star=comment.starred %}
+                            <br/>
+                            <div class="showdown-trigger">{{ comment.content }}</div>
+                            {% if request.user.is_teacher %}
+                                <span class="ajax-toggle">
+                                    <a href="/homework_comment/{{ comment.pk }}/star/add?page={{ request.GET.page }}" class="ajax-toggle-trigger {% if not comment.starred %}active{% endif %}">Добави звездата</a>
+                                    <a href="/homework_comment/{{ comment.pk }}/star/remove?page={{ request.GET.page }}" class="ajax-toggle-trigger {% if comment.starred %}active{% endif %}">Махни звездата</a>
+                                </span>
+                            {% endif %}
+                            {% if request.user.is_teacher or request.user.id == comment.author.id %}
+                                <a href="/homework_comment/edit/{{ comment.pk }}?page={{ request.GET.page }}">Редактирай</a>
+                            {% endif %}
+                        </td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    {% if comments.paginator.num_pages > 1 %}
+        <nav class="mt-2">
+            <ul class="pagination justify-content-center">
+                {% for page in comments.paginator.page_range %}
+                    <li class="page-item"><a class="page-link {% if page == comments.number %}active{% endif %}" href="?page={{ page }}">{{ page }}</a></li>
+                {% endfor %}
+            </ul>
+        </nav>
+    {% endif %}
+
+    <hr class="mt-2 mb-1"/>
+    <a href="/homeworks" class="text-reset text-decoration-none">
+        <button type="button" class="btn btn-primary">
+            <i class="bi bi-arrow-left-circle-fill"></i> Обратно към всички домашни
+        </button>
+    </a>
+
+{% endblock %}
