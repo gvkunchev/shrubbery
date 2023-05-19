@@ -9342,6 +9342,14 @@ textarea.form-control-lg {
     display: block !important;
     height: auto !important; } }
 
+.linenos {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none; }
+
 .student-card {
   max-width: 250px; }
 
