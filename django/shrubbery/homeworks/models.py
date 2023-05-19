@@ -21,7 +21,18 @@ class Homework(models.Model):
 
     def __str__(self):
         """String representation for the admin panel."""
-        return f"{self.title} - {self.creation_date}"
+        return self.title
+    
+    @property
+    def can_upload(self):
+        """Whether solutions can be uploaded or not."""
+        if self.hidden:
+            return False
+        if self.verified:
+            return False
+        if self.deadline < timezone.now():
+            return False
+        return True
 
     @property
     def comments(self):
