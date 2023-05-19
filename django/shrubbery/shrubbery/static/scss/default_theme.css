@@ -9334,6 +9334,14 @@ textarea.form-control-lg {
 [data-toggle="tooltip"] {
   cursor: pointer; }
 
+.home-overview-card {
+  height: 150px; }
+
+@media (max-width: 991.98px) {
+  .home-overview-card {
+    display: block !important;
+    height: auto !important; } }
+
 .student-card {
   max-width: 250px; }
 

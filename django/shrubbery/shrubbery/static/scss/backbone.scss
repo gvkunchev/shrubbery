@@ -102,3 +102,14 @@
 [data-toggle="tooltip"] {
     cursor: pointer;
 }
+
+.home-overview-card {
+    height: 150px;
+}
+
+@include media-breakpoint-down(lg) {
+    .home-overview-card {
+        display: block !important;
+        height: auto !important;
+    }
+}

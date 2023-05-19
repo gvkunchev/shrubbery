@@ -26,8 +26,27 @@
         {% endif %}
     {% endif %}
 
+
+    {% if active_homeworks %}
+        <div class="card mt-2 d-inline-block home-overview-card">
+            <div class="card-header">Активни домашни</div>
+            <div class="card-body">
+                <ul class="list-group list-group-flush">
+                    {% for homework in active_homeworks %}
+                        <li class="list-group-item">
+                            <i class="bi bi-house-door-fill text-primary"></i></i>
+                            <a href="/homework/{{ homework.pk }}">
+                                {{ homework.title }}
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    {% endif %}
+
     {% if ranking %}
-        <div class="card mt-2 d-inline-block">
+        <div class="card mt-2 d-inline-block home-overview-card">
             <div class="card-header">Позиция в класацията</div>
             <div class="card-body">
                 <ul class="list-group list-group-flush">
@@ -37,7 +56,7 @@
             </div>
         </div>
     {% endif %}
-
+    
     <div class="card mt-2">
         <div class="card-header">Новини</div>
         <div class="card-body">

@@ -36,6 +36,9 @@
                                 <a href="/homework/{{ homework.pk }}">
                                     {{ homework.title }}
                                 </a>
+                                {% if homework.verified %}
+                                    <i class="float-end bi bi-check-circle-fill text-primary" data-toggle="tooltip" title="Проверено"></i>
+                                {% endif %}
                             </th>
                             <td>
                                 {{ homework.human_deadline }}
@@ -48,7 +51,7 @@
                                     <a href="/homework/{{ homework.pk }}">
                                         <span class="opacity-50">{{ homework.title }}</span>
                                     </a>
-                                    <i class="float-end bi bi-eye-slash-fill text-primary"></i>
+                                    <i class="float-end bi bi-eye-slash-fill text-primary" data-toggle="tooltip" title="Скрито"></i>
                                 </th>
                                 <td class="opacity-50">
                                     {{ homework.human_deadline }}
