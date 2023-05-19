@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'sass_processor',
     'resources',
     'homeworks',
+    'homeworksolutions',
     'exams',
     'vouchers',
     'points',

@@ -53,12 +53,17 @@ def delete_homework(request, homework):
         homework = Homework.objects.get(pk=homework)
     except ObjectDoesNotExist:
         return redirect('missing')
-    # TODO Check for solutions before deleting
-    homework.delete()
-    context = {
-        'homeworks': Homework.objects.all(),
-        'info': 'Успешно изтри домашно'
-    }
+    if len(homework.homeworksolution_set.values()):
+        context = {
+            'homeworks': Homework.objects.all(),
+            'error': 'Не можеш да изтриеш домашано с вече предадени решения. Използвай конзолата.'
+        }
+    else:
+        homework.delete()
+        context = {
+            'homeworks': Homework.objects.all(),
+            'info': 'Успешно изтри домашно'
+        }
     return render(request, "homeworks/homeworks.html", context)
 
 
