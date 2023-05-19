@@ -25,6 +25,7 @@
             <thead>
                 <tr>
                     <th scope="col">Име</th>
+                    <th scope="col">Точки</th>
                     <th scope="col">Краен срок</th>
                 </tr>
             </thead>
@@ -41,6 +42,9 @@
                                 {% endif %}
                             </th>
                             <td>
+                                {{ homework.points }}
+                            </td>
+                            <td>
                                 {{ homework.human_deadline }}
                             </td>
                         </tr>
@@ -53,6 +57,9 @@
                                     </a>
                                     <i class="float-end bi bi-eye-slash-fill text-primary" data-toggle="tooltip" title="Скрито"></i>
                                 </th>
+                                <td>
+                                    {{ homework.points }}
+                                </td>
                                 <td class="opacity-50">
                                     {{ homework.human_deadline }}
                                 </td>
