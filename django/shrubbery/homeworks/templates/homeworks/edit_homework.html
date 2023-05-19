@@ -1,0 +1,66 @@
+{% extends "backbone/base.html" %}
+{% load static %}
+
+
+{% block location %}
+    <h6 class="location-info"><i class="bi bi-globe"></i> <a href="/homeworks">Домашни</a> > <a href="/homework/{{ homework.pk }}">{{ homework.title }}</a> > <a href="/homework/edit">Редактирай</a></h6>
+{% endblock %}
+
+{% block body %}
+
+    <div class="card mt-2">
+        <div class="card-header">
+            <h5 class="card-title">Редактирай домашно</h5>
+        </div>
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="title">Заглавие</label>
+                    <input type="text" required="required" class="form-control" id="title" name="title" placeholder="Заглавие" value="{% if request.POST.title %}{{ request.POST.title }}{% else %}{{ homework.title }}{% endif %}">
+                    <div class="text-danger">{{ errors.title.as_text }}</div>
+                </div>
+                <div class="form-group">
+                    <label for="content">Съдържание</label>
+                    <textarea required="required" name="content" class="form-control showdown-input" id="content" placeholder="Съдържание">{% if request.POST.content %}{{ request.POST.content }}{% else %}{{ homework.content }}{% endif %}</textarea>
+                    <div class="text-danger">{{ errors.content.as_text }}</div>
+                </div>
+                <div class="form-group d-inline-block">
+                    <label for="deadline">Краен срок</label>
+                    <input type="datetime-local" required="required" name="deadline" class="form-control" id="deadline" value="{% if request.POST.deadline %}{{ request.POST.deadline }}{% else %}{{ homework.parsable_deadline }}{% endif %}">
+                    <div class="text-danger">{{ errors.deadline.as_text }}</div>
+                </div>
+                <br/>
+                <div class="form-group d-inline-block">
+                    <label for="points">Точки</label>
+                    <input type="number" required="required" name="points" class="form-control" id="points" value="{% if request.POST.points %}{{ request.POST.points }}{% else %}{{ homework.points }}{% endif %}">
+                    <div class="text-danger">{{ errors.points.as_text }}</div>
+                </div>
+                <div class="form-group">
+                    <label for="sanity_test">Sanity тест</label>
+                    <textarea name="sanity_test" class="form-control" id="sanity_test" placeholder="Sanity тест">{% if request.POST.sanity_test %}{{ request.POST.sanity_test }}{% else %}{{ homework.sanity_test }}{% endif %}</textarea>
+                    <div class="text-danger">{{ errors.sanity_test.as_text }}</div>
+                </div>
+                <div class="form-group">
+                    <label for="full_test">Оценяващ тест</label>
+                    <textarea name="full_test" class="form-control" id="full_test" placeholder="Оценяващ тест">{% if request.POST.full_test %}{{ request.POST.full_test }}{% else %}{{ homework.full_test }}{% endif %}</textarea>
+                    <div class="text-danger">{{ errors.full_test.as_text }}</div>
+                </div>
+                <div class="form-group my-2">
+                    <input class="form-check-input" name="hidden" type="checkbox" {% if request.method == 'GET' and homework.hidden %}checked="checked"{% endif %} {% if request.method == 'POST' and request.POST.hidden %}checked="checked"{% endif %} id="hidden">
+                    <label for="hidden">Скритo</label>
+                </div>
+                <div class="form-group my-2">
+                    <input class="form-check-input" name="verified" type="checkbox" {% if request.method == 'GET' and homework.verified %}checked="checked"{% endif %} {% if request.method == 'POST' and request.POST.verified %}checked="checked"{% endif %} id="verified">
+                    <label for="verified">Проверено</label>
+                </div>
+                {% if info %}
+                    <div class="text-info"><i class="bi bi-check-circle-fill"></i> {{ info }}</div>
+                {% endif %}
+                <button type="submit" name="edit" class="btn btn-primary mt-2 mx-1">Редактирай</button>
+                <button class="btn btn-secondary mt-2 mx-1 showdown-preview" data-showdown-source="content"><i class="bi bi-eye-fill"></i> Преглед</button>
+            </form>
+        </div>
+    </div>
+
+{% endblock %}

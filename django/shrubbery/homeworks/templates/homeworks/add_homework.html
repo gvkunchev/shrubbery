@@ -1,0 +1,63 @@
+{% extends "backbone/base.html" %}
+{% load static %}
+
+
+{% block location %}
+    <h6 class="location-info"><i class="bi bi-globe"></i> <a href="/homeworks">Домашни</a> > <a href="/homework/add">Добави домашно</a></h6>
+{% endblock %}
+
+{% block body %}
+
+    <div class="card mt-2">
+        <div class="card-header">
+            <h5 class="card-title">Създай домашно</h5>
+        </div>
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="title">Заглавие</label>
+                    <input type="text" required="required" class="form-control" id="title" name="title" placeholder="Заглавие" value="{{ request.POST.title }}">
+                    <div class="text-danger">{{ errors.title.as_text }}</div>
+                </div>
+                <div class="form-group">
+                    <label for="content">Съдържание</label>
+                    <textarea required="required" name="content" class="form-control showdown-input" id="content" placeholder="Съдържание">{{ request.POST.content }}</textarea>
+                    <div class="text-danger">{{ errors.content.as_text }}</div>
+                </div>
+                <div class="form-group d-inline-block">
+                    <label for="deadline">Краен срок</label>
+                    <input type="datetime-local" required="required" name="deadline" class="form-control" id="deadline" value="{{ request.POST.deadline }}">
+                    <div class="text-danger">{{ errors.deadline.as_text }}</div>
+                </div>
+                <br/>
+                <div class="form-group d-inline-block">
+                    <label for="points">Точки</label>
+                    <input type="number" required="required" name="points" class="form-control" id="points" value="{% if request.POST.points %}{{ request.POST.points }}{% else %}10{% endif %}">
+                    <div class="text-danger">{{ errors.points.as_text }}</div>
+                </div>
+                <div class="form-group">
+                    <label for="sanity_test">Sanity тест</label>
+                    <textarea name="sanity_test" class="form-control" id="sanity_test" placeholder="Sanity тест">{{ request.POST.sanity_test }}</textarea>
+                    <div class="text-danger">{{ errors.sanity_test.as_text }}</div>
+                </div>
+                <div class="form-group">
+                    <label for="full_test">Оценяващ тест</label>
+                    <textarea name="full_test" class="form-control" id="full_test" placeholder="Оценяващ тест">{{ request.POST.full_test }}</textarea>
+                    <div class="text-danger">{{ errors.full_test.as_text }}</div>
+                </div>
+                <div class="form-group my-2">
+                    <input class="form-check-input" name="hidden" type="checkbox" {% if request.POST.hidden %}checked="checked"{% endif %} id="hidden">
+                    <label for="hidden">Скритo</label>
+                </div>
+                <div class="form-group my-2">
+                    <input class="form-check-input" name="verified" type="checkbox" {% if request.POST.verified %}checked="checked"{% endif %} id="verified">
+                    <label for="verified">Проверено</label>
+                </div>
+                <button type="submit" name="edit" class="btn btn-primary mt-2 mx-1">Създай</button>
+                <button class="btn btn-secondary mt-2 mx-1 showdown-preview" data-showdown-source="content"><i class="bi bi-eye-fill"></i> Преглед</button>
+            </form>
+        </div>
+    </div>
+
+{% endblock %}

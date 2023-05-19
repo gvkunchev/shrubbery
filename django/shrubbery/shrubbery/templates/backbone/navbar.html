@@ -19,6 +19,7 @@
 {% url 'points:scoreboard' as scoreboard_url %}
 {% url 'resources:resources' as resources_url %}
 {% url 'exams:exams' as exams_url %}
+{% url 'homeworks:homeworks' as homeworks_url %}
 
 
 <nav class="navbar navbar-expand-lg">
@@ -41,6 +42,7 @@
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             {% include 'common/navbar_inline_link.html' with url=home_url text='<i class="bi bi-house-fill text-primary"></i> Начало' %}
             {% include 'common/navbar_inline_link.html' with url=news_url text='<i class="bi bi-newspaper text-primary"></i> Новини' %}
+            {% include 'common/navbar_inline_link.html' with url=homeworks_url text='<i class="bi bi-house-door-fill text-primary"></i> Домашни' %}
             {% if request.user.is_student %}
                 {% include 'common/navbar_inline_link.html' with url=redeemed_url text='<i class="bi bi-upc text-primary"></i> Ваучери' %}
             {% endif %}

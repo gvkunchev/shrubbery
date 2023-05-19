@@ -1,0 +1,66 @@
+{% extends "backbone/base.html" %}
+{% load static %}
+
+
+{% block location %}
+    <h6 class="location-info"><i class="bi bi-globe"></i> <a href="/homeworks">Домашни</a></h6>
+{% endblock %}
+
+{% block body %}
+
+    {% if request.user.is_teacher %}
+    <a href="/homework/add" class="text-reset text-decoration-none">
+        <button type="button" class="btn btn-primary">
+            <i class="bi bi-plus-circle-fill"></i> Създай домашно
+        </button>
+    </a>
+    {% if info %}
+        <div class="text-info"><i class="bi bi-check-circle-fill"></i> {{ info }}</div>
+    {% endif %}
+    <hr class="mt-2 mb-1"/>
+    {% endif %}
+    
+    {% if homeworks %}
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">Име</th>
+                    <th scope="col">Краен срок</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for homework in homeworks %}
+                    {% if not homework.hidden %}
+                        <tr>
+                            <th scope="row">
+                                <a href="/homework/{{ homework.pk }}">
+                                    {{ homework.title }}
+                                </a>
+                            </th>
+                            <td>
+                                {{ homework.human_deadline }}
+                            </td>
+                        </tr>
+                    {% else %}
+                        {% if request.user.is_teacher %}
+                            <tr>
+                                <th scope="row">
+                                    <a href="/homework/{{ homework.pk }}">
+                                        <span class="opacity-50">{{ homework.title }}</span>
+                                    </a>
+                                    <i class="float-end bi bi-eye-slash-fill text-primary"></i>
+                                </th>
+                                <td class="opacity-50">
+                                    {{ homework.human_deadline }}
+                                </td>
+                            </tr>
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        Все още няма домашни.
+    {% endif %}
+
+{% endblock %}

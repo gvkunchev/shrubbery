@@ -1,4 +1,4 @@
-Add homeworks
+Add homework solutions (ensure that you can't delete homework with existing solutions - there is a TODO in homework.views)
 Add challanges
 Add activity monitoring
 Add email alerts
