@@ -8,6 +8,8 @@ from shrubbery.view_decorators import is_teacher
 from .models import Homework, HomeworkComment
 from .forms import HomeworkForm, HomeworkCommentForm
 
+from comments.views import AddComment, EditComment, DeleteComment, SetCommentStar
+
 
 def homeworks(request):
     '''Homeworks page.'''
@@ -86,87 +88,33 @@ def edit_homework(request, homework):
             context['errors'] = form.errors
     return render(request, "homeworks/edit_homework.html", context)
 
-@login_required
-def add_homework_comment(request):
-    '''Add homework comment.'''
-    if request.method != 'POST':
-        return redirect('missing')
-    try:
-        homework = Homework.objects.get(pk=request.POST.get('homework'))
-    except ObjectDoesNotExist:
-            return redirect('missing')
-    data = {
-        'content': request.POST.get('content'),
-        'homework': request.POST.get('homework'),
-        'author': request.user
-    }
-    form = HomeworkCommentForm(data)
-    if form.is_valid():
-        comment = form.save()
-    return redirect(f'/homework/{homework.pk}#comment{comment.pk}')
+
+class AddHomeworkComment(AddComment):
+    HOST = Homework
+    FORM = HomeworkCommentForm
+    HOST_KEY = 'homework'
 
 
-@login_required
-def edit_homework_comment(request, comment):
-    '''Edit homework comment.'''
-    try:
-        comment = HomeworkComment.objects.get(pk=comment)
-    except ObjectDoesNotExist:
-        return redirect('missing')
-    if not (request.user.is_teacher or comment.author.pk == request.user.pk):
-        return redirect('missing')
-    if request.method == 'POST':
-        data = {
-            'homework': comment.homework,
-            'content': request.POST.get('content'),
-            'author': comment.author
-        }
-        form = HomeworkCommentForm(data, instance=comment)
-        if form.is_valid():
-            form.save()
-            page = request.POST.get('page', '')
-            return redirect(f'/homework/{comment.homework.pk}?page={page}#comment{comment.pk}')
-        else:
-            context = {
-                'comment': comment,
-                'errors': form.errors
-            }
-            return render(request, "homeworks/edit_homework_comment.html", context)
-    else:
-        return render(request, "homeworks/edit_homework_comment.html", {'comment': comment})
+class EditHomeworkComment(EditComment):
+    HOST = Homework
+    FORM = HomeworkCommentForm
+    HOST_KEY = 'homework'
+    COMMENT_MODEL = HomeworkComment
+    TEMPLATE = 'homeworks/edit_homework_comment.html'
 
 
-@is_teacher
-def delete_homework_comment(request, comment):
-    '''Delete homework comment.'''
-    try:
-        comment = HomeworkComment.objects.get(pk=comment)
-    except ObjectDoesNotExist:
-        return redirect('missing')
-    homework = comment.homework
-    comment.delete()
-    return redirect(f'/homework/{homework.pk}')
+class DeleteHomeworkComment(DeleteComment):
+    HOST_KEY = 'homework'
+    COMMENT_MODEL = HomeworkComment
 
 
-# Helper for the below two
-@is_teacher
-def set_homework_comment_star(request, comment, status):
-    '''Set a star to a homework comment.'''
-    try:
-        comment = HomeworkComment.objects.get(pk=comment)
-    except ObjectDoesNotExist:
-        return redirect('missing')
-    comment.starred = status
-    comment.save()
-    page = request.GET.get('page', '')
-    return redirect(f'/homework/{comment.homework.pk}?page={page}#comment{comment.pk}')
+class AddHomeworkCommentStar(SetCommentStar):
+    HOST_KEY = 'homework'
+    COMMENT_MODEL = HomeworkComment
+    STATUS = True
 
-@is_teacher
-def add_homework_comment_star(request, comment):
-    '''Add star to a homework comment.'''
-    return set_homework_comment_star(request, comment, True)
 
-@is_teacher
-def remove_homework_comment_star(request, comment):
-    '''Remove a star from a homework comment.'''
-    return set_homework_comment_star(request, comment, False)
+class RemoveHomeworkCommentStar(SetCommentStar):
+    HOST_KEY = 'homework'
+    COMMENT_MODEL = HomeworkComment
+    STATUS = False

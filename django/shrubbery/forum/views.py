@@ -8,6 +8,8 @@ from shrubbery.view_decorators import is_teacher
 from .models import Forum, ForumComment
 from .forms import ForumForm, ForumCommentForm
 
+from comments.views import AddComment, EditComment, DeleteComment, SetCommentStar
+
 
 def forums(request):
     '''Forums page.'''
@@ -86,87 +88,32 @@ def edit_forum(request, forum):
         return render(request, "forums/edit_forum.html", {'forum': forum})
 
 
-@login_required
-def add_forum_comment(request):
-    '''Add forum comment.'''
-    if request.method != 'POST':
-            return redirect('missing')
-    try:
-        forum = Forum.objects.get(pk=request.POST.get('forum'))
-    except ObjectDoesNotExist:
-            return redirect('missing')
-    data = {
-        'content': request.POST.get('content'),
-        'forum': request.POST.get('forum'),
-        'author': request.user
-    }
-    form = ForumCommentForm(data)
-    if form.is_valid():
-        comment = form.save()
-    return redirect(f'/forum/{forum.pk}#comment{comment.pk}')
+class AddForumComment(AddComment):
+    HOST = Forum
+    FORM = ForumCommentForm
+    HOST_KEY = 'forum'
 
 
-@login_required
-def edit_forum_comment(request, comment):
-    '''Edit forum comment.'''
-    try:
-        comment = ForumComment.objects.get(pk=comment)
-    except ObjectDoesNotExist:
-        return redirect('missing')
-    if not (request.user.is_teacher or comment.author.pk == request.user.pk):
-        return redirect('missing')
-    if request.method == 'POST':
-        data = {
-            'forum': comment.forum,
-            'content': request.POST.get('content'),
-            'author': comment.author
-        }
-        form = ForumCommentForm(data, instance=comment)
-        if form.is_valid():
-            form.save()
-            page = request.POST.get('page', '')
-            return redirect(f'/forum/{comment.forum.pk}?page={page}#comment{comment.pk}')
-        else:
-            context = {
-                'comment': comment,
-                'errors': form.errors
-            }
-            return render(request, "forums/edit_forum_comment.html", context)
-    else:
-        return render(request, "forums/edit_forum_comment.html", {'comment': comment})
+class EditForumComment(EditComment):
+    HOST = Forum
+    FORM = ForumCommentForm
+    HOST_KEY = 'forum'
+    COMMENT_MODEL = ForumComment
+    TEMPLATE = 'forums/edit_forum_comment.html'
 
 
-@is_teacher
-def delete_forum_comment(request, comment):
-    '''Delete forum.'''
-    try:
-        comment = ForumComment.objects.get(pk=comment)
-    except ObjectDoesNotExist:
-        return redirect('missing')
-    forum = comment.forum
-    comment.delete()
-    return redirect(f'/forum/{forum.pk}')
+class DeleteForumComment(DeleteComment):
+    HOST_KEY = 'forum'
+    COMMENT_MODEL = ForumComment
 
 
-# Helper for the below two
-@is_teacher
-def set_forum_comment_star(request, comment, status):
-    '''Set a star to a forum comment.'''
-    try:
-        comment = ForumComment.objects.get(pk=comment)
-    except ObjectDoesNotExist:
-        return redirect('missing')
-    comment.starred = status
-    comment.save()
-    page = request.GET.get('page', '')
-    return redirect(f'/forum/{comment.forum.pk}?page={page}#comment{comment.pk}')
+class AddForumCommentStar(SetCommentStar):
+    HOST_KEY = 'forum'
+    COMMENT_MODEL = ForumComment
+    STATUS = True
 
-@is_teacher
-def add_forum_comment_star(request, comment):
-    '''Add star to a forum comment.'''
-    return set_forum_comment_star(request, comment, True)
 
-@is_teacher
-def remove_forum_comment_star(request, comment):
-    '''Remove a star from a forum comment.'''
-    return set_forum_comment_star(request, comment, False)
+class RemoveForumCommentStar(SetCommentStar):
+    HOST_KEY = 'forum'
+    COMMENT_MODEL = ForumComment
+    STATUS = False

@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_bootstrap5',
     'sass_processor',
+    'comments',
     'resources',
     'homeworks',
     'homeworksolutions',
