@@ -16,9 +16,17 @@
         <hr class="mt-2 mb-1"/>
     {% endif %}
     
-    {% autoescape off %}
-        {{ content }}
-    {% endautoescape %}
+    
+    <div class="card mt-2">
+        <div class="card-header">
+            <h6 class="card-title">Код</h6>
+        </div>
+        <div class="card-body">
+            {% autoescape off %}
+                {{ content }}
+            {% endautoescape %}
+        </div>
+    </div>
 
     
     
