@@ -5,6 +5,7 @@ RUN apt update
 RUN apt install -y python3.10
 RUN apt install -y python3-pip
 RUN apt install -y nginx
+RUN apt install -y redis-server
 
 # Install all python packages
 COPY requirements.txt .

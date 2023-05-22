@@ -15,6 +15,7 @@ class Homework(models.Model):
     full_test = models.TextField(default="", null=True, blank=True)
     hidden = models.BooleanField(default=True)
     verified = models.BooleanField(default=False)
+    executing_tests = models.BooleanField(default=False)
 
     class Meta:
         ordering = ('-creation_date',)

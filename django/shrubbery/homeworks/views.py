@@ -9,6 +9,8 @@ from .forms import HomeworkForm, HomeworkCommentForm
 
 from comments.views import AddComment, EditComment, DeleteComment, SetCommentStar
 
+from .tasks import run_homework_tests
+
 
 def homeworks(request):
     '''Homeworks page.'''
@@ -117,3 +119,18 @@ class RemoveHomeworkCommentStar(SetCommentStar):
     HOST_KEY = 'homework'
     COMMENT_MODEL = HomeworkComment
     STATUS = False
+
+
+@is_teacher
+def run_tests(request, homework):
+    '''Run homework tests.'''
+    try:
+        homework = Homework.objects.get(pk=homework)
+        if homework.executing_tests:
+            raise ObjectDoesNotExist()
+    except ObjectDoesNotExist:
+        return redirect('missing')
+    homework.executing_tests = True
+    homework.save()
+    run_homework_tests.delay(homework.pk)
+    return redirect(f'/homework/{homework.pk}')
