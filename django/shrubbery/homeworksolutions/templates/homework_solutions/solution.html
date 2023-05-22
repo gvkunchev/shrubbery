@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block location %}
-    <h6 class="location-info"><i class="bi bi-globe"></i> <a href="/homeworks">Домашни</a> > <a href="/homework/{{ homework.pk }}">{{ homework.title }}</a> > <a href="/homework/{{ homework.pk }}/solutions">Решения</a> > <a href="/homework/{{ homework.pk }}/solution/{{ solution.pk }}">Решението на {{ solution.author.full_name }}</a></h6>
+    <h6 class="location-info"><i class="bi bi-globe"></i> <a href="/homeworks">Домашни</a> > <a href="/homework/{{ homework.pk }}">{{ homework.title }}</a> {% if request.user.is_teacher or homework.verified %} > <a href="/homework/{{ homework.pk }}/solutions">Решения</a> {% endif %} > <a href="/homework/{{ homework.pk }}/solution/{{ solution.pk }}">Решението на {{ solution.author.full_name }}</a></h6>
 {% endblock %}
 
 {% block body %}

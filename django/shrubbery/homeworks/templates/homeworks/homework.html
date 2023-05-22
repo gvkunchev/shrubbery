@@ -1,5 +1,6 @@
 {% extends "backbone/base.html" %}
 {% load static %}
+{% load extras %}
 
 
 {% block location %}
@@ -9,11 +10,20 @@
 {% block body %}
 
     {% if request.user.is_teacher or request.user.is_student and homework.can_upload %}
-    <a href="/homework/{{ homework.pk }}/solution/add" class="text-reset text-decoration-none">
-        <button type="button" class="btn btn-primary m-1">
-            <i class="bi bi-file-arrow-up-fill"></i> Качи решение
-        </button>
-    </a>
+        {% with homework|solution_from:request.user as user_solution %}
+            {% if user_solution %}
+                <a href="/homework/{{ homework.pk }}/solution/{{ user_solution.pk }}" class="text-reset text-decoration-none">
+                    <button type="button" class="btn btn-primary m-1">
+                        <i class="bi bi-file-code-fill"></i> Виж своето решение
+                    </button>
+                </a>
+            {% endif %}
+        {% endwith %}
+            <a href="/homework/{{ homework.pk }}/solution/add" class="text-reset text-decoration-none">
+                <button type="button" class="btn btn-primary m-1">
+                    <i class="bi bi-file-arrow-up-fill"></i> Качи решение
+                </button>
+            </a>
     {% endif %}
 
     {% if request.user.is_teacher or homework.verified and not homework.hidden %}

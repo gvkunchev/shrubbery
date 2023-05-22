@@ -2,6 +2,8 @@ from django import template
 
 register = template.Library()
 
+from homeworksolutions.models import HomeworkSolution
+
 
 @register.simple_tag()
 def create_list(*args):
@@ -22,3 +24,12 @@ def activate_link(request_path, url):
     if url == '/':
         return request_path == '/'
     return url.rstrip('s') in request_path
+
+
+@register.filter()
+def solution_from(homework, user):
+    """Get the solution to a homework from a user."""
+    try:
+        return HomeworkSolution.objects.get(author=user, homework=homework)
+    except:
+        return False

@@ -21,6 +21,8 @@ def get_point_summary(user):
         points['comments'] += comment.get('points', 0)
     for comment in user.homeworkcomment_set.values():
         points['comments'] += comment.get('points', 0)
+    for comment in user.homeworksolutioncomment_set.values():
+        points['comments'] += comment.get('points', 0)
     # Vouchers
     for voucher in user.voucher_set.values():
         points['vouchers'] += voucher.get('points', 0)
