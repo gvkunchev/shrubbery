@@ -4,12 +4,12 @@
 {% endblock %}
 {% block body %}
     {% if request.user.is_teacher %}
-        <a href="/news/edit/{{ article.pk }}" class="text-reset text-decoration-none">
+        <a href="/news/{{ article.pk }}/edit" class="text-reset text-decoration-none">
             <button type="button" class="btn btn-primary m-1">
                 <i class="bi bi-pencil-square"></i> Редактирай
             </button>
         </a>
-        <a href="/news/delete/{{ article.pk }}" class="text-reset text-decoration-none confirm-delete-news-article">
+        <a href="/news/{{ article.pk }}/delete" class="text-reset text-decoration-none confirm-delete-news-article">
             <button type="button" class="btn btn-danger m-1">
                 <i class="bi bi-x-circle-fill"></i> Изтрий
             </button>

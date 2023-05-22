@@ -4,12 +4,12 @@
 {% endblock %}
 {% block body %}
 
-    <a href="/exam/edit/{{ exam.pk }}" class="text-reset text-decoration-none">
+    <a href="/exam/{{ exam.pk }}/edit" class="text-reset text-decoration-none">
         <button type="button" class="btn btn-primary m-1">
             <i class="bi bi-pencil-square"></i> Редактирай
         </button>
     </a>
-    <a href="/exam/delete/{{ exam.pk }}" class="text-reset text-decoration-none confirm-delete-exam">
+    <a href="/exam/{{ exam.pk }}/delete" class="text-reset text-decoration-none confirm-delete-exam">
         <button type="button" class="btn btn-danger m-1">
             <i class="bi bi-x-circle-fill"></i> Изтрий
         </button>

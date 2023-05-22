@@ -19,20 +19,21 @@ class AddComment(View):
     HOST_KEY = 'Key for the host that comes from the url - e.g. forum, homework'
 
     @method_decorator(login_required)
-    def post(self, request):
+    def post(self, request, **kwargs):
         try:
-            host = self.HOST.objects.get(pk=request.POST.get(self.HOST_KEY))
+            host = self.HOST.objects.get(pk=kwargs.get(self.HOST_KEY))
         except ObjectDoesNotExist:
                 return redirect('missing')
         data = {
             'content': request.POST.get('content'),
-            self.HOST_KEY: request.POST.get(self.HOST_KEY),
             'author': request.user
         }
+        data.update(kwargs)
         form = self.FORM(data)
         if form.is_valid():
             comment = form.save()
-        return redirect(f'/{self.HOST_KEY}/{host.pk}#comment{comment.pk}')
+        redirect_path = request.path.replace('/comment/add', '')
+        return redirect(f'{redirect_path}#comment{comment.pk}')
 
 
 class EditComment(View):
@@ -43,7 +44,7 @@ class EditComment(View):
     COMMENT_MODEL = 'Model of the comment - e.g. ForumComment'
     TEMPLATE = 'Template for parsing the result - e.g. forums/edit_forum_comment.html'
 
-    def get_comment_from_link(self, request, comment):
+    def get_comment_from_link(self, request, comment, **kwargs):
         """Validate that the host exists and user can change it and return the comment."""
         try:
             comment = self.COMMENT_MODEL.objects.get(pk=comment)
@@ -54,18 +55,19 @@ class EditComment(View):
         return comment
 
     @method_decorator(login_required)
-    def post(self, request, comment):
+    def post(self, request, comment, **kwargs):
         comment = self.get_comment_from_link(request, comment)
         data = {
-            self.HOST_KEY: getattr(comment, self.HOST_KEY),
             'content': request.POST.get('content'),
             'author': comment.author
         }
+        data.update(kwargs)
         form = self.FORM(data, instance=comment)
         if form.is_valid():
             form.save()
             page = request.POST.get('page', '')
-            return redirect(f'/{self.HOST_KEY}/{getattr(comment, self.HOST_KEY).pk}?page={page}#comment{comment.pk}')
+            redirect_path = request.path.replace(f'/comment/{comment.pk}/edit', '')
+            return redirect(f'{redirect_path}?page={page}#comment{comment.pk}')
         else:
             context = {
                 'comment': comment,
@@ -74,7 +76,7 @@ class EditComment(View):
             return render(request, self.TEMPLATE, context)
 
     @method_decorator(login_required)
-    def get(self, request, comment):
+    def get(self, request, comment, **kwargs):
         comment = self.get_comment_from_link(request, comment)
         return render(request, self.TEMPLATE, {'comment': comment})
 
@@ -85,14 +87,15 @@ class DeleteComment(View):
     COMMENT_MODEL = 'Model of the comment - e.g. ForumComment'
 
     @method_decorator(is_teacher)
-    def get(self, request, comment):
+    def get(self, request, comment, **kwargs):
         try:
             comment = self.COMMENT_MODEL.objects.get(pk=comment)
         except ObjectDoesNotExist:
             return redirect('missing')
-        host = getattr(comment, self.HOST_KEY)
+        comment_pk = comment.pk
         comment.delete()
-        return redirect(f'/{self.HOST_KEY}/{host.pk}')
+        redirect_path = request.path.replace(f'/comment/{comment_pk}/delete', '')
+        return redirect(redirect_path)
     
 
 class SetCommentStar(View):
@@ -102,7 +105,7 @@ class SetCommentStar(View):
     STATUS = 'Boolean for adding/removing the star'
 
     @method_decorator(is_teacher)
-    def get(self, request, comment):
+    def get(self, request, comment, **kwargs):
         try:
             comment = self.COMMENT_MODEL.objects.get(pk=comment)
         except ObjectDoesNotExist:
@@ -110,4 +113,6 @@ class SetCommentStar(View):
         comment.starred = self.STATUS
         comment.save()
         page = request.GET.get('page', '')
-        return redirect(f'/{self.HOST_KEY}/{getattr(comment, self.HOST_KEY).pk}?page={page}#comment{comment.pk}')
+        redirect_path = request.path.replace(f'/comment/{comment.pk}/star/add', '')
+        redirect_path = redirect_path.replace(f'/comment/{comment.pk}/star/remove', '')
+        return redirect(f'{redirect_path}?page={page}#comment{comment.pk}')
