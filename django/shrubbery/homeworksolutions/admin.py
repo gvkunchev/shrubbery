@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import HomeworkSolution, HomeworkSolutionHistory
+from .models import HomeworkSolution, HomeworkSolutionHistory, HomeworkSolutionComment
 
 
 class HomeworkSolutionAdmin(admin.ModelAdmin):
@@ -42,6 +42,26 @@ class HomeworkSolutionHistoryAdmin(admin.ModelAdmin):
         }),
     )
 
+class HomeworkSolutionCommentAdmin(admin.ModelAdmin):
+    model = HomeworkSolutionComment
+    ordering = ('date', 'author')
+    search_fields = ('date', 'author', 'solution', 'content')
+    list_display = ('date', 'author', 'solution')
+    list_filter = ('author', 'solution')
+    fieldsets = (
+            (None, {
+                "fields": (
+                   ('date', 'author', 'solution', 'content', 'starred')
+                ),
+            }),
+        )
+    add_fieldsets = (
+        (None, {
+            'fields': ('date', 'author', 'solution', 'content', 'starred')
+        }),
+    )
+
 
 admin.site.register(HomeworkSolution, HomeworkSolutionAdmin)
 admin.site.register(HomeworkSolutionHistory, HomeworkSolutionHistoryAdmin)
+admin.site.register(HomeworkSolutionComment, HomeworkSolutionCommentAdmin)

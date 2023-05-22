@@ -44,6 +44,11 @@ class HomeworkSolution(PointsGiver):
         """String representation for the admin panel."""
         return f"{self.homework} - {self.author}"
     
+    @property
+    def comments(self):
+        """Get all comments."""
+        return self.homeworksolutioncomment_set.all()
+    
     def send_to_history(self):
         """Send current version to history."""
         content = get_history_upload_path(self, None)
@@ -90,3 +95,36 @@ class HomeworkSolutionHistory(models.Model):
     def human_upload_date(self):
         """Ipload date format for human readers.."""
         return self.deadline.astimezone(timezone.get_current_timezone()).strftime("%d.%m.%Y %H:%M")
+
+
+class HomeworkSolutionComment(PointsGiver):
+    date = models.DateTimeField(default=timezone.now)
+    author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    solution = models.ForeignKey(HomeworkSolution, on_delete=models.CASCADE)
+    content = models.TextField()
+    starred = models.BooleanField(default=False)
+
+    class Meta:
+        ordering = ('-date', )
+
+    @property
+    def human_date(self):
+        """Date format used for parsing templates."""
+        return self.date.astimezone(timezone.get_current_timezone()).strftime("%d.%m.%Y %H:%M")
+
+    def __str__(self):
+        """String representation for the admin panel."""
+        return f"{self.author} - {self.human_date}"
+
+    def _update_points(self, *args, **kwargs):
+        """Update points assigned if starred."""
+        if self.starred:
+            self.points = 1
+        else:
+            self.points = 0
+        super(HomeworkSolutionComment, self).save(*args, **kwargs)
+
+    def save(self, *args, **kwargs):
+        """Decorate saving with points assignments."""
+        super(HomeworkSolutionComment, self).save(*args, **kwargs)
+        self._update_points(*args, **kwargs)

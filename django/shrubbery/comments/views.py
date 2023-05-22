@@ -21,9 +21,10 @@ class AddComment(View):
     @method_decorator(login_required)
     def post(self, request, **kwargs):
         try:
-            host = self.HOST.objects.get(pk=kwargs.get(self.HOST_KEY))
+            print(kwargs.get(self.HOST_KEY))
+            self.HOST.objects.get(pk=kwargs.get(self.HOST_KEY))
         except ObjectDoesNotExist:
-                return redirect('missing')
+            return redirect('missing')
         data = {
             'content': request.POST.get('content'),
             'author': request.user

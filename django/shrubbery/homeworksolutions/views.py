@@ -1,13 +1,11 @@
-from django.core.paginator import Paginator
 from django.shortcuts import render, redirect
 from django.core.exceptions import ObjectDoesNotExist
-from django.contrib.auth.decorators import login_required
-
-from shrubbery.view_decorators import is_teacher
 
 from homeworks.models import Homework
-from .models import HomeworkSolution
-from .forms import HomeworkSolutionForm
+from .models import HomeworkSolution, HomeworkSolutionComment
+from .forms import HomeworkSolutionForm, HomeworkSolutionCommentForm
+
+from comments.views import AddComment, EditComment, DeleteComment, SetCommentStar
 
 
 def homework_solutions(request, homework):
@@ -43,7 +41,8 @@ def homework_solution(request, homework, solution):
     context = {
         'homework': homework,
         'solution': solution,
-        'content': solution.get_content()
+        'content': solution.get_content(),
+        'comments': solution.comments
     }
     return render(request, "homework_solutions/solution.html", context)
 
@@ -81,3 +80,34 @@ def add_homework_solution(request, homework):
         else:
             context['errors'] = form.errors
     return render(request, "homework_solutions/add_solution.html", context)
+
+
+class AddHomeworkSolutionComment(AddComment):
+    HOST = HomeworkSolution
+    FORM = HomeworkSolutionCommentForm
+    HOST_KEY = 'solution'
+
+
+class EditHomeworkSolutionComment(EditComment):
+    HOST = HomeworkSolution
+    FORM = HomeworkSolutionCommentForm
+    HOST_KEY = 'solution'
+    COMMENT_MODEL = HomeworkSolutionComment
+    TEMPLATE = 'homework_solutions/edit_homework_solution_comment.html'
+
+
+class DeleteHomeworkSolutionComment(DeleteComment):
+    HOST_KEY = 'solution'
+    COMMENT_MODEL = HomeworkSolutionComment
+
+
+class AddHomeworkSolutionCommentStar(SetCommentStar):
+    HOST_KEY = 'solution'
+    COMMENT_MODEL = HomeworkSolutionComment
+    STATUS = True
+
+
+class RemoveHomeworkSolutionCommentStar(SetCommentStar):
+    HOST_KEY = 'solution'
+    COMMENT_MODEL = HomeworkSolutionComment
+    STATUS = False
