@@ -9,7 +9,7 @@
 
     {% if request.user.is_authenticated and request.user.pk == solution.author.pk and homework.can_upload %}
         <a href="/homework/{{ homework.pk }}/solution/add" class="text-reset text-decoration-none">
-            <button type="button" class="btn btn-primary">
+            <button type="button" class="btn btn-primary m-1">
                 <i class="bi bi-file-arrow-up-fill"></i> Качи ново решение
             </button>
         </a>

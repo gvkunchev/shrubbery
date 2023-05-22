@@ -10,7 +10,7 @@
 
     {% if request.user.is_teacher or request.user.is_student and homework.can_upload %}
     <a href="/homework/{{ homework.pk }}/solution/add" class="text-reset text-decoration-none">
-        <button type="button" class="btn btn-primary">
+        <button type="button" class="btn btn-primary m-1">
             <i class="bi bi-file-arrow-up-fill"></i> Качи решение
         </button>
     </a>
@@ -18,7 +18,7 @@
 
     {% if request.user.is_teacher or homework.verified and not homework.hidden %}
         <a href="/homework/{{ homework.pk }}/solutions" class="text-reset text-decoration-none">
-            <button type="button" class="btn btn-primary">
+            <button type="button" class="btn btn-primary m-1">
                 <i class="bi bi-file-code-fill"></i> Виж всички решенията
             </button>
         </a>
@@ -26,12 +26,12 @@
 
     {% if request.user.is_teacher %}
         <a href="/homework/edit/{{ homework.pk }}" class="text-reset text-decoration-none">
-            <button type="button" class="btn btn-primary">
+            <button type="button" class="btn btn-primary m-1">
                 <i class="bi bi-pencil-square"></i> Редактирай
             </button>
         </a>
         <a href="/homework/delete/{{ homework.pk }}" class="text-reset text-decoration-none confirm-delete-homework">
-            <button type="button" class="btn btn-danger">
+            <button type="button" class="btn btn-danger m-1">
                 <i class="bi bi-x-circle-fill"></i> Изтрий
             </button>
         </a>

@@ -7,12 +7,12 @@
 
     {% if request.user.is_teacher %}
         <a href="/forum/edit/{{ forum.pk }}" class="text-reset text-decoration-none">
-            <button type="button" class="btn btn-primary">
+            <button type="button" class="btn btn-primary m-1">
                 <i class="bi bi-pencil-square"></i> Редактирай
             </button>
         </a>
         <a href="/forum/delete/{{ forum.pk }}" class="text-reset text-decoration-none confirm-delete-forum">
-            <button type="button" class="btn btn-danger">
+            <button type="button" class="btn btn-danger m-1">
                 <i class="bi bi-x-circle-fill"></i> Изтрий
             </button>
         </a>

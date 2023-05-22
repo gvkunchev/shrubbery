@@ -6,7 +6,7 @@
 
     {% if request.user.is_teacher %}
         <a href="/homework_comment/delete/{{ comment.pk }}" class="text-reset text-decoration-none confirm-delete-homework-comment">
-            <button type="button" class="btn btn-danger">
+            <button type="button" class="btn btn-danger m-1">
                 <i class="bi bi-x-circle-fill"></i> Изтрий
             </button>
         </a>
