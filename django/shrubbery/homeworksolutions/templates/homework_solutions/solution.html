@@ -2,52 +2,77 @@
 {% load static %}
 
 {% block location %}
-    <h6 class="location-info"><i class="bi bi-globe"></i> <a href="/homeworks">Домашни</a> > <a href="/homework/{{ homework.pk }}">{{ homework.title }}</a> > <a href="/homework/{{ homework.pk }}/solutions">Решения</a> > <a href="/homework/{{ homework.pk }}/solution/{{ solution.pk }}">Решението на {{ solution.author.full_name }}</a></h6>
+    <h6 class="location-info"><i class="bi bi-globe"></i> <a href="/homeworks">Домашни</a> > <a href="/homework/{{ homework.pk }}">{{ homework.title }}</a> {% if request.user.is_teacher or homework.verified %} > <a href="/homework/{{ homework.pk }}/solutions">Решения</a> {% endif %} > <a href="/homework/{{ homework.pk }}/solution/{{ solution.pk }}">Решението на {{ solution.author.full_name }}</a></h6>
 {% endblock %}
 
 {% block body %}
-    
 
+    {% if request.user.is_authenticated and request.user.pk == solution.author.pk and homework.can_upload %}
+        <a href="/homework/{{ homework.pk }}/solution/add" class="text-reset text-decoration-none">
+            <button type="button" class="btn btn-primary m-1">
+                <i class="bi bi-file-arrow-up-fill"></i> Качи ново решение
+            </button>
+        </a>
+        <hr class="mt-2 mb-1"/>
+    {% endif %}
+    
+    
     <div class="card mt-2">
         <div class="card-header">
-            <h5 class="card-title">{{ homework.title }}</h5>
-        </div>
-        <div class="card-header">
-            <h7 class="card-title">Решения ({{ solutions|length }})</h7>
+            <h6 class="card-title">Код</h6>
         </div>
         <div class="card-body">
-            {% if solutions %}
-                <table class="table table-hover">
-                    <thead>
-                        <tr>
-                            <th scope="col">Име</th>
-                            <th scope="col">Точки</th>
-                            <th scope="col">Информация</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for solution in solutions %}
-                            <tr>
-                                <th scope="row">
-                                    <a href="/homework/{{ homework.pk }}/solution/{{ solution.pk }}">
-                                        {{ solution.author.full_name }}
-                                    </a>
-                                </th>
-                                <td>
-                                    TODO
-                                </td>
-                                <td>
-                                    TODO
-                                </td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            {% else %}
-                Все още няма предадени решения.
-            {% endif %}
+            {% autoescape off %}
+                {{ content }}
+            {% endautoescape %}
         </div>
     </div>
+
+    
+    
+    <div class="card mt-2">
+        <div class="card-header">
+            <h6 class="card-title">Дискусия</h6>
+        </div>
+        <div class="card-body">
+
+            <table class="table table-hover">
+                <tbody>
+                    {% if request.user.is_authenticated %}
+                    <tr>
+                        <td>
+                            <form method="post" action="/homework/{{ homework.pk }}/solution/{{ solution.pk }}/comment/add">
+                                {% csrf_token %}
+                                <textarea required="required" name="content" class="form-control showdown-input showdown-input-small" id="content" placeholder="Отговор"></textarea>
+                                <button type="submit" class="btn btn-primary mt-2 mx-1">Отговори</button>
+                                <button class="btn btn-secondary mt-2 mx-1 showdown-preview" data-showdown-source="content"><i class="bi bi-eye-fill"></i> Преглед</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endif %}
+
+
+                    {% for comment in comments %}
+                        <tr><td id="comment{{ comment.pk }}" class="ajax-toggle-container">
+                            {% include 'common/user_dated_card.html' with user=comment.author date=comment.human_date add_star=comment.starred %}
+                            <br/>
+                            <div class="showdown-trigger">{{ comment.content }}</div>
+                            {% if request.user.is_teacher %}
+                                <span class="ajax-toggle">
+                                    <a href="/homework/{{ homework.pk }}/solution/{{ solution.pk }}/comment/{{ comment.pk }}/star/add?page={{ request.GET.page }}" class="ajax-toggle-trigger {% if not comment.starred %}active{% endif %}">Добави звездата</a>
+                                    <a href="/homework/{{ homework.pk }}/solution/{{ solution.pk }}/comment/{{ comment.pk }}/star/remove?page={{ request.GET.page }}" class="ajax-toggle-trigger {% if comment.starred %}active{% endif %}">Махни звездата</a>
+                                </span>
+                            {% endif %}
+                            {% if request.user.is_teacher or request.user.id == comment.author.id %}
+                                <a href="/homework/{{ homework.pk }}/solution/{{ solution.pk }}/comment/{{ comment.pk }}/edit?page={{ request.GET.page }}">Редактирай</a>
+                            {% endif %}
+                        </td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
 
     <hr class="mt-2 mb-1"/>
     {% if not request.user.is_authenticated or request.user.is_student %}

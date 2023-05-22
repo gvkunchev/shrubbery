@@ -1,18 +1,18 @@
 {% extends "backbone/base.html" %}
 {% block location %}
-    <h6 class="location-info"><i class="bi bi-globe"></i> <a href="/forums">Форум</a> > <a href="/forum/{{ comment.forum.pk }}">{{ comment.forum.title }}</a> > <a href="/forum/{{ comment.forum.pk }}/comment/{{ comment.pk }}/edit">Редактирай коментар</a></h6>
+    <h6 class="location-info"><i class="bi bi-globe"></i> <a href="/homeworks">Домашни</a> > <a href="/homework/{{ comment.solution.homework.pk }}">{{ comment.solution.homework.title }}</a> > <a href="/homework/{{ comment.solution.homework.pk }}/solution/{{ comment.solution.pk }}">Решението на {{ comment.solution.author.full_name }}</a> > <a href="/homework/{{ comment.solution.homework.pk }}/solution/{{ comment.solution.pk }}/comment/{{ comment.pk }}/edit">Редактирай коментар</a></h6>
 {% endblock %}
 {% block body %}
 
     {% if request.user.is_teacher %}
-        <a href="/forum/{{ comment.forum.pk }}/comment/{{ comment.pk }}/delete" class="text-reset text-decoration-none confirm-delete-forum-comment">
+        <a href="/homework/{{ comment.solution.homework.pk }}/solution/{{ comment.solution.pk }}/comment/{{ comment.pk }}/delete" class="text-reset text-decoration-none confirm-delete-homework-comment">
             <button type="button" class="btn btn-danger m-1">
                 <i class="bi bi-x-circle-fill"></i> Изтрий
             </button>
         </a>
         <hr class="mt-2 mb-1"/>
 
-        {% include 'common/delete_modal.html' with content='Сигурен ли си, че искаш да изтриеш този коментар?' id='confirm_delete_forum_comment_modal' %}
+        {% include 'common/delete_modal.html' with content='Сигурен ли си, че искаш да изтриеш този коментар?' id='confirm_delete_homework_comment_modal' %}
         
     {% endif %}
 
@@ -23,7 +23,6 @@
         <div class="card-body">
             <form method="post">
                 {% csrf_token %}
-                <input type="hidden" name="page" value="{% if request.GET.page %}{{ request.GET.page }}{% else %}1{% endif %}">
                 <textarea name="content" class="form-control showdown-input" id="content" placeholder="Съдържание">{% if request.POST.content %}{{ request.POST.content }}{% else %}{{ comment.content }}{% endif %}</textarea>
                 <div class="text-danger">{{ errors.content.as_text }}</div>
                 <button type="submit" name="edit" class="btn btn-primary mt-2 mx-1">Запази</button>

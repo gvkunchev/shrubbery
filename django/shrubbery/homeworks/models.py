@@ -15,13 +15,25 @@ class Homework(models.Model):
     full_test = models.TextField(default="", null=True, blank=True)
     hidden = models.BooleanField(default=True)
     verified = models.BooleanField(default=False)
+    executing_tests = models.BooleanField(default=False)
 
     class Meta:
         ordering = ('-creation_date',)
 
     def __str__(self):
         """String representation for the admin panel."""
-        return f"{self.title} - {self.creation_date}"
+        return self.title
+    
+    @property
+    def can_upload(self):
+        """Whether solutions can be uploaded or not."""
+        if self.hidden:
+            return False
+        if self.verified:
+            return False
+        if self.deadline < timezone.now():
+            return False
+        return True
 
     @property
     def comments(self):

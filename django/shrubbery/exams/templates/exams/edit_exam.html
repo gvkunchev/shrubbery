@@ -1,6 +1,6 @@
 {% extends "backbone/base.html" %}
 {% block location %}
-    <h6 class="location-info"><i class="bi bi-globe"></i> <a href="/exams">Изпити</a> > <a href="/exam/{{ exam.pk }}">{{ exam.title }}</a> > <a href="/exam/edit/{{ exam.pk }}">Редактирай</a></h6>
+    <h6 class="location-info"><i class="bi bi-globe"></i> <a href="/exams">Изпити</a> > <a href="/exam/{{ exam.pk }}">{{ exam.title }}</a> > <a href="/exam/{{ exam.pk }}/edit">Редактирай</a></h6>
 {% endblock %}
 {% block body %}
     <div class="card mt-2 d-inline-block">

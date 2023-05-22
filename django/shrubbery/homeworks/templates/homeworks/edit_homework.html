@@ -3,7 +3,7 @@
 
 
 {% block location %}
-    <h6 class="location-info"><i class="bi bi-globe"></i> <a href="/homeworks">Домашни</a> > <a href="/homework/{{ homework.pk }}">{{ homework.title }}</a> > <a href="/homework/edit">Редактирай</a></h6>
+    <h6 class="location-info"><i class="bi bi-globe"></i> <a href="/homeworks">Домашни</a> > <a href="/homework/{{ homework.pk }}">{{ homework.title }}</a> > <a href="/homework/{{ homework.pk }}/edit">Редактирай</a></h6>
 {% endblock %}
 
 {% block body %}

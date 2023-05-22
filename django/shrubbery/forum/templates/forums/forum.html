@@ -6,13 +6,13 @@
 {% block body %}
 
     {% if request.user.is_teacher %}
-        <a href="/forum/edit/{{ forum.pk }}" class="text-reset text-decoration-none">
-            <button type="button" class="btn btn-primary">
+        <a href="/forum/{{ forum.pk }}/edit" class="text-reset text-decoration-none">
+            <button type="button" class="btn btn-primary m-1">
                 <i class="bi bi-pencil-square"></i> Редактирай
             </button>
         </a>
-        <a href="/forum/delete/{{ forum.pk }}" class="text-reset text-decoration-none confirm-delete-forum">
-            <button type="button" class="btn btn-danger">
+        <a href="/forum/{{ forum.pk }}/delete" class="text-reset text-decoration-none confirm-delete-forum">
+            <button type="button" class="btn btn-danger m-1">
                 <i class="bi bi-x-circle-fill"></i> Изтрий
             </button>
         </a>
@@ -42,9 +42,8 @@
                     {% if request.user.is_authenticated %}
                     <tr>
                         <td>
-                            <form method="post" action="/forum_comment/add">
+                            <form method="post" action="/forum/{{ forum.pk }}/comment/add">
                                 {% csrf_token %}
-                                <input type="hidden" name="forum" value="{{ forum.pk }}">
                                 <textarea required="required" name="content" class="form-control showdown-input showdown-input-small" id="content" placeholder="Отговор"></textarea>
                                 <button type="submit" class="btn btn-primary mt-2 mx-1">Отговори</button>
                                 <button class="btn btn-secondary mt-2 mx-1 showdown-preview" data-showdown-source="content"><i class="bi bi-eye-fill"></i> Преглед</button>
@@ -61,12 +60,12 @@
                             <div class="showdown-trigger">{{ comment.content }}</div>
                             {% if request.user.is_teacher %}
                                 <span class="ajax-toggle">
-                                    <a href="/forum_comment/{{ comment.pk }}/star/add?page={{ request.GET.page }}" class="ajax-toggle-trigger {% if not comment.starred %}active{% endif %}">Добави звездата</a>
-                                    <a href="/forum_comment/{{ comment.pk }}/star/remove?page={{ request.GET.page }}" class="ajax-toggle-trigger {% if comment.starred %}active{% endif %}">Махни звездата</a>
+                                    <a href="/forum/{{ forum.pk }}/comment/{{ comment.pk }}/star/add?page={{ request.GET.page }}" class="ajax-toggle-trigger {% if not comment.starred %}active{% endif %}">Добави звездата</a>
+                                    <a href="/forum/{{ forum.pk }}/comment/{{ comment.pk }}/star/remove?page={{ request.GET.page }}" class="ajax-toggle-trigger {% if comment.starred %}active{% endif %}">Махни звездата</a>
                                 </span>
                             {% endif %}
                             {% if request.user.is_teacher or request.user.id == comment.author.id %}
-                                <a href="/forum_comment/edit/{{ comment.pk }}?page={{ request.GET.page }}">Редактирай</a>
+                                <a href="/forum/{{ forum.pk }}/comment/{{ comment.pk }}/edit?page={{ request.GET.page }}">Редактирай</a>
                             {% endif %}
                         </td></tr>
                     {% endfor %}

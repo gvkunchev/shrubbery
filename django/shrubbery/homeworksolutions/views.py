@@ -1,12 +1,11 @@
-from django.core.paginator import Paginator
 from django.shortcuts import render, redirect
 from django.core.exceptions import ObjectDoesNotExist
-from django.contrib.auth.decorators import login_required
-
-from shrubbery.view_decorators import is_teacher
 
 from homeworks.models import Homework
-from .models import HomeworkSolution
+from .models import HomeworkSolution, HomeworkSolutionComment
+from .forms import HomeworkSolutionForm, HomeworkSolutionCommentForm
+
+from comments.views import AddComment, EditComment, DeleteComment, SetCommentStar
 
 
 def homework_solutions(request, homework):
@@ -41,6 +40,74 @@ def homework_solution(request, homework, solution):
         return redirect('missing')
     context = {
         'homework': homework,
-        'solution': solution
+        'solution': solution,
+        'content': solution.get_content(),
+        'comments': solution.comments
     }
     return render(request, "homework_solutions/solution.html", context)
+
+
+def add_homework_solution(request, homework):
+    """Add homework solution page."""
+    try:
+        homework = Homework.objects.get(pk=homework)
+        if not homework.can_upload:
+            if not request.user.is_authenticated:
+                raise ObjectDoesNotExist
+            if not request.is_teacher:
+                raise ObjectDoesNotExist
+    except ObjectDoesNotExist:
+        return redirect('missing')
+    context = {
+        'homework': homework
+    }
+    if request.method == 'POST':
+        data = {
+            'author': request.user,
+            'homework': homework,
+        }
+        try:
+            # If there is already an uploaded solution,
+            # move it to history and replace with the new one
+            existing_solution = HomeworkSolution.objects.get(author=request.user, homework=homework)
+            existing_solution.send_to_history()
+            form = HomeworkSolutionForm(data, request.FILES, instance=existing_solution)
+        except ObjectDoesNotExist:
+            form = HomeworkSolutionForm(data, request.FILES)
+        if form.is_valid():
+            solution = form.save()
+            return redirect(f'/homework/{homework.pk}/solution/{solution.pk}')
+        else:
+            context['errors'] = form.errors
+    return render(request, "homework_solutions/add_solution.html", context)
+
+
+class AddHomeworkSolutionComment(AddComment):
+    HOST = HomeworkSolution
+    FORM = HomeworkSolutionCommentForm
+    HOST_KEY = 'solution'
+
+
+class EditHomeworkSolutionComment(EditComment):
+    HOST = HomeworkSolution
+    FORM = HomeworkSolutionCommentForm
+    HOST_KEY = 'solution'
+    COMMENT_MODEL = HomeworkSolutionComment
+    TEMPLATE = 'homework_solutions/edit_homework_solution_comment.html'
+
+
+class DeleteHomeworkSolutionComment(DeleteComment):
+    HOST_KEY = 'solution'
+    COMMENT_MODEL = HomeworkSolutionComment
+
+
+class AddHomeworkSolutionCommentStar(SetCommentStar):
+    HOST_KEY = 'solution'
+    COMMENT_MODEL = HomeworkSolutionComment
+    STATUS = True
+
+
+class RemoveHomeworkSolutionCommentStar(SetCommentStar):
+    HOST_KEY = 'solution'
+    COMMENT_MODEL = HomeworkSolutionComment
+    STATUS = False

@@ -1,6 +1,6 @@
 {% extends "backbone/base.html" %}
 {% block location %}
-    <h6 class="location-info"><i class="bi bi-globe"></i> <a href="/forums">Форум</a> > <a href="/forum/{{ forum.pk }}">{{ forum.title }}</a> > <a href="/forum/edit/{{ forum.pk }}">Редактирай</a></h6>
+    <h6 class="location-info"><i class="bi bi-globe"></i> <a href="/forums">Форум</a> > <a href="/forum/{{ forum.pk }}">{{ forum.title }}</a> > <a href="/forum/{{ forum.pk }}/edit">Редактирай</a></h6>
 {% endblock %}
 {% block body %}
     <div class="card mt-2">
