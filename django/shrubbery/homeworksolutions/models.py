@@ -36,6 +36,7 @@ class HomeworkSolution(PointsGiver):
     content = models.FileField(upload_to=get_upload_path, validators=[validate_py_extension])
     upload_date = models.DateTimeField(default=timezone.now)
     points = models.IntegerField(default=0)
+    results = models.TextField(default='')
 
     class Meta:
         ordering = ('-upload_date',)
