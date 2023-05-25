@@ -1,4 +1,5 @@
 import os
+from difflib import Differ
 
 from django.conf import settings
 from django.core.exceptions import ValidationError
@@ -85,6 +86,7 @@ class HomeworkSolution(PointsGiver):
         self.failed_tests = 0
         self.points = 0
         self.save()
+        return history
 
     def get_content(self):
         """Get content from a solution file."""
@@ -106,6 +108,7 @@ class HomeworkSolutionHistory(models.Model):
     content = models.FileField(upload_to=get_history_upload_path, validators=[validate_py_extension])
     upload_date = models.DateTimeField(default=timezone.now)
     solution = models.ForeignKey(HomeworkSolution, on_delete=models.CASCADE)
+    diff = models.TextField(default='')
 
     class Meta:
         ordering = ('-upload_date',)
@@ -113,6 +116,16 @@ class HomeworkSolutionHistory(models.Model):
     def __str__(self):
         """String representation for the admin panel."""
         return f"{self.homework} - {self.author} - {self.upload_date}"
+    
+    def assign_diff_to(self, target):
+        """Generate diff of current solution to target and store it."""
+        differ = Differ()
+        with open(os.path.join(settings.MEDIA_ROOT, self.content.path)) as f:
+            old = f.readlines()
+        with open(os.path.join(settings.MEDIA_ROOT, target.content.path)) as f:
+            new = f.readlines()
+        self.diff = ''.join(differ.compare(old, new))
+        self.save()
 
     @property
     def human_upload_date(self):

@@ -34,13 +34,13 @@ class HomeworkSolutionHistoryAdmin(admin.ModelAdmin):
     fieldsets = (
             (None, {
                 "fields": (
-                   ('homework', 'author', 'solution', 'content', 'upload_date')
+                   ('homework', 'author', 'solution', 'content', 'upload_date', 'diff')
                 ),
             }),
         )
     add_fieldsets = (
         (None, {
-            'fields': ('homework', 'author', 'solution', 'content', 'upload_date')
+            'fields': ('homework', 'author', 'solution', 'content', 'upload_date', 'diff')
         }),
     )
 

@@ -68,17 +68,20 @@ def add_homework_solution(request, homework):
             'author': request.user,
             'homework': homework,
         }
+        history_object = None
         try:
             # If there is already an uploaded solution,
             # move it to history and replace with the new one
             existing_solution = HomeworkSolution.objects.get(author=request.user, homework=homework)
-            existing_solution.send_to_history()
+            history_object = existing_solution.send_to_history()
             form = HomeworkSolutionForm(data, request.FILES, instance=existing_solution)
         except ObjectDoesNotExist:
             form = HomeworkSolutionForm(data, request.FILES)
         if form.is_valid():
             solution = form.save()
             solution.assign_line_count()
+            if history_object is not None:
+                history_object.assign_diff_to(solution)
             try:
                 results = run_sanity_test(solution)
                 if len(results['failed']) or not len(results['passed']):
