@@ -38,7 +38,7 @@
                 </div>
                 <div class="form-group">
                     <label for="sanity_test">Sanity тест</label>
-                    <textarea name="sanity_test" class="form-control" id="sanity_test" placeholder="Sanity тест">{% if request.POST.sanity_test %}{{ request.POST.sanity_test }}{% else %}{{ homework.sanity_test }}{% endif %}</textarea>
+                    <textarea name="sanity_test" required="required" class="form-control" id="sanity_test" placeholder="Sanity тест">{% if request.POST.sanity_test %}{{ request.POST.sanity_test }}{% else %}{{ homework.sanity_test }}{% endif %}</textarea>
                     <div class="text-danger">{{ errors.sanity_test.as_text }}</div>
                 </div>
                 <div class="form-group">

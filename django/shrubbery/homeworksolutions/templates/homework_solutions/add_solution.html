@@ -22,6 +22,14 @@
                 {% if info %}
                     <div class="text-info"><i class="bi bi-check-circle-fill"></i> {{ info }}</div>
                 {% endif %}
+
+                {% if verification_error %}
+                    <div class="text-danger">
+                        Решението е качено, но изглежда кодът не следва очакваната сигнатура.
+                        <br/>
+                        {{ verification_error|linebreaks }}
+                    </div>
+                {% endif %}
                 <button class="btn btn-primary mt-2">Качи</button>
             </form>
         </div>
