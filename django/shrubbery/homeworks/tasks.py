@@ -13,8 +13,8 @@ from homeworksolutions.models import HomeworkSolution
 @shared_task()
 def run_homework_tests(homework_pk):
     """Tun tests for all solutions of a homework.."""
-    SANDBOX_MATRIX = '/tmp/sandbox-origin'
-    SANDBOX_TMP_COPY = f'/tmp/sandbox{homework_pk}'
+    SANDBOX_MATRIX = '/var/shrubbary/sandbox/sandbox-origin'
+    SANDBOX_TMP_COPY = f'/var/shrubbary/sandbox/sandbox{homework_pk}'
     homework = Homework.objects.get(pk=homework_pk)
     solutions = HomeworkSolution.objects.filter(homework=homework)
 
