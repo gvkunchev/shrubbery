@@ -9,11 +9,6 @@ redis-server --daemonize yes
 celery -A shrubbery worker -l DEBUG --logfile=celery_worker.log --detach
 celery -A shrubbery beat -l DEBUG --logfile=celery_beat.log --detach
 
-# Prepare sandbox for executing tests
-mkdir -p /var/shrubbary/sandbox/sandbox-origin
-mmdebstrap --variant=apt jammy /var/shrubbary/sandbox/sandbox-origin
-chroot /var/shrubbary/sandbox/sandbox-origin apt update --allow-insecure-repositories && apt install -y python3.10
-
 # Start Gunicorn + Nginx
 gunicorn -c gunicorn_conf.py
 nginx -g 'daemon off;'
