@@ -38,3 +38,7 @@ def solution_from(homework, user):
         return HomeworkSolution.objects.get(author=user, homework=homework)
     except:
         return False
+
+@register.filter(name='times') 
+def times(number):
+    return range(number)
