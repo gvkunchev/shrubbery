@@ -43,7 +43,24 @@
         </div>
     </div>
 
-    
+
+    {% if request.user.is_teacher or homework.verified %}
+        <div class="card mt-2">
+            <div class="card-header">
+                <h6 class="card-title">
+                    <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#test_log">
+                        <i class="bi bi-chevron-bar-expand"></i> Лог от тестовете
+                    </button>
+                </h6>
+            </div>
+            <div class="collapse" id="test_log">
+                <div class="card card-body">
+                    {{ solution.result|linebreaks }}
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
     
     <div class="card mt-2">
         <div class="card-header">
