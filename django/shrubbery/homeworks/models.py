@@ -11,7 +11,7 @@ class Homework(models.Model):
     creation_date = models.DateTimeField(default=timezone.now)
     deadline = models.DateTimeField()
     points = models.IntegerField(default=10)
-    sanity_test = models.TextField(default="", null=True, blank=True)
+    sanity_test = models.TextField()
     full_test = models.TextField(default="", null=True, blank=True)
     hidden = models.BooleanField(default=True)
     verified = models.BooleanField(default=False)

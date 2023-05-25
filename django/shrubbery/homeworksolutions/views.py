@@ -1,11 +1,13 @@
 from django.shortcuts import render, redirect
-from django.core.exceptions import ObjectDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist, ValidationError
 
 from homeworks.models import Homework
 from .models import HomeworkSolution, HomeworkSolutionComment
 from .forms import HomeworkSolutionForm, HomeworkSolutionCommentForm
 
 from comments.views import AddComment, EditComment, DeleteComment, SetCommentStar
+
+from homeworks.tasks import run_sanity_test
 
 
 def homework_solutions(request, homework):
@@ -77,6 +79,13 @@ def add_homework_solution(request, homework):
         if form.is_valid():
             solution = form.save()
             solution.assign_line_count()
+            try:
+                results = run_sanity_test(solution)
+                if len(results['failed']) or not len(results['passed']):
+                    raise ValidationError(results['log'])
+            except ValidationError as error:
+                context['verification_error'] = error.message
+                return render(request, "homework_solutions/add_solution.html", context)
             return redirect(f'/homework/{homework.pk}/solution/{solution.pk}')
         else:
             context['errors'] = form.errors

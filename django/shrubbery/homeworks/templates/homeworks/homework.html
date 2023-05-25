@@ -15,7 +15,7 @@
                 <i class="bi bi-filetype-py"></i> В момента се изпълняват тестове
             </button>
         {% else %}
-            <a href="/homework/{{ homework.pk }}/run_tests" class="text-reset text-decoration-none">
+            <a href="/homework/{{ homework.pk }}/run_tests?goto={{ request.path }}" class="text-reset text-decoration-none">
                 <button type="button" class="btn btn-primary m-1">
                     <i class="bi bi-filetype-py"></i> Пусни тестовете
                 </button>
@@ -36,22 +36,22 @@
     {% endif %}
 
 
-    {% if request.user.is_teacher or request.user.is_student and homework.can_upload %}
+    {% if request.user.is_teacher and not homework.verified or request.user.is_student and homework.can_upload %}
         <a href="/homework/{{ homework.pk }}/solution/add" class="text-reset text-decoration-none">
             <button type="button" class="btn btn-primary m-1">
                 <i class="bi bi-file-arrow-up-fill"></i> Качи решение
             </button>
         </a>
-        {% with homework|solution_from:request.user as user_solution %}
-            {% if user_solution %}
-                <a href="/homework/{{ homework.pk }}/solution/{{ user_solution.pk }}" class="text-reset text-decoration-none">
-                    <button type="button" class="btn btn-primary m-1">
-                        <i class="bi bi-file-code-fill"></i> Виж своето решение
-                    </button>
-                </a>
-            {% endif %}
-        {% endwith %}
     {% endif %}
+    {% with homework|solution_from:request.user as user_solution %}
+        {% if user_solution %}
+            <a href="/homework/{{ homework.pk }}/solution/{{ user_solution.pk }}" class="text-reset text-decoration-none">
+                <button type="button" class="btn btn-primary m-1">
+                    <i class="bi bi-file-code-fill"></i> Виж своето решение
+                </button>
+            </a>
+        {% endif %}
+    {% endwith %}
 
     {% if request.user.is_teacher or homework.verified and not homework.hidden %}
         <a href="/homework/{{ homework.pk }}/solutions" class="text-reset text-decoration-none">
