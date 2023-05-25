@@ -54,7 +54,7 @@ def add_homework_solution(request, homework):
         if not homework.can_upload:
             if not request.user.is_authenticated:
                 raise ObjectDoesNotExist
-            if not request.is_teacher:
+            if not request.user.is_teacher:
                 raise ObjectDoesNotExist
     except ObjectDoesNotExist:
         return redirect('missing')
@@ -76,6 +76,7 @@ def add_homework_solution(request, homework):
             form = HomeworkSolutionForm(data, request.FILES)
         if form.is_valid():
             solution = form.save()
+            solution.assign_line_count()
             return redirect(f'/homework/{homework.pk}/solution/{solution.pk}')
         else:
             context['errors'] = form.errors

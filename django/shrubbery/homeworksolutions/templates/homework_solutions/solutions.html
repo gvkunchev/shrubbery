@@ -1,5 +1,6 @@
 {% extends "backbone/base.html" %}
 {% load static %}
+{% load extras %}
 
 {% block location %}
     <h6 class="location-info"><i class="bi bi-globe"></i> <a href="/homeworks">Домашни</a> > <a href="/homework/{{ homework.pk }}">{{ homework.title }}</a> > <a href="/homework/{{ homework.pk }}/solutions">Решения</a></h6>
@@ -34,10 +35,33 @@
                                     </a>
                                 </th>
                                 <td>
-                                    TODO
+                                    <span data-toggle="tooltip" title="{{ solution.points }}/{{ solution.homework.points }} точки">
+                                        {% if solution.result != '' %}
+                                            {% if solution.points > 0 %}
+                                                {% for i in solution.points|times %}
+                                                    <i class="bi bi-emoji-smile-fill yellow"></i>
+                                                {% endfor %}
+                                            {% else %}
+                                                -
+                                            {% endif %}
+                                        {% else %}
+                                            Все още не са пуснати тестове
+                                        {% endif %}
+                                    </span>
                                 </td>
                                 <td>
-                                    TODO
+                                    <span data-toggle="tooltip" title="Успешни тестове">
+                                        <i class="bi bi-flag-fill green"></i> {{ solution.passed_tests }}
+                                    </span>
+                                    <span data-toggle="tooltip" title="Неуспешни тестове">
+                                        <i class="bi bi-flag-fill red"></i> {{ solution.failed_tests }}
+                                    </span>
+                                    <span data-toggle="tooltip" title="Брой редове в кода">
+                                        <i class="bi bi-file-text-fill"></i> {{ solution.line_count }}
+                                    </span>
+                                    <span data-toggle="tooltip" title="Брой коментари по решението">
+                                        <i class="bi bi-chat-left-dots-fill"></i> {{ solution.comments|length }}
+                                    </span>
                                 </td>
                             </tr>
                         {% endfor %}

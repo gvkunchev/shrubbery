@@ -9320,6 +9320,15 @@ textarea.form-control-lg {
   font-size: 2em;
   color: #ffc107; }
 
+.yellow {
+  color: #ffc107; }
+
+.green {
+  color: green; }
+
+.red {
+  color: red; }
+
 .hidden {
   display: none; }
 

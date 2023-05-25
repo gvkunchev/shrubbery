@@ -12,13 +12,15 @@ class HomeworkSolutionAdmin(admin.ModelAdmin):
     fieldsets = (
             (None, {
                 "fields": (
-                   ('homework', 'author', 'content', 'upload_date', 'points', 'results')
+                   ('homework', 'author', 'content', 'upload_date', 'points',
+                       'line_count', 'result', 'passed_tests', 'failed_tests')
                 ),
             }),
         )
     add_fieldsets = (
         (None, {
-            'fields': ('homework', 'author', 'content', 'upload_date', 'points', 'results')
+            'fields': ('homework', 'author', 'content', 'upload_date', 'points',
+                       'line_count', 'result', 'passed_tests', 'failed_tests')
         }),
     )
 
