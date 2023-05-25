@@ -9,31 +9,6 @@
 
 {% block body %}
 
-    {% if request.user.is_teacher or request.user.is_student and homework.can_upload %}
-        {% with homework|solution_from:request.user as user_solution %}
-            {% if user_solution %}
-                <a href="/homework/{{ homework.pk }}/solution/{{ user_solution.pk }}" class="text-reset text-decoration-none">
-                    <button type="button" class="btn btn-primary m-1">
-                        <i class="bi bi-file-code-fill"></i> Виж своето решение
-                    </button>
-                </a>
-            {% endif %}
-        {% endwith %}
-            <a href="/homework/{{ homework.pk }}/solution/add" class="text-reset text-decoration-none">
-                <button type="button" class="btn btn-primary m-1">
-                    <i class="bi bi-file-arrow-up-fill"></i> Качи решение
-                </button>
-            </a>
-    {% endif %}
-
-    {% if request.user.is_teacher or homework.verified and not homework.hidden %}
-        <a href="/homework/{{ homework.pk }}/solutions" class="text-reset text-decoration-none">
-            <button type="button" class="btn btn-primary m-1">
-                <i class="bi bi-file-code-fill"></i> Виж всички решенията
-            </button>
-        </a>
-    {% endif %}
-
     {% if request.user.is_teacher %}
         {% if homework.executing_tests %}
             <button type="button" class="btn btn-primary m-1" disabled="disabled">
@@ -56,7 +31,34 @@
                 <i class="bi bi-x-circle-fill"></i> Изтрий
             </button>
         </a>
+        <hr class="mt-2 mb-1"/>
         {% include 'common/delete_modal.html' with content='Сигурен ли си, че искаш да изтриеш това домашно?' id='confirm_delete_homework_modal' %}
+    {% endif %}
+
+
+    {% if request.user.is_teacher or request.user.is_student and homework.can_upload %}
+        <a href="/homework/{{ homework.pk }}/solution/add" class="text-reset text-decoration-none">
+            <button type="button" class="btn btn-primary m-1">
+                <i class="bi bi-file-arrow-up-fill"></i> Качи решение
+            </button>
+        </a>
+        {% with homework|solution_from:request.user as user_solution %}
+            {% if user_solution %}
+                <a href="/homework/{{ homework.pk }}/solution/{{ user_solution.pk }}" class="text-reset text-decoration-none">
+                    <button type="button" class="btn btn-primary m-1">
+                        <i class="bi bi-file-code-fill"></i> Виж своето решение
+                    </button>
+                </a>
+            {% endif %}
+        {% endwith %}
+    {% endif %}
+
+    {% if request.user.is_teacher or homework.verified and not homework.hidden %}
+        <a href="/homework/{{ homework.pk }}/solutions" class="text-reset text-decoration-none">
+            <button type="button" class="btn btn-primary m-1">
+                <i class="bi bi-file-code-fill"></i> Виж всички решенията
+            </button>
+        </a>
     {% endif %}
     <hr class="mt-2 mb-1"/>
 

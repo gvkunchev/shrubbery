@@ -1,3 +1,5 @@
+import os
+
 from django.core.paginator import Paginator
 from django.shortcuts import render, redirect
 from django.core.exceptions import ObjectDoesNotExist
@@ -132,5 +134,8 @@ def run_tests(request, homework):
         return redirect('missing')
     homework.executing_tests = True
     homework.save()
-    run_homework_tests.delay(homework.pk)
+    if os.environ.get('SHRUBBERY_ENV') == 'prd':
+        run_homework_tests.delay(homework.pk)
+    else:
+        run_homework_tests(homework.pk)
     return redirect(f'/homework/{homework.pk}')
