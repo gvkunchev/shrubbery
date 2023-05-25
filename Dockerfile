@@ -1,13 +1,12 @@
 FROM ubuntu
 
-
 # Install all generic software
 RUN apt update
 RUN apt install -y python3.10
 RUN apt install -y python3-pip
 RUN apt install -y nginx
 RUN apt install -y redis-server
-RUN apt install -y debootstrap
+RUN apt install -y mmdebstrap
 
 # Install all python packages
 COPY requirements.txt .
@@ -32,7 +31,7 @@ COPY gunicorn_conf.py /var/shrubbery
 
 # Prepare sandbox for executing tests
 RUN mkdir /tmp/sandbox-origin
-RUN debootstrap --variant=buildd jammy /tmp/sandbox-origin
+RUN mmdebstrap --variant=buildd jammy /tmp/sandbox-origin
 RUN chroot /tmp/sandbox-origin apt update && apt install -y python3.10
 
 # Copy start script and execute it
