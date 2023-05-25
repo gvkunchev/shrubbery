@@ -24,10 +24,14 @@
                 <h6 class="card-title">Резултати</h6>
             </div>
             <div class="card-body">
-                <div class="card-text"><i class="bi bi-emoji-smile-fill yellow"></i> {{ solution.points }} точки </div>
-                <br/>
-                <div class="card-text"><i class="bi bi-flag-fill green"></i> {{ solution.passed_tests }} успешни теста</div>
-                <div class="card-text"><i class="bi bi-flag-fill red"></i> {{ solution.failed_tests }} неуспешни теста</div>
+                {% if solution.result != '' %}
+                    <div class="card-text"><i class="bi bi-emoji-smile-fill yellow"></i> {{ solution.points }} точки </div>
+                    <br/>
+                    <div class="card-text"><i class="bi bi-flag-fill green"></i> {{ solution.passed_tests }} успешни теста</div>
+                    <div class="card-text"><i class="bi bi-flag-fill red"></i> {{ solution.failed_tests }} неуспешни теста</div>
+                {% else %}
+                    Все още не са пуснати тестове
+                {% endif %}
             </div>
         </div>
     {% endif %}
