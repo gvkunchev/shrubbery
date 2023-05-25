@@ -31,8 +31,8 @@ COPY gunicorn_conf.py /var/shrubbery
 
 # Prepare sandbox for executing tests
 RUN mkdir /tmp/sandbox-origin
-RUN mmdebstrap --variant=buildd jammy /tmp/sandbox-origin
-RUN chroot /tmp/sandbox-origin apt update && apt install -y python3.10
+RUN mmdebstrap --variant=apt jammy /tmp/sandbox-origin
+RUN chroot /tmp/sandbox-origin apt update --allow-insecure-repositories && apt install -y python3.10
 
 # Copy start script and execute it
 COPY start /var/shrubbery
