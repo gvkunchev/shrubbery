@@ -138,4 +138,4 @@ def run_tests(request, homework):
         run_homework_tests.delay(homework.pk)
     else:
         run_homework_tests(homework.pk)
-    return redirect(f'/homework/{homework.pk}')
+    return redirect(request.GET.get('goto', f'/homework/{homework.pk}'))
