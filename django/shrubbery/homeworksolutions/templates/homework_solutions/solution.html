@@ -16,7 +16,22 @@
         <hr class="mt-2 mb-1"/>
     {% endif %}
     
-    
+
+
+    {% if request.user.is_teacher or homework.verified %}
+        <div class="card mt-2">
+            <div class="card-header">
+                <h6 class="card-title">Резултати</h6>
+            </div>
+            <div class="card-body">
+                <div class="card-text"><i class="bi bi-emoji-smile-fill yellow"></i> {{ solution.points }} точки </div>
+                <br/>
+                <div class="card-text"><i class="bi bi-flag-fill green"></i> {{ solution.passed_tests }} успешни теста</div>
+                <div class="card-text"><i class="bi bi-flag-fill red"></i> {{ solution.failed_tests }} неуспешни теста</div>
+            </div>
+        </div>
+    {% endif %}
+
     <div class="card mt-2">
         <div class="card-header">
             <h6 class="card-title">Код</h6>

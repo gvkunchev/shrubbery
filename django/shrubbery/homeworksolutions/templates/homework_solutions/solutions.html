@@ -36,9 +36,17 @@
                                 </th>
                                 <td>
                                     <span data-toggle="tooltip" title="{{ solution.points }}/{{ solution.homework.points }} точки">
-                                        {% for i in solution.points|times %}
-                                            <i class="bi bi-emoji-smile-fill yellow"></i>
-                                        {% endfor %}
+                                        {% if solution.result != '' %}
+                                            {% if solution.points > 0 %}
+                                                {% for i in solution.points|times %}
+                                                    <i class="bi bi-emoji-smile-fill yellow"></i>
+                                                {% endfor %}
+                                            {% else %}
+                                                -
+                                            {% endif %}
+                                        {% else %}
+                                            Все още не са пуснати тестове
+                                        {% endif %}
                                     </span>
                                 </td>
                                 <td>
