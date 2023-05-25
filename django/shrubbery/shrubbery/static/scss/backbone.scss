@@ -134,3 +134,16 @@
     -ms-user-select: none;
     user-select: none;
 }
+
+.diff_add, .diff_chg, .diff_sub, .diff_header {
+    color: black !important
+}
+
+.diff_next a, .diff_next:active a, .diff_next:link a, .diff_next:visited a, .diff_next:hover a {
+    color: red !important;
+    text-decoration: none !important;
+}
+
+table.diff[summary="Legends"] {
+    display: none !important;
+}

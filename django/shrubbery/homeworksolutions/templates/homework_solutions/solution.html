@@ -109,6 +109,35 @@
         </div>
     </div>
 
+    <div class="card mt-2">
+        <div class="card-header">
+            <h6 class="card-title">История</h6>
+        </div>
+        <div class="card-body">
+            {% if history %}
+                {% for history_solution in history %}
+                    <div class="card mt-2">
+                        <div class="card-header">
+                            <h6 class="card-title">
+                                <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#history_{{ history_solution.pk }}">
+                                    <i class="bi bi-chevron-bar-expand"></i> {{ history_solution.human_upload_date }}
+                                </button>
+                            </h6>
+                        </div>
+                        <div class="collapse" id="history_{{ history_solution.pk }}">
+                            <div class="card card-body" style="overflow-x: scroll">
+                                {% autoescape off %}
+                                    {{ history_solution.get_diff_content }}
+                                {% endautoescape %}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                Това решение има само една версия.
+            {% endif %}
+        </div>
+    </div>
 
     <hr class="mt-2 mb-1"/>
     {% if not request.user.is_authenticated or request.user.is_student %}

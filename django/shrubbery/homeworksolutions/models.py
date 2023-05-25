@@ -1,5 +1,5 @@
 import os
-from difflib import Differ
+from difflib import HtmlDiff
 
 from django.conf import settings
 from django.core.exceptions import ValidationError
@@ -119,18 +119,23 @@ class HomeworkSolutionHistory(models.Model):
     
     def assign_diff_to(self, target):
         """Generate diff of current solution to target and store it."""
-        differ = Differ()
+        differ = HtmlDiff()
         with open(os.path.join(settings.MEDIA_ROOT, self.content.path)) as f:
             old = f.readlines()
         with open(os.path.join(settings.MEDIA_ROOT, target.content.path)) as f:
             new = f.readlines()
-        self.diff = ''.join(differ.compare(old, new))
+        self.diff = ''.join(differ.make_file(old, new))
         self.save()
 
     @property
+    def get_diff_content(self):
+        """Get content from a solution file."""
+        return self.diff
+        
+    @property
     def human_upload_date(self):
         """Ipload date format for human readers.."""
-        return self.deadline.astimezone(timezone.get_current_timezone()).strftime("%d.%m.%Y %H:%M")
+        return self.upload_date.astimezone(timezone.get_current_timezone()).strftime("%d.%m.%Y %H:%M")
 
 
 class HomeworkSolutionComment(PointsGiver):
