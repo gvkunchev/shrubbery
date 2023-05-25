@@ -125,7 +125,7 @@
                             </h6>
                         </div>
                         <div class="collapse" id="history_{{ history_solution.pk }}">
-                            <div class="card card-body" style="overflow-x: scroll">
+                            <div class="card card-body code-diff-container">
                                 {% autoescape off %}
                                     {{ history_solution.get_diff_content }}
                                 {% endautoescape %}
