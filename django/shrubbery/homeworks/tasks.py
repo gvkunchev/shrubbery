@@ -1,4 +1,5 @@
 import os
+import json
 import shutil
 import subprocess
 import tempfile
@@ -16,6 +17,8 @@ class TestsRunner:
 
     SANDBOX_MATRIX = '/var/shrubbery/sandbox/sandbox-origin'
     SANDBOX_TMP_COPY = '/var/shrubbery/sandbox/sandbox{}'
+    TEST_RUNNER = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'test_runner.py')
+    TIMEOUT = 2 # seconds
 
     def __init__(self, homework_pk):
         '''Initializator.'''
@@ -23,6 +26,7 @@ class TestsRunner:
         self._homework = None
         self._solutions = None
         self._work_dir = None
+        self._prd = os.environ.get('SHRUBBERY_ENV') == 'prd'
         self._prepare_data()
         self._prepare_env()
         self._execute()
@@ -35,14 +39,22 @@ class TestsRunner:
     
     def _prepare_env(self):
         """Prepare the environment."""
-        if os.environ.get('SHRUBBERY_ENV') == 'prd':
+        if self._prd:
+            # Create sandbox filesystem
             self._work_dir = self.SANDBOX_TMP_COPY.format(self._homework_pk)
             os.system(f'cp -r {self.SANDBOX_MATRIX} {self._work_dir}')
+            # Copy the test runner
+            shutil.copyfile(self.TEST_RUNNER, os.path.join(self._work_dir, 'tmp/test_runner.py'))
+            # Copy the test itself
             with open(os.path.join(self._work_dir, 'tmp/test.py'), 'w') as f:
                 f.write(self._homework.full_test)
         else:
+            # Create a temp directory
             self._work_dir = os.path.join(tempfile.gettempdir(), f'homework{self._homework_pk}')
             os.mkdir(self._work_dir)
+            # Copy the test runner
+            shutil.copyfile(self.TEST_RUNNER, os.path.join(self._work_dir, 'test_runner.py'))
+            # Copy the test itself
             with open(os.path.join(self._work_dir, 'test.py'), 'w') as f:
                 f.write(self._homework.full_test)
     
@@ -50,23 +62,27 @@ class TestsRunner:
         """Execute all tests."""
         for solution in self._solutions:
             source_code = os.path.join(settings.MEDIA_ROOT, solution.content.path)
-            if os.environ.get('SHRUBBERY_ENV') == 'prd':
+            if self._prd:
+                # Copy the solution
                 shutil.copy(source_code, os.path.join(self._work_dir, 'tmp/solution.py'))
-                process = subprocess.Popen('env -i '
-                                        f'/usr/sbin/chroot {self._work_dir} '
-                                        '/usr/bin/python3.10 /tmp/test.py', shell=True,
-                                        stdout=subprocess.PIPE,
-                                        stderr=subprocess.PIPE)
+                # Build the command
+                command = (f'env -i /usr/sbin/chroot {self._work_dir} '
+                            '/usr/bin/python3.10 /tmp/test_runner.py /tmp/test.py')
             else:
+                # Copy the solution
                 shutil.copy(source_code, os.path.join(self._work_dir, 'solution.py'))
-                test_location = os.path.join(self._work_dir, 'test.py')
-                process = subprocess.Popen(f'python {test_location}', shell=True,
-                                           stdout=subprocess.PIPE,
-                                           stderr=subprocess.PIPE)
-            stdout, stderr = process.communicate(timeout=2) # seconds
-            solution.results = f"{stdout.decode('utf-8')}\n\n{stderr.decode('utf-8')}"
-            # TODO: Assign points
+                # Build the command
+                test_runner = os.path.join(self._work_dir, 'test_runner.py')
+                test = os.path.join(self._work_dir, 'test.py')
+                command = (f'python {test_runner} {test}')
+            process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            stdout, _ = process.communicate(timeout=self.TIMEOUT)
+            json_result = json.loads(stdout)
+            solution.passed_tests = len(json_result['passed'])
+            solution.failed_tests = len(json_result['failed'])
+            solution.result = json_result['log']
             solution.save()
+            solution.assign_points()
 
     def _cleanup(self):
         """Cleanup temp dirs and release the model."""

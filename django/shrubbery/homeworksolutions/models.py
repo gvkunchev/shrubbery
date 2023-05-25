@@ -36,7 +36,10 @@ class HomeworkSolution(PointsGiver):
     content = models.FileField(upload_to=get_upload_path, validators=[validate_py_extension])
     upload_date = models.DateTimeField(default=timezone.now)
     points = models.IntegerField(default=0)
-    results = models.TextField(default='')
+    result = models.TextField(default='')
+    passed_tests = models.IntegerField(default=0)
+    failed_tests = models.IntegerField(default=0)
+    line_count = models.IntegerField(default=0)
 
     class Meta:
         ordering = ('-upload_date',)
@@ -49,7 +52,22 @@ class HomeworkSolution(PointsGiver):
     def comments(self):
         """Get all comments."""
         return self.homeworksolutioncomment_set.all()
-    
+
+    def assign_line_count(self, *args, **kwargs):
+        """Assign line count to the database."""
+        with open(os.path.join(settings.MEDIA_ROOT, self.content.path)) as f:
+            self.line_count = len(f.readlines())
+            self.save()
+
+    def assign_points(self):
+        """Assign points based on the result."""
+        total = self.passed_tests + self.failed_tests
+        if total == 0:
+            return False
+        percentage = self.passed_tests / total
+        self.points = round(self.homework.points * percentage)
+        self.save()
+
     def send_to_history(self):
         """Send current version to history."""
         content = get_history_upload_path(self, None)
@@ -62,6 +80,10 @@ class HomeworkSolution(PointsGiver):
                                                          content=content)
         history.save()
         self.upload_date = timezone.now()
+        self.result = ''
+        self.passed_tests = 0
+        self.failed_tests = 0
+        self.points = 0
         self.save()
 
     def get_content(self):
