@@ -14,6 +14,11 @@ def zip_many(*args):
     return list(zip(*args))
 
 @register.simple_tag()
+def get_homework_results(data, homework):
+    key = f'homework_{homework.pk}'
+    return data.get(key, '-')
+
+@register.simple_tag()
 def get_exam_results(data, exam):
     key = f'exam_{exam.pk}'
     return data.get(key, '-')

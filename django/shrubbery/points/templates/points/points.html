@@ -14,10 +14,18 @@
                     <th class="align-middle text-center" scope="col" rowspan="2">Профилна снимка</th>
                     <th class="align-middle text-center" scope="col" rowspan="2">Ваучери</th>
                     <th class="align-middle text-center" scope="col" rowspan="2">Коментари</th>
+                    <th class="align-middle text-center" scope="col" colspan="{{ homeworks|length }}">Домашни</th>
                     <th class="align-middle text-center" scope="col" colspan="{{ exams|length }}">Изпити</th>
                     <th class="align-middle text-center" scope="col" rowspan="2">Общо</th>
                 </tr>
                 <tr>
+                    {% if homeworks %}
+                        {% for homework in homeworks %}
+                            <th class="align-middle text-center" scope="col">{{ homework.title }}</th>
+                        {% endfor %}
+                    {% else %}
+                        <td class="text-center">-</td>
+                    {% endif %}
                     {% if exams %}
                         {% for exam in exams %}
                             <th class="align-middle text-center" scope="col">{{ exam.title }}</th>
@@ -39,6 +47,13 @@
                     <td class="text-center">{{ row.profile_picture }}</td>
                     <td class="text-center">{{ row.vouchers }}</td>
                     <td class="text-center">{{ row.comments }}</td>
+                    {% if homeworks %}
+                        {% for homework in homeworks %}
+                            <td class="align-middle text-center" scope="col">{% get_homework_results row homework %}</td>
+                        {% endfor %}
+                    {% else %}
+                        <td class="text-center">-</td>
+                    {% endif %}
                     {% if exams %}
                         {% for exam in exams %}
                             <td class="align-middle text-center" scope="col">{% get_exam_results row exam %}</td>
