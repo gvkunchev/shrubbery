@@ -18,8 +18,7 @@ def home(request):
     }
     if request.user.is_authenticated and request.user.is_student:
         context.update({
-            'ranking': get_rank_and_points(request.user),
-            'active_homeworks': get_active_homeworks()
+            'ranking': get_rank_and_points(request.user)
         })
     if request.user.is_authenticated :
         context.update({

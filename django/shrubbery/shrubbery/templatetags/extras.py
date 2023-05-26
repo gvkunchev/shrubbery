@@ -41,4 +41,5 @@ def solution_from(homework, user):
 
 @register.filter(name='times') 
 def times(number):
+    """Range from integer."""
     return range(number)
