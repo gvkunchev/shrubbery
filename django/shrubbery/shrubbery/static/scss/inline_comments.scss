@@ -1,5 +1,6 @@
 .code {
     overflow: auto;
+    padding-left: 1em;
 
     pre {
         overflow: visible;
@@ -10,6 +11,7 @@
     position: relative;
     white-space: normal;
     font-family: $font-family-sans-serif;
+    margin-left: -1em;
 }
 
 .inline-comment-picture {
@@ -18,7 +20,6 @@
     border: 1px solid $gray-500;
     width: 1em;
     position: absolute;
-    left: -0.5em;
 }
 
 .inline-comment-arrow {
@@ -41,4 +42,16 @@
     .inline-comment-picture {
         display: inline;
     }
+}
+
+.linenos {
+    cursor: pointer;
+
+    &:hover {
+        color: $blue;
+    }
+}
+
+.toggle-inline-comments {
+    cursor: pointer;
 }

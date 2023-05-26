@@ -4,7 +4,8 @@ from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from homeworks.models import Homework
 from .models import (HomeworkSolution, HomeworkSolutionComment,
                      HomeworkSolutionHistory, HomeworkSolutionInlineComment)
-from .forms import HomeworkSolutionForm, HomeworkSolutionCommentForm
+from .forms import (HomeworkSolutionForm, HomeworkSolutionCommentForm,
+                    HomeworkSolutionInlineCommentForm)
 
 from comments.views import AddComment, EditComment, DeleteComment, SetCommentStar
 
@@ -127,3 +128,22 @@ class RemoveHomeworkSolutionCommentStar(SetCommentStar):
     HOST_KEY = 'solution'
     COMMENT_MODEL = HomeworkSolutionComment
     STATUS = False
+
+
+class EditHomeworkSolutionInlineComment(EditComment):
+    HOST = HomeworkSolution
+    FORM = HomeworkSolutionInlineCommentForm
+    HOST_KEY = 'solution'
+    COMMENT_MODEL = HomeworkSolutionInlineComment
+    TEMPLATE = 'homework_solutions/edit_homework_solution_Inline_comment.html'
+
+
+class DeleteHomeworkSolutionInlineComment(DeleteComment):
+    HOST_KEY = 'solution'
+    COMMENT_MODEL = HomeworkSolutionInlineComment
+
+
+class AddHomeworkSolutionInlineComment(AddComment):
+    HOST = HomeworkSolution
+    FORM = HomeworkSolutionInlineCommentForm
+    HOST_KEY = 'solution'

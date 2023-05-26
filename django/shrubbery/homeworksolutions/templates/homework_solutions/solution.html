@@ -38,9 +38,9 @@
 
 
     <!-- Comments that will be moved into place using JS -->
-    <div class="inline-comments hidden1">
+    <div class="inline-comments hidden">
         {% for comment in inline_comments %}
-        <div class="inline-comment border border-primary rounded" data-line="{{ comment.line }}">
+        <div class="inline-comment existing-inline-comment border border-primary rounded" data-line="{{ comment.line }}" id="inlinecomment{{ comment.id }}">
             <i class="bi bi-arrow-90deg-right inline-comment-arrow text-primary inline-comment-hide-trigger"></i>
             <img src="{% include 'common/profile_picture' with user=comment.author %}" class="inline-comment-picture inline-comment-hide-trigger"/>
             <div class="inline-comment-hide-content">
@@ -58,12 +58,37 @@
             </div>
         </div>
         {% endfor %}
+        <div class="add-inline-comment-wrapper">
+            <div class="inline-comment add-inline-comment border border-primary rounded">
+                <i class="bi bi-arrow-90deg-right inline-comment-arrow text-primary"></i>
+                <div class="m-2">
+                    <form method="post" action="/homework/{{ homework.pk }}/solution/{{ solution.pk }}/inlinecomment/add">
+                        {% csrf_token %}
+                        <input type="hidden" name="line" value="-1"/>
+                        <textarea required="required" name="content" class="form-control showdown-input showdown-input-small" id="inline_content" placeholder="Коментар"></textarea>
+                        <button type="submit" class="btn btn-primary mt-2 mx-1">Коментирай</button>
+                        <button type="button" class="btn btn-secondary mt-2 mx-1 showdown-preview" data-showdown-source="inline_content"><i class="bi bi-eye-fill"></i> Преглед</button>
+                        <button type="button" class="btn btn-danger mt-2 mx-1 inline-comment-cancel"><i class="bi bi-x-circle-fill"></i> Отмени</button>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
 
     <div class="card mt-2">
         <div class="card-header">
             <h6 class="card-title">Код</h6>
         </div>
+        {% if inline_comments %}
+            <div class="card-body text-primary toggle-inline-comments">
+                <div class="toggle-inline-comments-show hidden">
+                    <i class="bi bi-eye-fill"></i> Покажи всички коментари
+                </div>
+                <div class="toggle-inline-comments-hide">
+                    <i class="bi bi-eye-slash-fill"></i> Скрий всички коментари
+                </div>
+            </div>
+        {% endif %}
         <div class="card-body code">
             {% autoescape off %}
                 {{ content }}

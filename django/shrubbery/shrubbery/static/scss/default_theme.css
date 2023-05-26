@@ -9752,22 +9752,23 @@ table.diff[summary="Legends"] {
   height: 400px; }
 
 .code {
-  overflow: auto; }
+  overflow: auto;
+  padding-left: 1em; }
   .code pre {
     overflow: visible; }
 
 .inline-comment {
   position: relative;
   white-space: normal;
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"; }
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  margin-left: -1em; }
 
 .inline-comment-picture {
   display: none;
   border-radius: 50%;
   border: 1px solid #adb5bd;
   width: 1em;
-  position: absolute;
-  left: -0.5em; }
+  position: absolute; }
 
 .inline-comment-arrow {
   position: absolute;
@@ -9783,5 +9784,13 @@ table.diff[summary="Legends"] {
     display: none; }
   .hidden-comment .inline-comment-picture {
     display: inline; }
+
+.linenos {
+  cursor: pointer; }
+  .linenos:hover {
+    color: #0d6efd; }
+
+.toggle-inline-comments {
+  cursor: pointer; }
 
 /*# sourceMappingURL=default_theme.css.map */
