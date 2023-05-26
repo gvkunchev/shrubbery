@@ -127,7 +127,7 @@
                         <div class="collapse" id="history_{{ history_solution.pk }}">
                             <div class="card card-body code-diff-container">
                                 {% autoescape off %}
-                                    {{ history_solution.get_diff_content }}
+                                    {{ history_solution.diff }}
                                 {% endautoescape %}
                             </div>
                         </div>

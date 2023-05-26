@@ -126,11 +126,6 @@ class HomeworkSolutionHistory(models.Model):
             new = f.readlines()
         self.diff = ''.join(differ.make_file(old, new))
         self.save()
-
-    @property
-    def get_diff_content(self):
-        """Get content from a solution file."""
-        return self.diff
         
     @property
     def human_upload_date(self):
