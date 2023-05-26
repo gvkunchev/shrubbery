@@ -1,7 +1,8 @@
 from django.contrib import admin
 
 from .models import (HomeworkSolution, HomeworkSolutionHistory,
-                     HomeworkSolutionComment, HomeworkSolutionInlineComment)
+                     HomeworkSolutionComment, HomeworkSolutionInlineComment,
+                     HomeworkSolutionHistoryInlineComment)
 
 
 class HomeworkSolutionAdmin(admin.ModelAdmin):
@@ -84,7 +85,30 @@ class HomeworkSolutionInlineCommentAdmin(admin.ModelAdmin):
         }),
     )
 
+
+class HomeworkSolutionHistoryInlineCommentAdmin(admin.ModelAdmin):
+    model = HomeworkSolutionHistoryInlineComment
+    ordering = ('date', 'author')
+    search_fields = ('date', 'author', 'solution', 'content')
+    list_display = ('date', 'author', 'solution', 'line')
+    list_filter = ('author', 'solution')
+    fieldsets = (
+            (None, {
+                "fields": (
+                   ('date', 'author', 'solution', 'history', 'content', 'line')
+                ),
+            }),
+        )
+    add_fieldsets = (
+        (None, {
+            'fields': ('date', 'author', 'solution', 'history', 'content', 'line')
+        }),
+    )
+
+
+
 admin.site.register(HomeworkSolution, HomeworkSolutionAdmin)
 admin.site.register(HomeworkSolutionHistory, HomeworkSolutionHistoryAdmin)
 admin.site.register(HomeworkSolutionComment, HomeworkSolutionCommentAdmin)
 admin.site.register(HomeworkSolutionInlineComment, HomeworkSolutionInlineCommentAdmin)
+admin.site.register(HomeworkSolutionHistoryInlineComment, HomeworkSolutionHistoryInlineCommentAdmin)

@@ -90,3 +90,13 @@
         }
     }
 }
+
+
+.inline-history-comment {
+    white-space: normal;
+    font-family: $font-family-sans-serif;
+
+    .inline-comment-arrow {
+        display: none;
+    }
+}

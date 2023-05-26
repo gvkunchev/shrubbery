@@ -1,5 +1,6 @@
 {% extends "backbone/base.html" %}
 {% load static %}
+{% load extras %}
 
 {% block location %}
     <h6 class="location-info"><i class="bi bi-globe"></i> <a href="/homeworks">Домашни</a> > <a href="/homework/{{ homework.pk }}">{{ homework.title }}</a> {% if request.user.is_teacher or homework.verified %} > <a href="/homework/{{ homework.pk }}/solutions">Решения</a> {% endif %} > <a href="/homework/{{ homework.pk }}/solution/{{ solution.pk }}">Решението на {{ solution.author.full_name }}</a></h6>
@@ -178,7 +179,26 @@
                                 </button>
                             </h6>
                         </div>
-                        <div class="collapse" id="history_{{ history_solution.pk }}">
+                        <div class="collapse history-wrapper" id="history_{{ history_solution.pk }}">
+                            <div class="history-inline-comments-wrapper hidden">
+                                {% with history_solution|inline_comments_from_history as inline_history_comments %}
+                                    {% for comment in inline_history_comments %}
+                                    <div class="inline-history-comment border border-primary rounded m-1" data-line="{{ comment.line }}">
+                                        <i class="bi bi-arrow-90deg-right inline-comment-arrow text-primary inline-comment-hide-trigger"></i>
+                                        <i class="bi bi-arrow-up inline-comment-arrow inline-comment-arrow-secondary text-primary"></i>
+                                        <img src="{% include 'common/profile_picture' with user=comment.author %}" class="inline-comment-picture inline-comment-hide-trigger"/>
+                                        <div class="inline-comment-hide-content">
+                                            <div class="m-2">
+                                                {% include 'common/user_dated_card.html' with user=comment.author date=comment.human_date %}
+                                            </div>
+                                            <div class="m-2">
+                                                <div class="showdown-trigger">{{ comment.content }}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                {% endwith %}
+                            </div>
                             <div class="card card-body code-diff-container">
                                 {% autoescape off %}
                                     {{ history_solution.diff }}

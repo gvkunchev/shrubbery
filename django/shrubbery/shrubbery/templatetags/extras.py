@@ -3,6 +3,7 @@ from django import template
 register = template.Library()
 
 from homeworksolutions.models import HomeworkSolution
+from homeworksolutions.models import HomeworkSolutionHistoryInlineComment
 
 
 @register.simple_tag()
@@ -38,6 +39,12 @@ def solution_from(homework, user):
         return HomeworkSolution.objects.get(author=user, homework=homework)
     except:
         return False
+
+
+@register.filter()
+def inline_comments_from_history(history):
+    """Get the inline comments from a history."""
+    return HomeworkSolutionHistoryInlineComment.objects.filter(history=history)
 
 @register.filter(name='times') 
 def times(number):

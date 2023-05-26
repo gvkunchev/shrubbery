@@ -7,6 +7,21 @@ $(document).ready(function(){
         $(e).insertAfter(line);
     })
 
+    // Move existing history comments in place
+    $('.inline-history-comment').each(function(i, e){
+        var line_number = $(e).data('line');
+        var container = $(this).parents('.history-wrapper');
+        var line = $(container).find('[id^="from"]').filter('[id$="_' + line_number + '"]').parents('tr');
+        var tr = $('<tr>');
+        var td = $('<td colspan="3">');
+        var td_dummy = $('<td colspan="3">');
+        tr.append(td)
+        tr.append(td_dummy)
+        td.append(e);
+        tr.insertAfter(line);
+    })
+    
+
     // Show/hide comment content
     $('.inline-comment-hide-trigger').bind('click', function(){
         var comment = $(this).parents('.inline-comment');

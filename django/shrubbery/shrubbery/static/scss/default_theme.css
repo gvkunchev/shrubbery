@@ -9813,4 +9813,10 @@ table.diff[summary="Legends"] {
     .inline-comment + .inline-comment.hidden-comment .inline-comment-picture {
       display: none; }
 
+.inline-history-comment {
+  white-space: normal;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"; }
+  .inline-history-comment .inline-comment-arrow {
+    display: none; }
+
 /*# sourceMappingURL=default_theme.css.map */

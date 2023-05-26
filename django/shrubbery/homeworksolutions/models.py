@@ -68,6 +68,28 @@ class HomeworkSolution(PointsGiver):
         percentage = self.passed_tests / total
         self.points = round(self.homework.points * percentage)
         self.save()
+    
+    def _reset_points(self):
+        """Reset points when sending to history."""
+        self.upload_date = timezone.now()
+        self.result = ''
+        self.passed_tests = 0
+        self.failed_tests = 0
+        self.points = 0
+        self.save()
+    
+    def _send_inline_comments_to_history(self, history):
+        """Send inline comments to history."""
+        comments = HomeworkSolutionInlineComment.objects.filter(solution=self)
+        for comment in comments:
+            history_comment = HomeworkSolutionHistoryInlineComment.objects.create(date=comment.date,
+                                                                                  author=comment.author,
+                                                                                  solution=comment.solution,
+                                                                                  history=history,
+                                                                                  content=comment.content,
+                                                                                  line=comment.line)
+            history_comment.save()
+            comment.delete()
 
     def send_to_history(self):
         """Send current version to history."""
@@ -80,12 +102,8 @@ class HomeworkSolution(PointsGiver):
                                                          solution=self,
                                                          content=content)
         history.save()
-        self.upload_date = timezone.now()
-        self.result = ''
-        self.passed_tests = 0
-        self.failed_tests = 0
-        self.points = 0
-        self.save()
+        self._reset_points()
+        self._send_inline_comments_to_history(history)
         return history
 
     def get_content(self):
@@ -170,6 +188,27 @@ class HomeworkSolutionInlineComment(models.Model):
     date = models.DateTimeField(default=timezone.now)
     author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     solution = models.ForeignKey(HomeworkSolution, on_delete=models.CASCADE)
+    content = models.TextField()
+    line = models.IntegerField()
+
+    class Meta:
+        ordering = ('line', 'date')
+
+    @property
+    def human_date(self):
+        """Date format used for parsing templates."""
+        return self.date.astimezone(timezone.get_current_timezone()).strftime("%d.%m.%Y %H:%M")
+
+    def __str__(self):
+        """String representation for the admin panel."""
+        return f"{self.author} - {self.human_date}"
+
+
+class HomeworkSolutionHistoryInlineComment(models.Model):
+    date = models.DateTimeField(default=timezone.now)
+    author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    solution = models.ForeignKey(HomeworkSolution, on_delete=models.CASCADE)
+    history = models.ForeignKey(HomeworkSolutionHistory, on_delete=models.CASCADE)
     content = models.TextField()
     line = models.IntegerField()
 
