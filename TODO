@@ -1,4 +1,6 @@
 Allow teachers to adjust points
+Add inline comments counter to the soluionts overview
+Add horizontal scrolls to mobile pages that overflow (tables, images...)
 Add challenges
 Refactor - there are complicated views
 Add activity monitoring
