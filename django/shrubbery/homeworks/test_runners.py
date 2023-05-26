@@ -1,3 +1,4 @@
+from abc import ABC, abstractmethod
 import os
 import uuid
 import json
@@ -11,7 +12,7 @@ from .models import Homework
 from homeworksolutions.models import HomeworkSolution
 
 
-class TestsRunner:
+class TestsRunner(ABC):
     """Tests runner for full and sanity test."""
 
     SANDBOX_MATRIX = '/var/shrubbery/sandbox/sandbox-origin'
@@ -29,6 +30,10 @@ class TestsRunner:
         self._prepare_env()
         self._execute()
         self._cleanup()
+
+    @abstractmethod
+    def _prepare_data(self):
+        pass
 
     def _prepare_env(self):
         """Prepare the environment."""
@@ -67,6 +72,10 @@ class TestsRunner:
             test_runner = os.path.join(self._work_dir, 'test_runner.py')
             test = os.path.join(self._work_dir, 'test.py')
             return f'python {test_runner} {test}'
+        
+    @abstractmethod
+    def _execute(self):
+        pass
 
     def _cleanup(self):
         """Cleanup temp dirs and release the model."""
