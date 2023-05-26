@@ -9,7 +9,8 @@ $(document).ready(function(){
 
     // Show/hide comment content
     $('.inline-comment-hide-trigger').bind('click', function(){
-        $(this).parents('.inline-comment').toggleClass('hidden-comment');
+        var comment = $(this).parents('.inline-comment');
+        $(this).parents('.code').find('[data-line="' + $(comment).data('line') + '"').toggleClass('hidden-comment');
     })
 
     // Add new comment

@@ -42,6 +42,7 @@
         {% for comment in inline_comments %}
         <div class="inline-comment existing-inline-comment border border-primary rounded" data-line="{{ comment.line }}" id="inlinecomment{{ comment.id }}">
             <i class="bi bi-arrow-90deg-right inline-comment-arrow text-primary inline-comment-hide-trigger"></i>
+            <i class="bi bi-arrow-up inline-comment-arrow inline-comment-arrow-secondary text-primary"></i>
             <img src="{% include 'common/profile_picture' with user=comment.author %}" class="inline-comment-picture inline-comment-hide-trigger"/>
             <div class="inline-comment-hide-content">
                 <div class="m-2">
