@@ -36,7 +36,7 @@ else:
     ALLOWED_HOSTS = ['*']
 
 if os.environ.get('SHRUBBERY_ENV') == 'prd':
-    DEBUG = False
+    DEBUG = True
 else:
     DEBUG = True
 
