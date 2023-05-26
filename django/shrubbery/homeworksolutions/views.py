@@ -2,8 +2,10 @@ from django.shortcuts import render, redirect
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 
 from homeworks.models import Homework
-from .models import HomeworkSolution, HomeworkSolutionComment
-from .forms import HomeworkSolutionForm, HomeworkSolutionCommentForm
+from .models import (HomeworkSolution, HomeworkSolutionComment,
+                     HomeworkSolutionHistory, HomeworkSolutionInlineComment)
+from .forms import (HomeworkSolutionForm, HomeworkSolutionCommentForm,
+                    HomeworkSolutionInlineCommentForm)
 
 from comments.views import AddComment, EditComment, DeleteComment, SetCommentStar
 
@@ -44,7 +46,9 @@ def homework_solution(request, homework, solution):
         'homework': homework,
         'solution': solution,
         'content': solution.get_content(),
-        'comments': solution.comments
+        'comments': solution.comments,
+        'history': HomeworkSolutionHistory.objects.filter(solution=solution),
+        'inline_comments': HomeworkSolutionInlineComment.objects.filter(solution=solution),
     }
     return render(request, "homework_solutions/solution.html", context)
 
@@ -68,17 +72,20 @@ def add_homework_solution(request, homework):
             'author': request.user,
             'homework': homework,
         }
+        history_object = None
         try:
             # If there is already an uploaded solution,
             # move it to history and replace with the new one
             existing_solution = HomeworkSolution.objects.get(author=request.user, homework=homework)
-            existing_solution.send_to_history()
+            history_object = existing_solution.send_to_history()
             form = HomeworkSolutionForm(data, request.FILES, instance=existing_solution)
         except ObjectDoesNotExist:
             form = HomeworkSolutionForm(data, request.FILES)
         if form.is_valid():
             solution = form.save()
             solution.assign_line_count()
+            if history_object is not None:
+                history_object.assign_diff_to(solution)
             try:
                 results = run_sanity_test(solution)
                 if len(results['failed']) or not len(results['passed']):
@@ -121,3 +128,22 @@ class RemoveHomeworkSolutionCommentStar(SetCommentStar):
     HOST_KEY = 'solution'
     COMMENT_MODEL = HomeworkSolutionComment
     STATUS = False
+
+
+class EditHomeworkSolutionInlineComment(EditComment):
+    HOST = HomeworkSolution
+    FORM = HomeworkSolutionInlineCommentForm
+    HOST_KEY = 'solution'
+    COMMENT_MODEL = HomeworkSolutionInlineComment
+    TEMPLATE = 'homework_solutions/edit_homework_solution_Inline_comment.html'
+
+
+class DeleteHomeworkSolutionInlineComment(DeleteComment):
+    HOST_KEY = 'solution'
+    COMMENT_MODEL = HomeworkSolutionInlineComment
+
+
+class AddHomeworkSolutionInlineComment(AddComment):
+    HOST = HomeworkSolution
+    FORM = HomeworkSolutionInlineCommentForm
+    HOST_KEY = 'solution'

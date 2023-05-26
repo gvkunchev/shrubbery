@@ -1,4 +1,5 @@
 import os
+from difflib import HtmlDiff
 
 from django.conf import settings
 from django.core.exceptions import ValidationError
@@ -67,6 +68,28 @@ class HomeworkSolution(PointsGiver):
         percentage = self.passed_tests / total
         self.points = round(self.homework.points * percentage)
         self.save()
+    
+    def _reset_points(self):
+        """Reset points when sending to history."""
+        self.upload_date = timezone.now()
+        self.result = ''
+        self.passed_tests = 0
+        self.failed_tests = 0
+        self.points = 0
+        self.save()
+    
+    def _send_inline_comments_to_history(self, history):
+        """Send inline comments to history."""
+        comments = HomeworkSolutionInlineComment.objects.filter(solution=self)
+        for comment in comments:
+            history_comment = HomeworkSolutionHistoryInlineComment.objects.create(date=comment.date,
+                                                                                  author=comment.author,
+                                                                                  solution=comment.solution,
+                                                                                  history=history,
+                                                                                  content=comment.content,
+                                                                                  line=comment.line)
+            history_comment.save()
+            comment.delete()
 
     def send_to_history(self):
         """Send current version to history."""
@@ -79,12 +102,9 @@ class HomeworkSolution(PointsGiver):
                                                          solution=self,
                                                          content=content)
         history.save()
-        self.upload_date = timezone.now()
-        self.result = ''
-        self.passed_tests = 0
-        self.failed_tests = 0
-        self.points = 0
-        self.save()
+        self._reset_points()
+        self._send_inline_comments_to_history(history)
+        return history
 
     def get_content(self):
         """Get content from a solution file."""
@@ -106,6 +126,7 @@ class HomeworkSolutionHistory(models.Model):
     content = models.FileField(upload_to=get_history_upload_path, validators=[validate_py_extension])
     upload_date = models.DateTimeField(default=timezone.now)
     solution = models.ForeignKey(HomeworkSolution, on_delete=models.CASCADE)
+    diff = models.TextField(default='')
 
     class Meta:
         ordering = ('-upload_date',)
@@ -113,11 +134,21 @@ class HomeworkSolutionHistory(models.Model):
     def __str__(self):
         """String representation for the admin panel."""
         return f"{self.homework} - {self.author} - {self.upload_date}"
-
+    
+    def assign_diff_to(self, target):
+        """Generate diff of current solution to target and store it."""
+        differ = HtmlDiff()
+        with open(os.path.join(settings.MEDIA_ROOT, self.content.path)) as f:
+            old = f.readlines()
+        with open(os.path.join(settings.MEDIA_ROOT, target.content.path)) as f:
+            new = f.readlines()
+        self.diff = ''.join(differ.make_file(old, new))
+        self.save()
+        
     @property
     def human_upload_date(self):
         """Ipload date format for human readers.."""
-        return self.deadline.astimezone(timezone.get_current_timezone()).strftime("%d.%m.%Y %H:%M")
+        return self.upload_date.astimezone(timezone.get_current_timezone()).strftime("%d.%m.%Y %H:%M")
 
 
 class HomeworkSolutionComment(PointsGiver):
@@ -151,3 +182,44 @@ class HomeworkSolutionComment(PointsGiver):
         """Decorate saving with points assignments."""
         super(HomeworkSolutionComment, self).save(*args, **kwargs)
         self._update_points(*args, **kwargs)
+
+
+class HomeworkSolutionInlineComment(models.Model):
+    date = models.DateTimeField(default=timezone.now)
+    author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    solution = models.ForeignKey(HomeworkSolution, on_delete=models.CASCADE)
+    content = models.TextField()
+    line = models.IntegerField()
+
+    class Meta:
+        ordering = ('line', 'date')
+
+    @property
+    def human_date(self):
+        """Date format used for parsing templates."""
+        return self.date.astimezone(timezone.get_current_timezone()).strftime("%d.%m.%Y %H:%M")
+
+    def __str__(self):
+        """String representation for the admin panel."""
+        return f"{self.author} - {self.human_date}"
+
+
+class HomeworkSolutionHistoryInlineComment(models.Model):
+    date = models.DateTimeField(default=timezone.now)
+    author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    solution = models.ForeignKey(HomeworkSolution, on_delete=models.CASCADE)
+    history = models.ForeignKey(HomeworkSolutionHistory, on_delete=models.CASCADE)
+    content = models.TextField()
+    line = models.IntegerField()
+
+    class Meta:
+        ordering = ('line', 'date')
+
+    @property
+    def human_date(self):
+        """Date format used for parsing templates."""
+        return self.date.astimezone(timezone.get_current_timezone()).strftime("%d.%m.%Y %H:%M")
+
+    def __str__(self):
+        """String representation for the admin panel."""
+        return f"{self.author} - {self.human_date}"

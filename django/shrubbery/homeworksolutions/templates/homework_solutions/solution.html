@@ -1,5 +1,6 @@
 {% extends "backbone/base.html" %}
 {% load static %}
+{% load extras %}
 
 {% block location %}
     <h6 class="location-info"><i class="bi bi-globe"></i> <a href="/homeworks">Домашни</a> > <a href="/homework/{{ homework.pk }}">{{ homework.title }}</a> {% if request.user.is_teacher or homework.verified %} > <a href="/homework/{{ homework.pk }}/solutions">Решения</a> {% endif %} > <a href="/homework/{{ homework.pk }}/solution/{{ solution.pk }}">Решението на {{ solution.author.full_name }}</a></h6>
@@ -36,11 +37,61 @@
         </div>
     {% endif %}
 
+
+    <!-- Comments that will be moved into place using JS -->
+    <div class="inline-comments hidden">
+        {% for comment in inline_comments %}
+        <div class="inline-comment existing-inline-comment border border-primary rounded" data-line="{{ comment.line }}" id="inlinecomment{{ comment.id }}">
+            <i class="bi bi-arrow-90deg-right inline-comment-arrow text-primary inline-comment-hide-trigger"></i>
+            <i class="bi bi-arrow-up inline-comment-arrow inline-comment-arrow-secondary text-primary"></i>
+            <img src="{% include 'common/profile_picture' with user=comment.author %}" class="inline-comment-picture inline-comment-hide-trigger"/>
+            <div class="inline-comment-hide-content">
+                <div class="m-2">
+                    {% include 'common/user_dated_card.html' with user=comment.author date=comment.human_date %}
+                </div>
+                <div class="m-2">
+                    <div class="showdown-trigger">{{ comment.content }}</div>
+                </div>
+                <div class="m-2">
+                    {% if request.user.is_teacher or request.user.id == comment.author.id %}
+                        <a href="/homework/{{ homework.pk }}/solution/{{ solution.pk }}/inlinecomment/{{ comment.pk }}/edit">Редактирай</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        <div class="add-inline-comment-wrapper">
+            <div class="inline-comment add-inline-comment border border-primary rounded">
+                <i class="bi bi-arrow-90deg-right inline-comment-arrow text-primary"></i>
+                <div class="m-2">
+                    <form method="post" action="/homework/{{ homework.pk }}/solution/{{ solution.pk }}/inlinecomment/add">
+                        {% csrf_token %}
+                        <input type="hidden" name="line" value="-1"/>
+                        <textarea required="required" name="content" class="form-control showdown-input showdown-input-small" id="inline_content" placeholder="Коментар"></textarea>
+                        <button type="submit" class="btn btn-primary mt-2 mx-1">Коментирай</button>
+                        <button type="button" class="btn btn-secondary mt-2 mx-1 showdown-preview" data-showdown-source="inline_content"><i class="bi bi-eye-fill"></i> Преглед</button>
+                        <button type="button" class="btn btn-danger mt-2 mx-1 inline-comment-cancel"><i class="bi bi-x-circle-fill"></i> Отмени</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="card mt-2">
         <div class="card-header">
             <h6 class="card-title">Код</h6>
         </div>
-        <div class="card-body">
+        {% if inline_comments %}
+            <div class="card-body text-primary toggle-inline-comments">
+                <div class="toggle-inline-comments-show hidden">
+                    <i class="bi bi-eye-fill"></i> Покажи всички коментари
+                </div>
+                <div class="toggle-inline-comments-hide">
+                    <i class="bi bi-eye-slash-fill"></i> Скрий всички коментари
+                </div>
+            </div>
+        {% endif %}
+        <div class="card-body code">
             {% autoescape off %}
                 {{ content }}
             {% endautoescape %}
@@ -59,7 +110,11 @@
             </div>
             <div class="collapse" id="test_log">
                 <div class="card card-body">
-                    {{ solution.result|linebreaks }}
+                    {% if solution.result != '' %}
+                        {{ solution.result|linebreaks }}
+                    {% else %}
+                        Все още няма пуснати тестове.
+                    {% endif %}
                 </div>
             </div>
         </div>
@@ -109,6 +164,54 @@
         </div>
     </div>
 
+    <div class="card mt-2">
+        <div class="card-header">
+            <h6 class="card-title">История</h6>
+        </div>
+        <div class="card-body">
+            {% if history %}
+                {% for history_solution in history %}
+                    <div class="card mt-2">
+                        <div class="card-header">
+                            <h6 class="card-title">
+                                <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#history_{{ history_solution.pk }}">
+                                    <i class="bi bi-chevron-bar-expand"></i> {{ history_solution.human_upload_date }}
+                                </button>
+                            </h6>
+                        </div>
+                        <div class="collapse history-wrapper" id="history_{{ history_solution.pk }}">
+                            <div class="history-inline-comments-wrapper hidden">
+                                {% with history_solution|inline_comments_from_history as inline_history_comments %}
+                                    {% for comment in inline_history_comments %}
+                                    <div class="inline-history-comment border border-primary rounded m-1" data-line="{{ comment.line }}">
+                                        <i class="bi bi-arrow-90deg-right inline-comment-arrow text-primary inline-comment-hide-trigger"></i>
+                                        <i class="bi bi-arrow-up inline-comment-arrow inline-comment-arrow-secondary text-primary"></i>
+                                        <img src="{% include 'common/profile_picture' with user=comment.author %}" class="inline-comment-picture inline-comment-hide-trigger"/>
+                                        <div class="inline-comment-hide-content">
+                                            <div class="m-2">
+                                                {% include 'common/user_dated_card.html' with user=comment.author date=comment.human_date %}
+                                            </div>
+                                            <div class="m-2">
+                                                <div class="showdown-trigger">{{ comment.content }}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                {% endwith %}
+                            </div>
+                            <div class="card card-body code-diff-container">
+                                {% autoescape off %}
+                                    {{ history_solution.diff }}
+                                {% endautoescape %}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                Това решение има само една версия.
+            {% endif %}
+        </div>
+    </div>
 
     <hr class="mt-2 mb-1"/>
     {% if not request.user.is_authenticated or request.user.is_student %}

@@ -27,14 +27,19 @@ class AddComment(View):
             return redirect('missing')
         data = {
             'content': request.POST.get('content'),
+            'line': request.POST.get('line'),
             'author': request.user
         }
         data.update(kwargs)
         form = self.FORM(data)
         if form.is_valid():
             comment = form.save()
-        redirect_path = request.path.replace('/comment/add', '')
-        return redirect(f'{redirect_path}#comment{comment.pk}')
+        if 'inlinecomment' in request.path:
+            redirect_path = request.path.replace('/inlinecomment/add', '')
+            return redirect(f'{redirect_path}#inlinecomment{comment.pk}')
+        else:
+            redirect_path = request.path.replace('/comment/add', '')
+            return redirect(f'{redirect_path}#comment{comment.pk}')
 
 
 class EditComment(View):
@@ -60,6 +65,7 @@ class EditComment(View):
         comment = self.get_comment_from_link(request, comment)
         data = {
             'content': request.POST.get('content'),
+            'line': request.POST.get('line'),
             'author': comment.author
         }
         data.update(kwargs)
@@ -67,8 +73,12 @@ class EditComment(View):
         if form.is_valid():
             form.save()
             page = request.POST.get('page', '')
-            redirect_path = request.path.replace(f'/comment/{comment.pk}/edit', '')
-            return redirect(f'{redirect_path}?page={page}#comment{comment.pk}')
+            if 'inlinecomment' in request.path:
+                redirect_path = request.path.replace(f'/inlinecomment/{comment.pk}/edit', '')
+                return redirect(f'{redirect_path}?page={page}#inlinecomment{comment.pk}')
+            else:
+                redirect_path = request.path.replace(f'/comment/{comment.pk}/edit', '')
+                return redirect(f'{redirect_path}?page={page}#comment{comment.pk}')
         else:
             context = {
                 'comment': comment,
@@ -95,9 +105,12 @@ class DeleteComment(View):
             return redirect('missing')
         comment_pk = comment.pk
         comment.delete()
-        redirect_path = request.path.replace(f'/comment/{comment_pk}/delete', '')
+        if 'inlinecomment' in request.path:
+            redirect_path = request.path.replace(f'/inlinecomment/{comment_pk}/delete', '')
+        else:
+            redirect_path = request.path.replace(f'/comment/{comment_pk}/delete', '')
         return redirect(redirect_path)
-    
+
 
 class SetCommentStar(View):
     # Set these when inheriting.
