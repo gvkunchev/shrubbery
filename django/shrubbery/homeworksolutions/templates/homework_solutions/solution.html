@@ -59,7 +59,11 @@
             </div>
             <div class="collapse" id="test_log">
                 <div class="card card-body">
-                    {{ solution.result|linebreaks }}
+                    {% if solution.result != '' %}
+                        {{ solution.result|linebreaks }}
+                    {% else %}
+                        Все още няма пуснати тестове.
+                    {% endif %}
                 </div>
             </div>
         </div>
