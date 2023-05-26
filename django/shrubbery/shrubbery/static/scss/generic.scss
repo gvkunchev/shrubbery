@@ -1,0 +1,46 @@
+.star {
+    position: absolute;
+    bottom: -0.5em;
+    right: -0.5em;
+    font-size: 2em;
+    color: #ffc107;
+}
+
+.yellow {
+    color: #ffc107;
+}
+
+.green {
+    color: green;
+}
+
+.red {
+    color: red;
+}
+
+.hidden {
+    display: none;
+}
+
+.home-overview-card {
+    height: 150px;
+}
+
+@include media-breakpoint-down(lg) {
+    .home-overview-card {
+        display: block !important;
+        height: auto !important;
+    }
+}
+
+.ajax-toggle-trigger {
+    display: none;
+
+    &.active {
+        display: inline;
+    }
+}
+
+[data-toggle="tooltip"] {
+    cursor: pointer;
+}
