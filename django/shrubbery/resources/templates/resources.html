@@ -58,11 +58,11 @@
                         </td>
                         <td>
                             <span class="m-2 clipboard-trigger" data-toggle="tooltip" title="Копирай">
-                                <input type="text" class="hidden" value="{{ request.get_host }}/media/{{ resource.content }}">
+                                <input type="text" class="hidden" value="https://{{ request.get_host }}/media/{{ resource.content }}">
                                 <i class="bi bi-clipboard-check-fill"></i>
                             </span>
                             <a href="media/{{ resource.content }}" target="_blank">
-                                {{ request.get_host }}/media/{{ resource.content }}
+                                https://{{ request.get_host }}/media/{{ resource.content }}
                             </a>
                         </td>
                     </tr>
