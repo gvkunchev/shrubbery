@@ -2,7 +2,8 @@ from django.shortcuts import render, redirect
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 
 from homeworks.models import Homework
-from .models import HomeworkSolution, HomeworkSolutionComment, HomeworkSolutionHistory
+from .models import (HomeworkSolution, HomeworkSolutionComment,
+                     HomeworkSolutionHistory, HomeworkSolutionInlineComment)
 from .forms import HomeworkSolutionForm, HomeworkSolutionCommentForm
 
 from comments.views import AddComment, EditComment, DeleteComment, SetCommentStar
@@ -45,7 +46,8 @@ def homework_solution(request, homework, solution):
         'solution': solution,
         'content': solution.get_content(),
         'comments': solution.comments,
-        'history': HomeworkSolutionHistory.objects.filter(solution=solution)
+        'history': HomeworkSolutionHistory.objects.filter(solution=solution),
+        'inline_comments': HomeworkSolutionInlineComment.objects.filter(solution=solution),
     }
     return render(request, "homework_solutions/solution.html", context)
 

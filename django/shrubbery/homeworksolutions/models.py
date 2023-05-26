@@ -164,3 +164,23 @@ class HomeworkSolutionComment(PointsGiver):
         """Decorate saving with points assignments."""
         super(HomeworkSolutionComment, self).save(*args, **kwargs)
         self._update_points(*args, **kwargs)
+
+
+class HomeworkSolutionInlineComment(models.Model):
+    date = models.DateTimeField(default=timezone.now)
+    author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    solution = models.ForeignKey(HomeworkSolution, on_delete=models.CASCADE)
+    content = models.TextField()
+    line = models.IntegerField()
+
+    class Meta:
+        ordering = ('line', 'date')
+
+    @property
+    def human_date(self):
+        """Date format used for parsing templates."""
+        return self.date.astimezone(timezone.get_current_timezone()).strftime("%d.%m.%Y %H:%M")
+
+    def __str__(self):
+        """String representation for the admin panel."""
+        return f"{self.author} - {self.human_date}"

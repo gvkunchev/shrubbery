@@ -36,11 +36,35 @@
         </div>
     {% endif %}
 
+
+    <!-- Comments that will be moved into place using JS -->
+    <div class="inline-comments hidden1">
+        {% for comment in inline_comments %}
+        <div class="inline-comment border border-primary rounded" data-line="{{ comment.line }}">
+            <i class="bi bi-arrow-90deg-right inline-comment-arrow text-primary inline-comment-hide-trigger"></i>
+            <img src="{% include 'common/profile_picture' with user=comment.author %}" class="inline-comment-picture inline-comment-hide-trigger"/>
+            <div class="inline-comment-hide-content">
+                <div class="m-2">
+                    {% include 'common/user_dated_card.html' with user=comment.author date=comment.human_date %}
+                </div>
+                <div class="m-2">
+                    <div class="showdown-trigger">{{ comment.content }}</div>
+                </div>
+                <div class="m-2">
+                    {% if request.user.is_teacher or request.user.id == comment.author.id %}
+                        <a href="/homework/{{ homework.pk }}/solution/{{ solution.pk }}/inlinecomment/{{ comment.pk }}/edit">Редактирай</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
     <div class="card mt-2">
         <div class="card-header">
             <h6 class="card-title">Код</h6>
         </div>
-        <div class="card-body">
+        <div class="card-body code">
             {% autoescape off %}
                 {{ content }}
             {% endautoescape %}
