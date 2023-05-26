@@ -135,7 +135,7 @@ class EditHomeworkSolutionInlineComment(EditComment):
     FORM = HomeworkSolutionInlineCommentForm
     HOST_KEY = 'solution'
     COMMENT_MODEL = HomeworkSolutionInlineComment
-    TEMPLATE = 'homework_solutions/edit_homework_solution_Inline_comment.html'
+    TEMPLATE = 'homework_solutions/edit_homework_solution_inline_comment.html'
 
 
 class DeleteHomeworkSolutionInlineComment(DeleteComment):
