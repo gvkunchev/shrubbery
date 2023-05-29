@@ -39,36 +39,38 @@
             {% csrf_token %}
             <button type="submit" name="edit" class="btn btn-danger mt-2 confirm-delete-resources">Изтрий избраните</button>
             {% include 'common/delete_modal.html' with content='Сигурен ли си, че искаш да изтриеш тези ресурси?' id='confirm_delete_resources_modal' %}
-            <table class="table table-hover">
-                <thead>
-                    <tr>
-                        <th scope="col"></th>
-                        <th scope="col">Име</th>
-                        <th scope="col">Линк</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for resource in resources %}
-                    <tr>
-                        <td>
-                            <input type="checkbox" name="resource_{{ resource.pk }}" class="form-check-input"/>
-                        </td>
-                        <td>
-                            {{ resource.content }}
-                        </td>
-                        <td>
-                            <span class="m-2 clipboard-trigger" data-toggle="tooltip" title="Копирай">
-                                <input type="text" class="hidden" value="https://{{ request.get_host }}/media/{{ resource.content }}">
-                                <i class="bi bi-clipboard-check-fill"></i>
-                            </span>
-                            <a href="media/{{ resource.content }}" target="_blank">
-                                https://{{ request.get_host }}/media/{{ resource.content }}
-                            </a>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+            <div class="overflow-auto">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col"></th>
+                            <th scope="col">Име</th>
+                            <th scope="col">Линк</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for resource in resources %}
+                        <tr>
+                            <td>
+                                <input type="checkbox" name="resource_{{ resource.pk }}" class="form-check-input"/>
+                            </td>
+                            <td>
+                                {{ resource.content }}
+                            </td>
+                            <td class="text-nowrap">
+                                <span class="m-2 clipboard-trigger" data-toggle="tooltip" title="Копирай">
+                                    <input type="text" class="hidden" value="https://{{ request.get_host }}/media/{{ resource.content }}">
+                                    <i class="bi bi-clipboard-check-fill"></i>
+                                </span>
+                                <a href="media/{{ resource.content }}" target="_blank">
+                                    https://{{ request.get_host }}/media/{{ resource.content }}
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </form>
     {% else %}
         <br/>Все още няма никакви ресурси.

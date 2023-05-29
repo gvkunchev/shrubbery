@@ -19,28 +19,30 @@
     {% endif %}
 
     {% if materials %}
-        <table class="table table-hover">
-            <thead>
-                <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Лекция</th>
-                    <th scope="col">Дата</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for material in materials %}
-                <tr>
-                    <th scope="row">{{ forloop.counter }}</th>
-                    <td>
-                        <a href="media/{{ material.content }}" target="_blank">
-                            {{ material.title }}
-                        </a>
-                    </td>
-                    <td>{{ material.date }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+        <div class="overflow-auto">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Лекция</th>
+                        <th scope="col">Дата</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for material in materials %}
+                    <tr>
+                        <th scope="row">{{ forloop.counter }}</th>
+                        <td>
+                            <a href="media/{{ material.content }}" target="_blank">
+                                {{ material.title }}
+                            </a>
+                        </td>
+                        <td>{{ material.date }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     {% else %}
         Все още няма никакви материали.
     {% endif %}
