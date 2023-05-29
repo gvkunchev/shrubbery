@@ -125,6 +125,14 @@ class HomeworkSolution(PointsGiver):
         """Ipload date format for human readers.."""
         return self.deadline.astimezone(timezone.get_current_timezone()).strftime("%d.%m.%Y %H:%M")
 
+    def save(self, *args, **kwargs):
+        """Create teacher points when creating a solution."""
+        is_new = self.id is None
+        super(HomeworkSolution, self).save(*args, **kwargs)
+        if is_new:
+            teacher_points = HomeworkSolutionTeacherPoints.objects.create(solution=self)
+            teacher_points.save()
+
 
 class HomeworkSolutionHistory(models.Model):
     homework = models.ForeignKey(Homework, on_delete=models.CASCADE)
@@ -229,3 +237,12 @@ class HomeworkSolutionHistoryInlineComment(models.Model):
     def __str__(self):
         """String representation for the admin panel."""
         return f"{self.author} - {self.human_date}"
+
+
+class HomeworkSolutionTeacherPoints(PointsGiver):
+
+    solution = models.OneToOneField(HomeworkSolution, on_delete=models.CASCADE)
+
+    def __str__(self):
+        """String representation for the admin panel."""
+        return f"{self.solution} - {self.points}"

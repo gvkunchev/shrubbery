@@ -50,12 +50,24 @@
                                     </a>
                                 </th>
                                 <td>
-                                    <span data-toggle="tooltip" title="{{ solution.points }}/{{ solution.homework.points }} точки">
+                                    <span data-toggle="tooltip" title="{{ solution.points|add:solution.homeworksolutionteacherpoints.points }}/{{ solution.homework.points }} точки">
                                         {% if solution.result != '' %}
-                                            {% if solution.points > 0 %}
-                                                {% for i in solution.points|times %}
-                                                    <i class="bi bi-emoji-smile-fill yellow"></i>
-                                                {% endfor %}
+                                            {% if solution.points|add:solution.homeworksolutionteacherpoints.points > 0 %}
+                                                {% if solution.homeworksolutionteacherpoints.points < 0 %}
+                                                    {% for i in solution.points|add:solution.homeworksolutionteacherpoints.points|times %}
+                                                        <i class="bi bi-emoji-smile-fill yellow"></i>
+                                                    {% endfor %}
+                                                    {% for i in solution.homeworksolutionteacherpoints.points|abs|times %}
+                                                        <i class="bi bi-emoji-smile-fill red"></i>
+                                                    {% endfor %}
+                                                {% else %}
+                                                    {% for i in solution.points|times %}
+                                                        <i class="bi bi-emoji-smile-fill yellow"></i>
+                                                    {% endfor %}
+                                                    {% for i in solution.homeworksolutionteacherpoints.points|times %}
+                                                        <i class="bi bi-star-fill yellow"></i>
+                                                    {% endfor %}
+                                                {% endif %}
                                             {% else %}
                                                 -
                                             {% endif %}

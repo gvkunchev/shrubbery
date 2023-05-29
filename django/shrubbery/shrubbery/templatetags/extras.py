@@ -50,3 +50,7 @@ def inline_comments_from_history(history):
 def times(number):
     """Range from integer."""
     return range(number)
+
+@register.filter(name='abs')
+def abs_filter(value):
+    return abs(value)
