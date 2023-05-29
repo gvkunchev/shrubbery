@@ -20,6 +20,11 @@ def get_homework_results(data, homework):
     return data.get(key, '-')
 
 @register.simple_tag()
+def get_challenge_results(data, challenge):
+    key = f'challenge_{challenge.pk}'
+    return data.get(key, '-')
+
+@register.simple_tag()
 def get_exam_results(data, exam):
     key = f'exam_{exam.pk}'
     return data.get(key, '-')

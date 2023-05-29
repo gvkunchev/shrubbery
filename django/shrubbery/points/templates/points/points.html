@@ -7,7 +7,7 @@
 
     {% if data %}
         <div class="overflow-auto">
-            <table class="table table-hover">
+            <table class="table table-hover table-bordered">
                 <thead>
                     <tr>
                         <th class="align-middle" scope="col" rowspan="2">Име</th>
@@ -16,6 +16,7 @@
                         <th class="align-middle text-center" scope="col" rowspan="2">Ваучери</th>
                         <th class="align-middle text-center" scope="col" rowspan="2">Коментари</th>
                         <th class="align-middle text-center" scope="col" colspan="{{ homeworks|length }}">Домашни</th>
+                        <th class="align-middle text-center" scope="col" colspan="{{ challenges|length }}">Предизвикателства</th>
                         <th class="align-middle text-center" scope="col" colspan="{{ exams|length }}">Изпити</th>
                         <th class="align-middle text-center" scope="col" rowspan="2">Общо</th>
                     </tr>
@@ -23,6 +24,13 @@
                         {% if homeworks %}
                             {% for homework in homeworks %}
                                 <th class="align-middle text-center" scope="col">{{ homework.title }}</th>
+                            {% endfor %}
+                        {% else %}
+                            <td class="text-center">-</td>
+                        {% endif %}
+                        {% if challenges %}
+                            {% for challenge in challenges %}
+                                <th class="align-middle text-center" scope="col">{{ challenge.title }}</th>
                             {% endfor %}
                         {% else %}
                             <td class="text-center">-</td>
@@ -51,6 +59,13 @@
                         {% if homeworks %}
                             {% for homework in homeworks %}
                                 <td class="align-middle text-center" scope="col">{% get_homework_results row homework %}</td>
+                            {% endfor %}
+                        {% else %}
+                            <td class="text-center">-</td>
+                        {% endif %}
+                        {% if challenges %}
+                            {% for challenge in challenges %}
+                                <td class="align-middle text-center" scope="col">{% get_challenge_results row challenge %}</td>
                             {% endfor %}
                         {% else %}
                             <td class="text-center">-</td>
