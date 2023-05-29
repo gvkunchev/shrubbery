@@ -75,7 +75,7 @@
                                         <i class="bi bi-file-text-fill"></i> {{ solution.line_count }}
                                     </span>
                                     <span data-toggle="tooltip" title="Брой коментари по решението">
-                                        <i class="bi bi-chat-left-dots-fill"></i> {{ solution.comments|length }}
+                                        <i class="bi bi-chat-left-dots-fill"></i> {{ solution.comments|length|add:solution.inline_comments_count }}
                                     </span>
                                 </td>
                             </tr>

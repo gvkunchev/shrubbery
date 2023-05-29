@@ -53,6 +53,12 @@ class HomeworkSolution(PointsGiver):
     def comments(self):
         """Get all comments."""
         return self.homeworksolutioncomment_set.all()
+    
+    @property
+    def inline_comments_count(self):
+        """Get count of all inline comments."""
+        return (len(HomeworkSolutionInlineComment.objects.filter(solution=self)) + 
+                len(HomeworkSolutionHistoryInlineComment.objects.filter(solution=self)))
 
     def assign_line_count(self, *args, **kwargs):
         """Assign line count to the database."""
