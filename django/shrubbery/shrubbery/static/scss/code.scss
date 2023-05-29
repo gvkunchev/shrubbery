@@ -24,3 +24,20 @@ table.diff[summary="Legends"] {
     overflow-x: scroll;
     height: 400px;
 }
+
+.word-wrap-diff {
+    table.diff {
+        width: 100%;
+        max-width: 100%;
+        table-layout: fixed;
+    }
+    .diff td.diff_next {
+        width: 0 !important
+    }
+    .diff td.diff_header {
+        width: 3em !important;
+    }
+    .diff td[nowrap="nowrap"] {
+        white-space: break-spaces;
+    }
+}
