@@ -6,10 +6,10 @@ $(document).ready(function(){
 
     $('[data-trigger="word-wrap"]').bind('change', function(){
         if($(this).is(':checked')){
-            $(this).parents('.code-diff-container').addClass('word-wrap-diff');
+            $(this).parents('.code-diff-container, .code').addClass('word-wrap-diff');
         }
         else{
-            $(this).parents('.code-diff-container').removeClass('word-wrap-diff');
+            $(this).parents('.code-diff-container, .code').removeClass('word-wrap-diff');
         }
     })
 })

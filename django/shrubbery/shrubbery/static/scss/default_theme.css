@@ -9765,6 +9765,9 @@ table.diff[summary="Legends"] {
 .word-wrap-diff .diff td[nowrap="nowrap"] {
   white-space: break-spaces; }
 
+.word-wrap-diff span[id^=code-line] {
+  white-space: break-spaces; }
+
 .code {
   overflow: auto;
   padding-left: 1em; }

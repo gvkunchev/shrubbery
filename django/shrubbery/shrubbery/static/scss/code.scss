@@ -40,4 +40,8 @@ table.diff[summary="Legends"] {
     .diff td[nowrap="nowrap"] {
         white-space: break-spaces;
     }
+
+    span[id^=code-line]{
+        white-space: break-spaces;
+    }
 }
