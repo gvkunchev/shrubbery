@@ -9729,6 +9729,9 @@ span.linenos.special {
 [data-toggle="tooltip"] {
   cursor: pointer; }
 
+img {
+  max-width: 100%; }
+
 .linenos {
   -webkit-touch-callout: none;
   -webkit-user-select: none;

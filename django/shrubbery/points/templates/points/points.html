@@ -6,66 +6,68 @@
 {% block body %}
 
     {% if data %}
-        <table class="table table-hover">
-            <thead>
-                <tr>
-                    <th class="align-middle" scope="col" rowspan="2">Име</th>
-                    <th class="align-middle" scope="col" rowspan="2">Факултетен номер</th>
-                    <th class="align-middle text-center" scope="col" rowspan="2">Профилна снимка</th>
-                    <th class="align-middle text-center" scope="col" rowspan="2">Ваучери</th>
-                    <th class="align-middle text-center" scope="col" rowspan="2">Коментари</th>
-                    <th class="align-middle text-center" scope="col" colspan="{{ homeworks|length }}">Домашни</th>
-                    <th class="align-middle text-center" scope="col" colspan="{{ exams|length }}">Изпити</th>
-                    <th class="align-middle text-center" scope="col" rowspan="2">Общо</th>
-                </tr>
-                <tr>
-                    {% if homeworks %}
-                        {% for homework in homeworks %}
-                            <th class="align-middle text-center" scope="col">{{ homework.title }}</th>
-                        {% endfor %}
-                    {% else %}
-                        <td class="text-center">-</td>
-                    {% endif %}
-                    {% if exams %}
-                        {% for exam in exams %}
-                            <th class="align-middle text-center" scope="col">{{ exam.title }}</th>
-                        {% endfor %}
-                    {% else %}
-                        <td class="text-center">-</td>
-                    {% endif %}
-                </tr>
-            </thead>
-            <tbody>
-                {% for row in data %}
-                <tr>
-                    <th scope="row">
-                        <a href="/student/{{ row.student.pk }}" target="_blank">
-                            {{ row.student.full_name }}
-                        </a>
-                    </th>
-                    <td>{{ row.student.fn }}</td>
-                    <td class="text-center">{{ row.profile_picture }}</td>
-                    <td class="text-center">{{ row.vouchers }}</td>
-                    <td class="text-center">{{ row.comments }}</td>
-                    {% if homeworks %}
-                        {% for homework in homeworks %}
-                            <td class="align-middle text-center" scope="col">{% get_homework_results row homework %}</td>
-                        {% endfor %}
-                    {% else %}
-                        <td class="text-center">-</td>
-                    {% endif %}
-                    {% if exams %}
-                        {% for exam in exams %}
-                            <td class="align-middle text-center" scope="col">{% get_exam_results row exam %}</td>
-                        {% endfor %}
-                    {% else %}
-                        <td class="text-center">-</td>
-                    {% endif %}
-                    <td class="text-center">{{ row.total }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+        <div class="overflow-auto">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th class="align-middle" scope="col" rowspan="2">Име</th>
+                        <th class="align-middle" scope="col" rowspan="2">Факултетен номер</th>
+                        <th class="align-middle text-center" scope="col" rowspan="2">Профилна снимка</th>
+                        <th class="align-middle text-center" scope="col" rowspan="2">Ваучери</th>
+                        <th class="align-middle text-center" scope="col" rowspan="2">Коментари</th>
+                        <th class="align-middle text-center" scope="col" colspan="{{ homeworks|length }}">Домашни</th>
+                        <th class="align-middle text-center" scope="col" colspan="{{ exams|length }}">Изпити</th>
+                        <th class="align-middle text-center" scope="col" rowspan="2">Общо</th>
+                    </tr>
+                    <tr>
+                        {% if homeworks %}
+                            {% for homework in homeworks %}
+                                <th class="align-middle text-center" scope="col">{{ homework.title }}</th>
+                            {% endfor %}
+                        {% else %}
+                            <td class="text-center">-</td>
+                        {% endif %}
+                        {% if exams %}
+                            {% for exam in exams %}
+                                <th class="align-middle text-center" scope="col">{{ exam.title }}</th>
+                            {% endfor %}
+                        {% else %}
+                            <td class="text-center">-</td>
+                        {% endif %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in data %}
+                    <tr>
+                        <th scope="row">
+                            <a href="/student/{{ row.student.pk }}" target="_blank">
+                                {{ row.student.full_name }}
+                            </a>
+                        </th>
+                        <td>{{ row.student.fn }}</td>
+                        <td class="text-center">{{ row.profile_picture }}</td>
+                        <td class="text-center">{{ row.vouchers }}</td>
+                        <td class="text-center">{{ row.comments }}</td>
+                        {% if homeworks %}
+                            {% for homework in homeworks %}
+                                <td class="align-middle text-center" scope="col">{% get_homework_results row homework %}</td>
+                            {% endfor %}
+                        {% else %}
+                            <td class="text-center">-</td>
+                        {% endif %}
+                        {% if exams %}
+                            {% for exam in exams %}
+                                <td class="align-middle text-center" scope="col">{% get_exam_results row exam %}</td>
+                            {% endfor %}
+                        {% else %}
+                            <td class="text-center">-</td>
+                        {% endif %}
+                        <td class="text-center">{{ row.total }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     {% else %}
         Все още няма записани студенти.
     {% endif %}

@@ -93,36 +93,38 @@
                     <input type="hidden" name="exam" value="{{ exam.pk }}" />
                     <button type="submit" name="edit" class="btn btn-danger mt-2 confirm-delete-exam-results">Изтрий избраните</button>
                     {% include 'common/delete_modal.html' with content='Сигурен ли си, че искаш да изтриеш тези резултати?' id='confirm_delete_exam_results_modal' %}
-                    <table class="table table-hover">
-                        <thead>
-                            <tr>
-                                <th scope="col"><i class="bi bi-check2-square text-primary select-all-trigger" data-toggle="tooltip" title="Обърни селекцията"></i></th>
-                                <th scope="col">Име</th>
-                                <th scope="col">Факултетен номер</th>
-                                <th scope="col">Точки</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for result in results %}
-                            <tr>
-                                <td>
-                                    <input type="checkbox" name="exam_result_{{ result.pk }}" class="form-check-input"/>
-                                </td>
-                                <td>
-                                    <a href="/student/{{ result.owner.pk }}" target="_blank">
-                                        {{ result.owner.full_name }}
-                                    </a>
-                                </td>
-                                <td>
-                                    {{ result.owner.fn }}
-                                </td>
-                                <td>
-                                    {{ result.points }}
-                                </td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
+                    <div class="overflow-auto">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th scope="col"><i class="bi bi-check2-square text-primary select-all-trigger" data-toggle="tooltip" title="Обърни селекцията"></i></th>
+                                    <th scope="col">Име</th>
+                                    <th scope="col">Факултетен номер</th>
+                                    <th scope="col">Точки</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for result in results %}
+                                <tr>
+                                    <td>
+                                        <input type="checkbox" name="exam_result_{{ result.pk }}" class="form-check-input"/>
+                                    </td>
+                                    <td>
+                                        <a href="/student/{{ result.owner.pk }}" target="_blank">
+                                            {{ result.owner.full_name }}
+                                        </a>
+                                    </td>
+                                    <td>
+                                        {{ result.owner.fn }}
+                                    </td>
+                                    <td>
+                                        {{ result.points }}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
                 </form>
             {% else %}
                 <br/>Все още няма резултати.

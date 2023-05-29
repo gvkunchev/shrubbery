@@ -46,46 +46,48 @@
             {% csrf_token %}
             <button type="submit" name="edit" class="btn btn-danger mt-2 confirm-delete-vouchers">Изтрий избраните</button>
             {% include 'common/delete_modal.html' with content='Сигурен ли си, че искаш да изтриеш тези ваучери?' id='confirm_delete_vouchers_modal' %}
-            <table class="table table-hover">
-                <thead>
-                    <tr>
-                        <th scope="col"></th>
-                        <th scope="col">Токен</th>
-                        <th scope="col">Заявен от</th>
-                        <th scope="col">Заявен на</th>
-                        <th scope="col">Точки</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for voucher in vouchers %}
-                    <tr>
-                        <td>
-                            <input type="checkbox" name="voucher_{{ voucher.pk }}" class="form-check-input"/>
-                        </td>
-                        <td>
-                            {{ voucher.token }}
-                        </td>
-                        <td>
-                            {% if voucher.owner %}
-                                <a href="student/{{ voucher.owner.pk }}" target="_blank">
-                                    {{ voucher.owner.full_name }}
-                                </a>
-                            {% else %}
-                                -
-                            {% endif %}
-                        </td>
-                        <td>
-                            {% if voucher.owner %}
-                                {{ voucher.human_date }}
-                            {% else %}
-                                -
-                            {% endif %}
-                        </td>
-                        <td>{{ voucher.points }}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+            <div class="overflow-auto">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col"></th>
+                            <th scope="col">Токен</th>
+                            <th scope="col">Заявен от</th>
+                            <th scope="col">Заявен на</th>
+                            <th scope="col">Точки</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for voucher in vouchers %}
+                        <tr>
+                            <td>
+                                <input type="checkbox" name="voucher_{{ voucher.pk }}" class="form-check-input"/>
+                            </td>
+                            <td>
+                                {{ voucher.token }}
+                            </td>
+                            <td>
+                                {% if voucher.owner %}
+                                    <a href="student/{{ voucher.owner.pk }}" target="_blank">
+                                        {{ voucher.owner.full_name }}
+                                    </a>
+                                {% else %}
+                                    -
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if voucher.owner %}
+                                    {{ voucher.human_date }}
+                                {% else %}
+                                    -
+                                {% endif %}
+                            </td>
+                            <td>{{ voucher.points }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </form>
     {% else %}
         <br/>Все още няма никакви ваучери.

@@ -35,34 +35,36 @@
     {% endif %}
 
     {% if team %}
-        <table class="table table-hover">
-            <thead>
-                <tr>
-                    <th scope="col">Име</th>
-                    <th scope="col">Поща</th>
-                    <th scope="col">Активен</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for teacher in team %}
+        <div class="overflow-auto">
+            <table class="table table-hover">
+                <thead>
                     <tr>
-                        <th scope="row">
-                            <a href="/team/member/{{ teacher.id }}">
-                                {{ teacher.full_name }}
-                            </a>
-                        </th>
-                        <td>{{ teacher.email }}</td>
-                        <td>
-                            {% if teacher.is_active %}
-                                <i class="bi bi-check-circle-fill text-success"></i>
-                            {% else %}
-                                <i class="bi bi-x-circle-fill text-danger"></i>
-                            {% endif %}
-                        </td>
+                        <th scope="col">Име</th>
+                        <th scope="col">Поща</th>
+                        <th scope="col">Активен</th>
                     </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    {% for teacher in team %}
+                        <tr>
+                            <th scope="row">
+                                <a href="/team/member/{{ teacher.id }}">
+                                    {{ teacher.full_name }}
+                                </a>
+                            </th>
+                            <td>{{ teacher.email }}</td>
+                            <td>
+                                {% if teacher.is_active %}
+                                    <i class="bi bi-check-circle-fill text-success"></i>
+                                {% else %}
+                                    <i class="bi bi-x-circle-fill text-danger"></i>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     {% else %}
         Все още няма учители.
     {% endif %}
