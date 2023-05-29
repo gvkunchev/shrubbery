@@ -2,10 +2,10 @@ $(document).ready(function(){
 
     var showDownConverter = new showdown.Converter();
     showDownConverter.setOption('emoji', true);
-    
+
     // Inline text
     $('.showdown-trigger').each(function(){
-        $(this).html(showDownConverter.makeHtml($(this).html()));
+        $(this).html(showDownConverter.makeHtml($(this).text()));
     })
 
     // Dynamic preview
@@ -19,5 +19,5 @@ $(document).ready(function(){
     $('#showdown-modal').find('button').bind('click', function(){
         $('#showdown-modal').modal('hide');
     })
-    
+
 })
