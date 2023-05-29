@@ -1,0 +1,79 @@
+{% extends "backbone/base.html" %}
+{% load static %}
+
+
+{% block location %}
+    <h6 class="location-info"><i class="bi bi-globe"></i> <a href="/challenges">Предизвикателства</a></h6>
+{% endblock %}
+
+{% block body %}
+
+    {% if request.user.is_teacher %}
+    <a href="/challenge/add" class="text-reset text-decoration-none">
+        <button type="button" class="btn btn-primary m-1">
+            <i class="bi bi-plus-circle-fill"></i> Създай предизвикателство
+        </button>
+    </a>
+    {% if info %}
+        <div class="text-info"><i class="bi bi-check-circle-fill"></i> {{ info }}</div>
+    {% endif %}
+    {% if error %}
+        <div class="text-danger"><i class="bi bi-x-circle-fill"></i> {{ error }}</div>
+    {% endif %}
+    <hr class="mt-2 mb-1"/>
+    {% endif %}
+    
+    {% if challenges %}
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">Име</th>
+                    <th scope="col">Точки</th>
+                    <th scope="col">Краен срок</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for challenge in challenges %}
+                    {% if not challenge.hidden %}
+                        <tr>
+                            <th scope="row">
+                                <a href="/challenge/{{ challenge.pk }}">
+                                    {{ challenge.title }}
+                                </a>
+                                {% if challenge.verified %}
+                                    <i class="float-end bi bi-check-circle-fill text-primary" data-toggle="tooltip" title="Проверено"></i>
+                                {% endif %}
+                            </th>
+                            <td>
+                                {{ challenge.points }}
+                            </td>
+                            <td>
+                                {{ challenge.human_deadline }}
+                            </td>
+                        </tr>
+                    {% else %}
+                        {% if request.user.is_teacher %}
+                            <tr>
+                                <th scope="row">
+                                    <a href="/challenge/{{ challenge.pk }}">
+                                        <span class="opacity-50">{{ challenge.title }}</span>
+                                    </a>
+                                    <i class="float-end bi bi-eye-slash-fill text-primary" data-toggle="tooltip" title="Скрито"></i>
+                                </th>
+                                <td>
+                                    {{ challenge.points }}
+                                </td>
+                                <td class="opacity-50">
+                                    {{ challenge.human_deadline }}
+                                </td>
+                            </tr>
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        Все още няма предизвикателства.
+    {% endif %}
+
+{% endblock %}

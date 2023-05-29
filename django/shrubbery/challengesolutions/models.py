@@ -6,7 +6,7 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils import timezone
 
-from homeworks.models import Homework
+from challenges.models import Challenge
 from users.models import User
 from points.models import PointsGiver
 
@@ -19,20 +19,20 @@ def validate_py_extension(value):
 
 
 def get_history_upload_path(instance, filename):
-    """Get history upload path based on homework."""
+    """Get history upload path based on challenge."""
     file_name = f'{instance.upload_date.strftime("%d_%m_%Y_%H_%M_%S")}.py'
-    return os.path.join('homeworksolutions', str(instance.homework.pk),
+    return os.path.join('challengesolutions', str(instance.challenge.pk),
                         str(instance.author.pk), file_name)
 
 
 def get_upload_path(instance, filename):
-    """Get latest upload path based on homework."""
-    return os.path.join('homeworksolutions', str(instance.homework.pk),
+    """Get latest upload path based on challenge."""
+    return os.path.join('challengesolutions', str(instance.challenge.pk),
                         str(instance.author.pk), 'latest.py')
 
 
-class HomeworkSolution(PointsGiver):
-    homework = models.ForeignKey(Homework, on_delete=models.CASCADE)
+class ChallengeSolution(PointsGiver):
+    challenge = models.ForeignKey(Challenge, on_delete=models.CASCADE)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     content = models.FileField(upload_to=get_upload_path, validators=[validate_py_extension])
     upload_date = models.DateTimeField(default=timezone.now)
@@ -47,18 +47,18 @@ class HomeworkSolution(PointsGiver):
 
     def __str__(self):
         """String representation for the admin panel."""
-        return f"{self.homework} - {self.author}"
+        return f"{self.challenge} - {self.author}"
     
     @property
     def comments(self):
         """Get all comments."""
-        return self.homeworksolutioncomment_set.all()
+        return self.challengesolutioncomment_set.all()
     
     @property
     def inline_comments_count(self):
         """Get count of all inline comments."""
-        return (len(HomeworkSolutionInlineComment.objects.filter(solution=self)) + 
-                len(HomeworkSolutionHistoryInlineComment.objects.filter(solution=self)))
+        return (len(ChallengeSolutionInlineComment.objects.filter(solution=self)) + 
+                len(ChallengeSolutionHistoryInlineComment.objects.filter(solution=self)))
 
     def assign_line_count(self, *args, **kwargs):
         """Assign line count to the database."""
@@ -72,7 +72,7 @@ class HomeworkSolution(PointsGiver):
         if total == 0:
             return False
         percentage = self.passed_tests / total
-        self.points = round(self.homework.points * percentage)
+        self.points = round(self.challenge.points * percentage)
         self.save()
     
     def _reset_points(self):
@@ -86,9 +86,9 @@ class HomeworkSolution(PointsGiver):
     
     def _send_inline_comments_to_history(self, history):
         """Send inline comments to history."""
-        comments = HomeworkSolutionInlineComment.objects.filter(solution=self)
+        comments = ChallengeSolutionInlineComment.objects.filter(solution=self)
         for comment in comments:
-            history_comment = HomeworkSolutionHistoryInlineComment.objects.create(date=comment.date,
+            history_comment = ChallengeSolutionHistoryInlineComment.objects.create(date=comment.date,
                                                                                   author=comment.author,
                                                                                   solution=comment.solution,
                                                                                   history=history,
@@ -102,7 +102,7 @@ class HomeworkSolution(PointsGiver):
         content = get_history_upload_path(self, None)
         os.rename(os.path.join(settings.MEDIA_ROOT, self.content.path),
                   os.path.join(settings.MEDIA_ROOT, content))
-        history = HomeworkSolutionHistory.objects.create(homework=self.homework,
+        history = ChallengeSolutionHistory.objects.create(challenge=self.challenge,
                                                          author=self.author,
                                                          upload_date=self.upload_date,
                                                          solution=self,
@@ -128,18 +128,18 @@ class HomeworkSolution(PointsGiver):
     def save(self, *args, **kwargs):
         """Create teacher points when creating a solution."""
         is_new = self.id is None
-        super(HomeworkSolution, self).save(*args, **kwargs)
+        super(ChallengeSolution, self).save(*args, **kwargs)
         if is_new:
-            teacher_points = HomeworkSolutionTeacherPoints.objects.create(solution=self)
+            teacher_points = ChallengeSolutionTeacherPoints.objects.create(solution=self)
             teacher_points.save()
 
 
-class HomeworkSolutionHistory(models.Model):
-    homework = models.ForeignKey(Homework, on_delete=models.CASCADE)
+class ChallengeSolutionHistory(models.Model):
+    challenge = models.ForeignKey(Challenge, on_delete=models.CASCADE)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     content = models.FileField(upload_to=get_history_upload_path, validators=[validate_py_extension])
     upload_date = models.DateTimeField(default=timezone.now)
-    solution = models.ForeignKey(HomeworkSolution, on_delete=models.CASCADE)
+    solution = models.ForeignKey(ChallengeSolution, on_delete=models.CASCADE)
     diff = models.TextField(default='')
 
     class Meta:
@@ -147,7 +147,7 @@ class HomeworkSolutionHistory(models.Model):
 
     def __str__(self):
         """String representation for the admin panel."""
-        return f"{self.homework} - {self.author} - {self.upload_date}"
+        return f"{self.challenge} - {self.author} - {self.upload_date}"
     
     def assign_diff_to(self, target):
         """Generate diff of current solution to target and store it."""
@@ -165,10 +165,10 @@ class HomeworkSolutionHistory(models.Model):
         return self.upload_date.astimezone(timezone.get_current_timezone()).strftime("%d.%m.%Y %H:%M")
 
 
-class HomeworkSolutionComment(PointsGiver):
+class ChallengeSolutionComment(PointsGiver):
     date = models.DateTimeField(default=timezone.now)
     author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
-    solution = models.ForeignKey(HomeworkSolution, on_delete=models.CASCADE)
+    solution = models.ForeignKey(ChallengeSolution, on_delete=models.CASCADE)
     content = models.TextField()
     starred = models.BooleanField(default=False)
 
@@ -190,18 +190,18 @@ class HomeworkSolutionComment(PointsGiver):
             self.points = 1
         else:
             self.points = 0
-        super(HomeworkSolutionComment, self).save(*args, **kwargs)
+        super(ChallengeSolutionComment, self).save(*args, **kwargs)
 
     def save(self, *args, **kwargs):
         """Decorate saving with points assignments."""
-        super(HomeworkSolutionComment, self).save(*args, **kwargs)
+        super(ChallengeSolutionComment, self).save(*args, **kwargs)
         self._update_points(*args, **kwargs)
 
 
-class HomeworkSolutionInlineComment(models.Model):
+class ChallengeSolutionInlineComment(models.Model):
     date = models.DateTimeField(default=timezone.now)
     author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
-    solution = models.ForeignKey(HomeworkSolution, on_delete=models.CASCADE)
+    solution = models.ForeignKey(ChallengeSolution, on_delete=models.CASCADE)
     content = models.TextField()
     line = models.IntegerField()
 
@@ -218,11 +218,11 @@ class HomeworkSolutionInlineComment(models.Model):
         return f"{self.author} - {self.human_date}"
 
 
-class HomeworkSolutionHistoryInlineComment(models.Model):
+class ChallengeSolutionHistoryInlineComment(models.Model):
     date = models.DateTimeField(default=timezone.now)
     author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
-    solution = models.ForeignKey(HomeworkSolution, on_delete=models.CASCADE)
-    history = models.ForeignKey(HomeworkSolutionHistory, on_delete=models.CASCADE)
+    solution = models.ForeignKey(ChallengeSolution, on_delete=models.CASCADE)
+    history = models.ForeignKey(ChallengeSolutionHistory, on_delete=models.CASCADE)
     content = models.TextField()
     line = models.IntegerField()
 
@@ -239,9 +239,9 @@ class HomeworkSolutionHistoryInlineComment(models.Model):
         return f"{self.author} - {self.human_date}"
 
 
-class HomeworkSolutionTeacherPoints(PointsGiver):
+class ChallengeSolutionTeacherPoints(PointsGiver):
 
-    solution = models.OneToOneField(HomeworkSolution, on_delete=models.CASCADE)
+    solution = models.OneToOneField(ChallengeSolution, on_delete=models.CASCADE)
 
     def __str__(self):
         """String representation for the admin panel."""

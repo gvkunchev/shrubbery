@@ -57,6 +57,8 @@ INSTALLED_APPS = [
     'resources',
     'homeworks',
     'homeworksolutions',
+    'challenges',
+    'challengesolutions',
     'exams',
     'vouchers',
     'points',

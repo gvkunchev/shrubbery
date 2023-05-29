@@ -45,6 +45,26 @@
         </div>
     {% endif %}
 
+    
+    {% if active_challenges %}
+        <div class="card mt-2 d-inline-block home-overview-card">
+            <div class="card-header">Активни предизвикателства</div>
+            <div class="card-body">
+                <ul class="list-group list-group-flush">
+                    {% for challenge in active_challenges %}
+                        <li class="list-group-item">
+                            <i class="bi bi-hourglass-split text-primary"></i></i>
+                            <a href="/challenge/{{ challenge.pk }}">
+                                {{ challenge.title }}
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    {% endif %}
+
+
     {% if ranking %}
         <div class="card mt-2 d-inline-block home-overview-card">
             <div class="card-header">Позиция в класацията</div>
