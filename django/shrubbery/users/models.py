@@ -25,7 +25,7 @@ def rename_profile_picture(instance, filename):
 
 class ProfilePicturePoints(PointsGiver):
 
-    owner = models.ForeignKey('Student', on_delete=models.CASCADE)
+    owner = models.OneToOneField('Student', on_delete=models.CASCADE)
 
 
 class User(AbstractUser):
