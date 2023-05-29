@@ -38,7 +38,7 @@ def send_email_newsarticle(instance):
     all_emails = get_emails_from_queryset(queryset)
     context = {
         'domain':DOMAIN,
-        'id': instance.pk
+        'id': instance
     }
     EMAILER.send_email(all_emails, 'Python @ ФМИ - Новина',
                        render_to_string('emails/news_article_created.html', context))
@@ -51,7 +51,7 @@ def send_email_forum(instance):
     all_emails = get_emails_from_queryset(queryset)
     context = {
         'domain':DOMAIN,
-        'id': instance.pk
+        'id': instance
     }
     EMAILER.send_email(all_emails, 'Python @ ФМИ - Нов форум',
                        render_to_string('emails/forum_created.html', context))
@@ -64,7 +64,7 @@ def send_email_homework(instance):
     all_emails = get_emails_from_queryset(queryset)
     context = {
         'domain':DOMAIN,
-        'id': instance.pk
+        'id': instance
     }
     EMAILER.send_email(all_emails, 'Python @ ФМИ - Ново домашно',
                        render_to_string('emails/homework_created.html', context))
@@ -77,7 +77,7 @@ def send_email_challenge(instance):
     all_emails = get_emails_from_queryset(queryset)
     context = {
         'domain':DOMAIN,
-        'id': instance.pk
+        'id': instance
     }
     EMAILER.send_email(all_emails, 'Python @ ФМИ - Ново предизвикателство',
                        render_to_string('emails/challenge_created.html', context))
@@ -94,9 +94,9 @@ def newsarticle_action(sender, instance, created, **kwargs):
         # Modifying an existing article - nothing to do
         return False
     if os.environ.get('SHRUBBERY_ENV') == 'prd':
-        send_email_newsarticle.delay(instance)
+        send_email_newsarticle.delay(instance.pk)
     else:
-        send_email_newsarticle(instance)
+        send_email_newsarticle(instance.pk)
 
 
 @receiver(post_save, sender=Forum)
@@ -105,9 +105,9 @@ def forum_action(sender, instance, created, **kwargs):
         # Modifying an existing forum - nothing to do
         return False
     if os.environ.get('SHRUBBERY_ENV') == 'prd':
-        send_email_forum.delay(instance)
+        send_email_forum.delay(instance.pk)
     else:
-        send_email_forum(instance)
+        send_email_forum(instance.pk)
 
 
 @receiver(post_save, sender=Homework)
@@ -116,9 +116,9 @@ def homework_action(sender, instance, created, **kwargs):
         instance.email_sent = True
         instance.save()
         if os.environ.get('SHRUBBERY_ENV') == 'prd':
-            send_email_homework.delay(instance)
+            send_email_homework.delay(instance.pk)
         else:
-            send_email_homework(instance)
+            send_email_homework(instance.pk)
 
 
 @receiver(post_save, sender=Challenge)
@@ -127,6 +127,6 @@ def challenge_action(sender, instance, created, **kwargs):
         instance.email_sent = True
         instance.save()
         if os.environ.get('SHRUBBERY_ENV') == 'prd':
-            send_email_challenge.delay(instance)
+            send_email_challenge.delay(instance.pk)
         else:
-            send_email_challenge(instance)
+            send_email_challenge(instance.pk)
