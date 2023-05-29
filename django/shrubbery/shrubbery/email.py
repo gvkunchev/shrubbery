@@ -14,4 +14,4 @@ class Emailer:
 
     def send_email(self, recipients, subject, body):
         """Send email."""
-        self._yag.send(recipients, subject, body)
+        self._yag.send(bcc=recipients, subject=subject, contents=body)

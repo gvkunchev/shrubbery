@@ -16,6 +16,7 @@ class Challenge(models.Model):
     hidden = models.BooleanField(default=True)
     verified = models.BooleanField(default=False)
     executing_tests = models.BooleanField(default=False)
+    email_sent = models.BooleanField(default=False)
 
     class Meta:
         ordering = ('-creation_date',)
