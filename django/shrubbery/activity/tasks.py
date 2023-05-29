@@ -49,11 +49,14 @@ def alert_for_new_solution_comments(*args, **kwargs):
                     if timezone.now() - comment.date < timezone.timedelta(minutes=60):
                         new_comments.append({
                             'task_type': task_type,
-                            'task': comment.solution.homework or comment.solution.challenge,
                             'solution': comment.solution,
                             'comment_type': comment_type,
                             'comment': comment
                         })
+                        if task_type == 'homework':
+                            new_comments[-1].update({'task': comment.solution.homework})
+                        else:
+                            new_comments[-1].update({'task': comment.solution.challenge})
         if len(new_comments):
             context = {
                 'domain':DOMAIN,
