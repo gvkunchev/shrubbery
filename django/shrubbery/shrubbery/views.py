@@ -2,6 +2,7 @@ from django.shortcuts import render
 
 from points.getters import get_rank_and_points
 from homeworks.getters import get_active_homeworks
+from challenges.getters import get_active_challenges
 from news.models import NewsArticle
 
 
@@ -23,5 +24,8 @@ def home(request):
     if request.user.is_authenticated :
         context.update({
             'active_homeworks': get_active_homeworks()
+        })
+        context.update({
+            'active_challenges': get_active_challenges()
         })
     return render(request, "home.html", context)

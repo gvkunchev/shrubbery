@@ -23,6 +23,15 @@ class EditUserForm(forms.ModelForm):
         fields = ('first_name', 'last_name', 'github', 'image', 'dark_theme')
 
 
+class EmailSettingsForm(forms.ModelForm):
+
+    class Meta:
+        model = User
+        fields = ('email_notification_news', 'email_notification_forum',
+                  'email_notification_homework', 'email_notification_challenge',
+                  'email_notification_solution_comments')
+
+
 class AddStudentForm(UserCreationForm):
 
     class Meta:

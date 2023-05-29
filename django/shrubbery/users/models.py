@@ -25,7 +25,7 @@ def rename_profile_picture(instance, filename):
 
 class ProfilePicturePoints(PointsGiver):
 
-    owner = models.ForeignKey('Student', on_delete=models.CASCADE)
+    owner = models.OneToOneField('Student', on_delete=models.CASCADE)
 
 
 class User(AbstractUser):
@@ -41,6 +41,11 @@ class User(AbstractUser):
     image = models.ImageField(upload_to=rename_profile_picture, blank=True)
     github = models.CharField(max_length=100, blank=True)
     dark_theme = models.BooleanField(default=False)
+    email_notification_news = models.BooleanField(default=True)
+    email_notification_forum = models.BooleanField(default=True)
+    email_notification_homework = models.BooleanField(default=True)
+    email_notification_challenge = models.BooleanField(default=True)
+    email_notification_solution_comments = models.BooleanField(default=True)
 
     objects = UserManager()
 

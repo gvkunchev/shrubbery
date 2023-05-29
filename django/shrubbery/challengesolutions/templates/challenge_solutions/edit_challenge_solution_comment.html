@@ -1,0 +1,33 @@
+{% extends "backbone/base.html" %}
+{% block location %}
+    <h6 class="location-info"><i class="bi bi-globe"></i> <a href="/challenges">Предизвикателства</a> > <a href="/challenge/{{ comment.solution.challenge.pk }}">{{ comment.solution.challenge.title }}</a> > <a href="/challenge/{{ comment.solution.challenge.pk }}/solution/{{ comment.solution.pk }}">Решението на {{ comment.solution.author.full_name }}</a> > <a href="/challenge/{{ comment.solution.challenge.pk }}/solution/{{ comment.solution.pk }}/comment/{{ comment.pk }}/edit">Редактирай коментар</a></h6>
+{% endblock %}
+{% block body %}
+
+    {% if request.user.is_teacher %}
+        <a href="/challenge/{{ comment.solution.challenge.pk }}/solution/{{ comment.solution.pk }}/comment/{{ comment.pk }}/delete" class="text-reset text-decoration-none confirm-delete-challenge-comment">
+            <button type="button" class="btn btn-danger m-1">
+                <i class="bi bi-x-circle-fill"></i> Изтрий
+            </button>
+        </a>
+        <hr class="mt-2 mb-1"/>
+
+        {% include 'common/delete_modal.html' with content='Сигурен ли си, че искаш да изтриеш този коментар?' id='confirm_delete_challenge_comment_modal' %}
+        
+    {% endif %}
+
+    <div class="card mt-2">
+        <div class="card-header">
+            <h5 class="card-title">Редактирай коментар</h5>
+        </div>
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                <textarea name="content" class="form-control showdown-input" id="content" placeholder="Съдържание">{% if request.POST.content %}{{ request.POST.content }}{% else %}{{ comment.content }}{% endif %}</textarea>
+                <div class="text-danger">{{ errors.content.as_text }}</div>
+                <button type="submit" name="edit" class="btn btn-primary mt-2 mx-1">Запази</button>
+                <button class="btn btn-secondary mt-2 mx-1 showdown-preview" data-showdown-source="content"><i class="bi bi-eye-fill"></i> Преглед</button>
+            </form>
+        </div>
+    </div>
+{% endblock %}

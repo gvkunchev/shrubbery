@@ -1,0 +1,70 @@
+{% extends "backbone/base.html" %}
+{% load static %}
+
+{% block location %}
+    <h6 class="location-info"><i class="bi bi-globe"></i> <a href="/challenges">Предизвикателства</a> > <a href="/challenge/{{ challenge.pk }}">{{ challenge.title }}</a> > <a href="/challenge/{{ challenge.pk }}/solution/add">Добави решения</a></h6>
+{% endblock %}
+
+{% block body %}
+
+    <div class="card mt-2 mx-2 d-inline-block align-top">
+        <div class="card-header">
+            <h5 class="card-title">Качи решение</h5>
+        </div>
+        <div class="card-body">
+            <div class="mb-2" style="max-width: 350px">
+                <i class="bi bi-info-circle-fill"></i> Качи .py файл със своето решение.
+            </div>
+            <form method="POST" enctype="multipart/form-data" class="form-horizontal"> 
+                {% csrf_token %}
+                <input type="file" accept=".py" name="content" required="True" class="form-control">
+                <div class="text-danger">{{ errors.content.as_text }}</div>
+                {% if info %}
+                    <div class="text-info"><i class="bi bi-check-circle-fill"></i> {{ info }}</div>
+                {% endif %}
+
+                {% if verification_error %}
+                    <div class="text-danger">
+                        Решението е качено, но изглежда кодът не следва очакваната сигнатура.
+                        <br/>
+                        {{ verification_error|linebreaks }}
+                    </div>
+                {% endif %}
+                <button class="btn btn-primary mt-2">Качи</button>
+            </form>
+        </div>
+    </div>
+
+    <hr class="mt-2 mb-1"/>
+    {% if not request.user.is_authenticated or request.user.is_student %}
+        {% if challenge.hidden or not challenge.verified %}
+            <a href="/challenge/{{ challenge.pk }}" class="text-reset text-decoration-none">
+                <button type="button" class="btn btn-primary">
+                    <i class="bi bi-arrow-left-circle-fill"></i> Обратно към предизвикателството
+                </button>
+            </a>
+        {% else %}
+            <a href="/challenge/{{ challenge.pk }}/solutions" class="text-reset text-decoration-none">
+                <button type="button" class="btn btn-primary">
+                    <i class="bi bi-arrow-left-circle-fill"></i> Обратно към всички решения
+                </button>
+            </a>
+        {% endif %}
+    {% endif %}
+    {% if request.user.is_authenticated and request.user.is_teacher %}
+        {% if challenge.hidden %}
+            <a href="/challenge/{{ challenge.pk }}" class="text-reset text-decoration-none">
+                <button type="button" class="btn btn-primary">
+                    <i class="bi bi-arrow-left-circle-fill"></i> Обратно към предизвикателството
+                </button>
+            </a>
+        {% else %}
+            <a href="/challenge/{{ challenge.pk }}/solutions" class="text-reset text-decoration-none">
+                <button type="button" class="btn btn-primary">
+                    <i class="bi bi-arrow-left-circle-fill"></i> Обратно към всички решения
+                </button>
+            </a>
+        {% endif %}
+    {% endif %}
+
+{% endblock %}

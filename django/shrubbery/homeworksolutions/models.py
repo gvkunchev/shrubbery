@@ -21,13 +21,13 @@ def validate_py_extension(value):
 def get_history_upload_path(instance, filename):
     """Get history upload path based on homework."""
     file_name = f'{instance.upload_date.strftime("%d_%m_%Y_%H_%M_%S")}.py'
-    return os.path.join('solutions', str(instance.homework.pk),
+    return os.path.join('homeworksolutions', str(instance.homework.pk),
                         str(instance.author.pk), file_name)
 
 
 def get_upload_path(instance, filename):
     """Get latest upload path based on homework."""
-    return os.path.join('solutions', str(instance.homework.pk),
+    return os.path.join('homeworksolutions', str(instance.homework.pk),
                         str(instance.author.pk), 'latest.py')
 
 
@@ -124,6 +124,14 @@ class HomeworkSolution(PointsGiver):
     def human_upload_date(self):
         """Ipload date format for human readers.."""
         return self.deadline.astimezone(timezone.get_current_timezone()).strftime("%d.%m.%Y %H:%M")
+
+    def save(self, *args, **kwargs):
+        """Create teacher points when creating a solution."""
+        is_new = self.id is None
+        super(HomeworkSolution, self).save(*args, **kwargs)
+        if is_new:
+            teacher_points = HomeworkSolutionTeacherPoints.objects.create(solution=self)
+            teacher_points.save()
 
 
 class HomeworkSolutionHistory(models.Model):
@@ -229,3 +237,12 @@ class HomeworkSolutionHistoryInlineComment(models.Model):
     def __str__(self):
         """String representation for the admin panel."""
         return f"{self.author} - {self.human_date}"
+
+
+class HomeworkSolutionTeacherPoints(PointsGiver):
+
+    solution = models.OneToOneField(HomeworkSolution, on_delete=models.CASCADE)
+
+    def __str__(self):
+        """String representation for the admin panel."""
+        return f"{self.solution} - {self.points}"

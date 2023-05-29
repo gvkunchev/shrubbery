@@ -1,11 +1,15 @@
 from django.shortcuts import render, redirect
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 
+from shrubbery.view_decorators import is_teacher
+
 from homeworks.models import Homework
 from .models import (HomeworkSolution, HomeworkSolutionComment,
-                     HomeworkSolutionHistory, HomeworkSolutionInlineComment)
+                     HomeworkSolutionHistory, HomeworkSolutionInlineComment,
+                     HomeworkSolutionTeacherPoints)
 from .forms import (HomeworkSolutionForm, HomeworkSolutionCommentForm,
-                    HomeworkSolutionInlineCommentForm)
+                    HomeworkSolutionInlineCommentForm,
+                    HomeworkSolutionTeacherPointsForm)
 
 from comments.views import AddComment, EditComment, DeleteComment, SetCommentStar
 
@@ -51,6 +55,24 @@ def homework_solution(request, homework, solution):
         'inline_comments': HomeworkSolutionInlineComment.objects.filter(solution=solution),
     }
     return render(request, "homework_solutions/solution.html", context)
+
+@is_teacher
+def set_teacher_points(request, homework, solution):
+    """Set teacher points to a solution."""
+    try:
+        homework = Homework.objects.get(pk=homework)
+        solution = HomeworkSolution.objects.get(pk=solution)
+        teacher_points = HomeworkSolutionTeacherPoints.objects.get(solution=solution)
+    except ObjectDoesNotExist:
+        return redirect('missing')
+    data = {
+        'solution': solution,
+        'points': request.POST.get('teacher_points', 0)
+    }
+    form = HomeworkSolutionTeacherPointsForm(data, instance=teacher_points)
+    if form.is_valid():
+        form.save()
+    return redirect(f"/homework/{homework.pk}/solution/{solution.pk}")
 
 
 def add_homework_solution(request, homework):

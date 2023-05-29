@@ -2,6 +2,9 @@ from django.core.exceptions import ObjectDoesNotExist
 
 from users.models import Student, ProfilePicturePoints
 from homeworks.models import Homework
+from homeworksolutions.models import HomeworkSolution
+from challenges.models import Challenge
+from challengesolutions.models import ChallengeSolution
 
 
 def get_point_summary(user):
@@ -30,7 +33,13 @@ def get_point_summary(user):
     # Homeworks
     for homework_solution in user.homeworksolution_set.values():
         if Homework.objects.get(pk=homework_solution.get('homework_id')).verified:
-            points[f"homework_{homework_solution.get('homework_id')}"] = homework_solution.get('points', 0)
+            teacher_points = HomeworkSolution.objects.get(pk=homework_solution.get('id')).homeworksolutionteacherpoints.points
+            points[f"homework_{homework_solution.get('homework_id')}"] = homework_solution.get('points', 0) + teacher_points
+    # Challenges
+    for challenge_solution in user.challengesolution_set.values():
+        if Challenge.objects.get(pk=challenge_solution.get('challenge_id')).verified:
+            teacher_points = ChallengeSolution.objects.get(pk=challenge_solution.get('id')).challengesolutionteacherpoints.points
+            points[f"challenge_{challenge_solution.get('challenge_id')}"] = challenge_solution.get('points', 0) + teacher_points
     # Exams
     for exam in user.examresult_set.values():
         points[f"exam_{exam.get('exam_id')}"] = exam.get('points', 0)

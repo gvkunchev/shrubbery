@@ -1,4 +1,7 @@
+import six
 from django import template
+from django.template.base import Node
+from django.utils.functional import keep_lazy
 
 register = template.Library()
 
@@ -17,6 +20,11 @@ def zip_many(*args):
 @register.simple_tag()
 def get_homework_results(data, homework):
     key = f'homework_{homework.pk}'
+    return data.get(key, '-')
+
+@register.simple_tag()
+def get_challenge_results(data, challenge):
+    key = f'challenge_{challenge.pk}'
     return data.get(key, '-')
 
 @register.simple_tag()
@@ -50,3 +58,22 @@ def inline_comments_from_history(history):
 def times(number):
     """Range from integer."""
     return range(number)
+
+@register.filter(name='abs')
+def abs_filter(value):
+    return abs(value)
+
+@register.tag
+def linebreakless(parser, token):
+    nodelist = parser.parse(('endlinebreakless',))
+    parser.delete_first_token()
+    return LinebreaklessNode(nodelist)
+
+
+class LinebreaklessNode(Node):
+    def __init__(self, nodelist):
+        self.nodelist = nodelist
+
+    def render(self, context):
+        strip_line_breaks = keep_lazy(six.text_type)(lambda x: x.replace('\n', '').replace('\r', ''))
+        return strip_line_breaks(self.nodelist.render(context).strip())

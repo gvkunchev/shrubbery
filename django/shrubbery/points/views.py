@@ -4,6 +4,7 @@ from shrubbery.view_decorators import is_teacher
 
 from exams.models import Exam
 from homeworks.models import Homework
+from challenges.models import Challenge
 
 from .getters import get_scoreboard_summary
 
@@ -14,7 +15,8 @@ def points(request):
     context = {
         'data': get_scoreboard_summary(),
         'exams': Exam.objects.all(),
-        'homeworks': Homework.objects.filter(verified=True).reverse()
+        'homeworks': Homework.objects.filter(verified=True).reverse(),
+        'challenges': Challenge.objects.filter(verified=True).reverse()
     }
     return render(request, "points/points.html", context)
 

@@ -3,7 +3,7 @@
     <h6 class="location-info"><i class="bi bi-globe"></i> <a href="/settings">Настройки</a></h6>
 {% endblock %}
 {% block body %}
-    <div class="card d-inline-block m-1">
+    <div class="card d-md-inline-block m-1">
         <h5 class="card-header">Информация</h5>
         <div class="card-body">
             <form method="post" enctype="multipart/form-data">
@@ -61,7 +61,7 @@
             </form>
         </div>
     </div>
-    <div class="card d-inline-block m-1 align-top">
+    <div class="card d-md-inline-block m-1 align-top">
         <h5 class="card-header">Парола</h5>
         <div class="card-body">
             <form method="post">
@@ -85,6 +85,40 @@
                     <div class="text-info"><i class="bi bi-check-circle-fill"></i> {{ password_info }}</div>
                 {% endif %}
                 <button type="submit" name="change_password" class="btn btn-primary mt-2">Смени</button>
+            </form>
+        </div>
+    </div>
+    <div class="card d-md-inline-block m-1 align-top">
+        <h5 class="card-header">Известия по пощата</h5>
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <div class="form-check mt-2">
+                        <label class="form-check-label" for="email_notification_news">Известия при създадена новина</label>
+                        <input class="form-check-input" name="email_notification_news" id="email_notification_news" type="checkbox" {% if request.user.email_notification_news %}checked="checked"{% endif %}>
+                    </div>
+                    <div class="form-check mt-2">
+                        <label class="form-check-label" for="email_notification_forum">Известия при създаден форум</label>
+                        <input class="form-check-input" name="email_notification_forum" id="email_notification_forum" type="checkbox" {% if request.user.email_notification_forum %}checked="checked"{% endif %}>
+                    </div>
+                    <div class="form-check mt-2">
+                        <label class="form-check-label" for="email_notification_homework">Известия при създадено домашно</label>
+                        <input class="form-check-input" name="email_notification_homework" id="email_notification_homework" type="checkbox" {% if request.user.email_notification_homework %}checked="checked"{% endif %}>
+                    </div>
+                    <div class="form-check mt-2">
+                        <label class="form-check-label" for="email_notification_challenge">Известия при създадено предизвикателство</label>
+                        <input class="form-check-input" name="email_notification_challenge" id="email_notification_challenge" type="checkbox" {% if request.user.email_notification_challenge %}checked="checked"{% endif %}>
+                    </div>
+                    <div class="form-check mt-2">
+                        <label class="form-check-label" for="email_notification_solution_comments">Известия при нови коментари по решенията ми</label>
+                        <input class="form-check-input" name="email_notification_solution_comments" id="email_notification_solution_comments" type="checkbox" {% if request.user.email_notification_solution_comments %}checked="checked"{% endif %}>
+                    </div>
+                </div>
+                {% if email_settings_info %}
+                    <div class="text-info"><i class="bi bi-check-circle-fill"></i> {{ email_settings_info }}</div>
+                {% endif %}
+                <button type="submit" name="change_email_settings" class="btn btn-primary mt-2">Запази</button>
             </form>
         </div>
     </div>

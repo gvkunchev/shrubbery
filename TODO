@@ -1,7 +1,3 @@
-Allow teachers to adjust points
-Add challenges
-Refactor - there are complicated views
-Add activity monitoring
-Add email alerts
-Add settings for email alerts
+Add activity monitoring (and/or emails) for teachers
+Refactor - there are complicated views and code duplication between homeworks/challenges
 Consider adding responses to forum comments

@@ -13,7 +13,7 @@ from shrubbery.view_decorators import is_teacher
 from .forms import (EditUserForm, PasswordSetForm,
                     RegisterStudent, EditStudentForm,
                     AddStudentForm, EditTeacherForm,
-                    AddTeacherForm)
+                    AddTeacherForm, EmailSettingsForm)
 from .emails import send_activation_email
 from .models import User, Student, Teacher
 from .tokens import account_activation_token
@@ -161,6 +161,18 @@ def settings(request):
                 update_session_auth_hash(request, user)
                 context = {
                     'password_info': 'Паролата е сменена'
+                }
+            else:
+                context = {
+                    'errors': form.errors
+                }
+            return render(request, "settings.html", context)
+        elif 'change_email_settings' in request.POST:
+            form = EmailSettingsForm(request.POST, instance=request.user)
+            if form.is_valid():
+                user = form.save()
+                context = {
+                    'email_settings_info': 'Настройките са запазени'
                 }
             else:
                 context = {

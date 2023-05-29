@@ -26,14 +26,35 @@
             </div>
             <div class="card-body">
                 {% if solution.result != '' %}
-                    <div class="card-text"><i class="bi bi-emoji-smile-fill yellow"></i> {{ solution.points }} точки </div>
-                    <br/>
+                    <div class="card-text"><i class="bi bi-emoji-smile-fill yellow"></i> {{ solution.points }} точки  от тестове</div>
+                    <div class="card-text"><i class="bi bi-star-fill yellow"></i> {{ solution.homeworksolutionteacherpoints.points }} точки от учител</div>
+                    <hr/>
+                    <div class="card-text"><i class="bi bi-calculator-fill yellow"></i> {{ solution.points|add:solution.homeworksolutionteacherpoints.points }} точки общо</div>
+                    <hr/>
                     <div class="card-text"><i class="bi bi-flag-fill green"></i> {{ solution.passed_tests }} успешни теста</div>
                     <div class="card-text"><i class="bi bi-flag-fill red"></i> {{ solution.failed_tests }} неуспешни теста</div>
                 {% else %}
                     Все още не са пуснати тестове
-                {% endif %}
+                {% endif %}  
             </div>
+            {% if request.user.is_teacher %}
+                <form method="post" action="/homework/{{ homework.pk }}/solution/{{ solution.pk }}/set_teacher_points">
+                    {% csrf_token %}
+                    <div class="card-body">
+                        <div class="d-inline-block">
+                            <div class="input-group input-group-sm mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text rounded-0" id="inputGroup-sizing-sm">Редакция на точките:</span>
+                                </div>
+                                <input type="number" class="form-control rounded-0" name="teacher_points" value="{{ solution.homeworksolutionteacherpoints.points }}">
+                                <div class="input-group-append">
+                                    <button type="submit" class="btn btn-outline-secondary rounded-0" type="button">Запази</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            {% endif %}   
         </div>
     {% endif %}
 
