@@ -45,6 +45,7 @@ class User(AbstractUser):
     email_notification_forum = models.BooleanField(default=True)
     email_notification_homework = models.BooleanField(default=True)
     email_notification_challenge = models.BooleanField(default=True)
+    email_notification_solution_comments = models.BooleanField(default=True)
 
     objects = UserManager()
 

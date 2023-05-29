@@ -19,3 +19,11 @@ app.config_from_object('django.conf:settings', namespace='CELERY')
 
 # Load task modules from all registered Django app configs.
 app.autodiscover_tasks()
+
+
+app.conf.beat_schedule = {
+    'alert_for_new_solution_comments': {
+        'task': 'alert_for_new_solution_comments',
+        'schedule': crontab(minute=0), # Hourly UTC
+    }
+}

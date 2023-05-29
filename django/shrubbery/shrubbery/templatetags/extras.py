@@ -1,4 +1,7 @@
+import six
 from django import template
+from django.template.base import Node
+from django.utils.functional import keep_lazy
 
 register = template.Library()
 
@@ -59,3 +62,18 @@ def times(number):
 @register.filter(name='abs')
 def abs_filter(value):
     return abs(value)
+
+@register.tag
+def linebreakless(parser, token):
+    nodelist = parser.parse(('endlinebreakless',))
+    parser.delete_first_token()
+    return LinebreaklessNode(nodelist)
+
+
+class LinebreaklessNode(Node):
+    def __init__(self, nodelist):
+        self.nodelist = nodelist
+
+    def render(self, context):
+        strip_line_breaks = keep_lazy(six.text_type)(lambda x: x.replace('\n', '').replace('\r', ''))
+        return strip_line_breaks(self.nodelist.render(context).strip())

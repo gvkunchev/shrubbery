@@ -1,6 +1,10 @@
-Здравей,
-
-Има нов форум:<br/><a href="{{ domain }}/forum/{{ id }}">{{ domain }}/forum/{{ id }}</a>
-
-Поздрави,
-Python @ ФМИ
+{% load extras %}
+{% linebreakless %}
+    Здравей,
+    <br/><br/>
+    Има нов форум:<br/>
+    <a href="{{ domain }}/forum/{{ id }}">{{ domain }}/forum/{{ id }}</a>
+    <br/><br/>
+    Поздрави,<br/>
+    Python @ ФМИ
+{% endlinebreakless %}

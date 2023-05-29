@@ -3,7 +3,7 @@
     <h6 class="location-info"><i class="bi bi-globe"></i> <a href="/settings">Настройки</a></h6>
 {% endblock %}
 {% block body %}
-    <div class="card d-inline-block m-1">
+    <div class="card d-md-inline-block m-1">
         <h5 class="card-header">Информация</h5>
         <div class="card-body">
             <form method="post" enctype="multipart/form-data">
@@ -61,7 +61,7 @@
             </form>
         </div>
     </div>
-    <div class="card d-inline-block m-1 align-top">
+    <div class="card d-md-inline-block m-1 align-top">
         <h5 class="card-header">Парола</h5>
         <div class="card-body">
             <form method="post">
@@ -88,7 +88,7 @@
             </form>
         </div>
     </div>
-    <div class="card d-inline-block m-1 align-top">
+    <div class="card d-md-inline-block m-1 align-top">
         <h5 class="card-header">Известия по пощата</h5>
         <div class="card-body">
             <form method="post">
@@ -109,6 +109,10 @@
                     <div class="form-check mt-2">
                         <label class="form-check-label" for="email_notification_challenge">Известия при създадено предизвикателство</label>
                         <input class="form-check-input" name="email_notification_challenge" id="email_notification_challenge" type="checkbox" {% if request.user.email_notification_challenge %}checked="checked"{% endif %}>
+                    </div>
+                    <div class="form-check mt-2">
+                        <label class="form-check-label" for="email_notification_solution_comments">Известия при нови коментари по решенията ми</label>
+                        <input class="form-check-input" name="email_notification_solution_comments" id="email_notification_solution_comments" type="checkbox" {% if request.user.email_notification_solution_comments %}checked="checked"{% endif %}>
                     </div>
                 </div>
                 {% if email_settings_info %}

@@ -1,6 +1,10 @@
-Здравей,
-
-Има ново домашно:<br/><a href="{{ domain }}/homework/{{ id }}">{{ domain }}/homework/{{ id }}</a>
-
-Поздрави,
-Python @ ФМИ
+{% load extras %}
+{% linebreakless %}
+    Здравей,
+    <br/><br/>
+    Има ново домашно:<br/>
+    <a href="{{ domain }}/homework/{{ id }}">{{ domain }}/homework/{{ id }}</a>
+    <br/><br/>
+    Поздрави,<br/>
+    Python @ ФМИ<br/>
+{% endlinebreakless %}

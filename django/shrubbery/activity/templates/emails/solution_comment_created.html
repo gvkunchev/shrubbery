@@ -1,0 +1,25 @@
+{% load extras %}
+{% linebreakless %}
+    Здравей,
+    <br/><br/>
+    Има нова активност по твоите решения:<br/>
+    {% for comment in comments %}
+        {% if comment.task_type == 'homework' %}
+            {% if comment.comment_type == 'overall' %}
+                <a href="{{ domain }}/homework/{{ comment.task.pk }}/solution/{{ comment.solution.pk }}#comment{{ comment.comment.pk }}">{{ domain }}/homework/{{ comment.task.pk }}/solution/{{ comment.solution.pk }}#comment{{ comment.comment.pk }}</a>
+            {% else %}
+                <a href="{{ domain }}/homework/{{ comment.task.pk }}/solution/{{ comment.solution.pk }}#inlinecomment{{ comment.comment.pk }}">{{ domain }}/homework/{{ comment.task.pk }}/solution/{{ comment.solution.pk }}#inlinecomment{{ comment.comment.pk }}</a>
+            {% endif %}        
+        {% else %}
+            {% if comment.comment_type == 'overall' %}
+                <a href="{{ domain }}/challenge/{{ comment.task.pk }}/solution/{{ comment.solution.pk }}#comment{{ comment.comment.pk }}">{{ domain }}/challenge/{{ comment.task.pk }}/solution/{{ comment.solution.pk }}#comment{{ comment.comment.pk }}</a>
+            {% else %}
+                <a href="{{ domain }}/challenge/{{ comment.task.pk }}/solution/{{ comment.solution.pk }}#inlinecomment{{ comment.comment.pk }}">{{ domain }}/challenge/{{ comment.task.pk }}/solution/{{ comment.solution.pk }}#inlinecomment{{ comment.comment.pk }}</a>
+            {% endif %}  
+        {% endif %}
+        <br/>
+    {% endfor %}
+    <br/>
+    Поздрави,<br/>
+    Python @ ФМИ<br/>
+{% endlinebreakless %}

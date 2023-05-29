@@ -14,7 +14,8 @@ class StudentAdmin(UserAdmin):
             (None, {
                 "fields": (
                     ('image', 'fn', 'email', 'first_name', 'last_name', 'github', 'dark_theme', 'is_active',
-                     'email_notification_news', 'email_notification_forum', 'email_notification_homework', 'email_notification_challenge')
+                     'email_notification_news', 'email_notification_forum', 'email_notification_homework', 'email_notification_challenge',
+                     'email_notification_solution_comments')
                 ),
             }),
         )
@@ -37,7 +38,8 @@ class TeacherAdmin(UserAdmin):
             (None, {
                 "fields": (
                     ('image', 'email', 'first_name', 'last_name', 'github', 'dark_theme', 'is_active',
-                     'email_notification_news', 'email_notification_forum', 'email_notification_homework', 'email_notification_challenge')
+                     'email_notification_news', 'email_notification_forum', 'email_notification_homework', 'email_notification_challenge',
+                     'email_notification_solution_comments')
                 ),
             }),
         )

@@ -1,6 +1,10 @@
-Здравей,
-
-Има новина в сайта:<br/><a href="{{ domain }}/news/{{ id }}">{{ domain }}/news/{{ id }}</a>
-
-Поздрави,
-Python @ ФМИ
+{% load extras %}
+{% linebreakless %}
+    Здравей,
+    <br/><br/>
+    Има новина в сайта:<br/>
+    <a href="{{ domain }}/news/{{ id }}">{{ domain }}/news/{{ id }}</a>
+    <br/><br/>
+    Поздрави,<br/>
+    Python @ ФМИ<br/>
+{% endlinebreakless %}
