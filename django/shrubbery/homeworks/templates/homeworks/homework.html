@@ -43,7 +43,7 @@
             </button>
         </a>
     {% endif %}
-    {% with homework|solution_from:request.user as user_solution %}
+    {% with homework|homework_solution_from:request.user as user_solution %}
         {% if user_solution %}
             <a href="/homework/{{ homework.pk }}/solution/{{ user_solution.pk }}" class="text-reset text-decoration-none">
                 <button type="button" class="btn btn-primary m-1">

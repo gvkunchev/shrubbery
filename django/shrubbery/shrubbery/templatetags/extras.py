@@ -7,6 +7,7 @@ register = template.Library()
 
 from homeworksolutions.models import HomeworkSolution
 from homeworksolutions.models import HomeworkSolutionHistoryInlineComment
+from challengesolutions.models import ChallengeSolution
 
 
 @register.simple_tag()
@@ -39,15 +40,21 @@ def activate_link(request_path, url):
         return request_path == '/'
     return url.rstrip('s') in request_path
 
-
 @register.filter()
-def solution_from(homework, user):
+def homework_solution_from(homework, user):
     """Get the solution to a homework from a user."""
     try:
         return HomeworkSolution.objects.get(author=user, homework=homework)
     except:
         return False
 
+@register.filter()
+def challenge_solution_from(challenge, user):
+    """Get the solution to a challenge from a user."""
+    try:
+        return ChallengeSolution.objects.get(author=user, homechallengework=challenge)
+    except:
+        return False
 
 @register.filter()
 def inline_comments_from_history(history):
