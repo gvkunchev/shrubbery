@@ -52,7 +52,7 @@ def homework_solution_from(homework, user):
 def challenge_solution_from(challenge, user):
     """Get the solution to a challenge from a user."""
     try:
-        return ChallengeSolution.objects.get(author=user, homechallengework=challenge)
+        return ChallengeSolution.objects.get(author=user, challenge=challenge)
     except:
         return False
 
