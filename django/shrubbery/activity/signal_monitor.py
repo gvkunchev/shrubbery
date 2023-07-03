@@ -16,7 +16,7 @@ from forum.models import Forum
 
 EMAILER = Emailer()
 if os.environ.get('SHRUBBERY_ENV') == 'prd':
-    DOMAIN = 'https://shrubbery.onrender.com'
+    DOMAIN = 'https://py-fmi.org'
 else:
     DOMAIN = 'http://localhost:8080'
 
