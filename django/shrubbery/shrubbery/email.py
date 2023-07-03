@@ -2,7 +2,7 @@ import os
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-
+from email.utils import formataddr
 
 class Emailer:
     """Email."""
@@ -20,7 +20,7 @@ class Emailer:
     def send_email(self, recipients, subject, body):
         """Send email."""
         message = MIMEMultipart()
-        message['From'] = self.SENDER_ALIAS
+        message['From'] = formataddr(('Python @ ФМИ', self.SENDER_ALIAS))
         message['To'] = self.SENDER_ALIAS
         message['Bcc'] = ','.join(recipients)
         message['Subject'] = subject
