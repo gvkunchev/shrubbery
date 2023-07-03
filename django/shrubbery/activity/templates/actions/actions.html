@@ -1,0 +1,95 @@
+{% extends "backbone/base.html" %}
+{% block location %}
+    <h6 class="location-info"><i class="bi bi-globe"></i> <a href="/activity">Активност</a></h6>
+{% endblock %}
+{% block body %}
+
+
+    {% if actions %}
+    <div class="overflow-auto">
+        <table class="table table-hover table-bordered">
+            <thead>
+                <tr>
+                    <th scope="col">Събитие</th>
+                    <th scope="col">Дата</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for action in actions %}
+                    <tr>
+                        <td>
+                            <a 
+                                {% if action.author.is_teacher %}
+                                    href="teacher/{{ action.author.id }}" target="_blank"
+                                {% else %}
+                                    href="teacher/{{ action.author.id }}" target="_blank"
+                                {% endif %}
+                            >{{ action.author.full_name }}</a>
+
+                            {% if action.type == 'NA' %}
+                                създаде <a href="{{ action.link }}" target="_blank">новина</a>.
+                            {% endif %}
+                            {% if action.type == 'F' %}
+                                създаде <a href="{{ action.link }}" target="_blank">форум</a>.
+                            {% endif %}
+                            {% if action.type == 'FC' %}
+                                добави <a href="{{ action.link }}" target="_blank">коментар във форум</a>.
+                            {% endif %}
+                            {% if action.type == 'HW' %}
+                                създаде <a href="{{ action.link }}" target="_blank">домашно</a>.
+                            {% endif %}
+                            {% if action.type == 'HWC' %}
+                                добави <a href="{{ action.link }}" target="_blank">коментър към домашно</a>.
+                            {% endif %}
+                            {% if action.type == 'HWS' %}
+                                качи <a href="{{ action.link }}" target="_blank">решение на домашно</a>.
+                            {% endif %}
+                            {% if action.type == 'HWSU' %}
+                                качи нова версия на <a href="{{ action.link }}" target="_blank">решение на домашно</a>.
+                            {% endif %}
+                            {% if action.type == 'HWSC' %}
+                                добави <a href="{{ action.link }}" target="_blank">коментар на решение на домашно</a>.
+                            {% endif %}
+                            {% if action.type == 'HWSIC' %}
+                                добави <a href="{{ action.link }}" target="_blank">коментар в кода на решение на домашно</a>.
+                            {% endif %}
+                            {% if action.type == 'C' %}
+                                създаде <a href="{{ action.link }}" target="_blank">предизвикателство</a>.
+                            {% endif %}
+                            {% if action.type == 'CC' %}
+                                добави <a href="{{ action.link }}" target="_blank">коментър към предизвикателство</a>.
+                            {% endif %}
+                            {% if action.type == 'CS' %}
+                                качи <a href="{{ action.link }}" target="_blank">решение на предизвикателство</a>.
+                            {% endif %}
+                            {% if action.type == 'CSU' %}
+                                качи нова версия на <a href="{{ action.link }}" target="_blank">решение на предизвикателство</a>.
+                            {% endif %}
+                            {% if action.type == 'CSC' %}
+                                добави <a href="{{ action.link }}" target="_blank">коментар на решение на предизвикателство</a>.
+                            {% endif %}
+                            {% if action.type == 'CSIC' %}
+                                добави <a href="{{ action.link }}" target="_blank">коментар в кода на решение на предизвикателство</a>.
+                            {% endif %}
+                        </td>
+                        <td>{{ action.human_date }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+        Все още няма никакви събития
+    {% endif %}
+
+    {% if actions.paginator.num_pages > 1 %}
+        <nav class="mt-2">
+            <ul class="pagination justify-content-center">
+                    {% for page in actions.paginator.page_range %}
+                        <li class="page-item"><a class="page-link {% if page == actions.number %}active{% endif %}" href="?page={{ page }}">{{ page }}</a></li>
+                    {% endfor %}
+            </ul>
+        </nav>
+    {% endif %}
+    
+{% endblock %}

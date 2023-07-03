@@ -23,7 +23,9 @@ def homeworks(request):
 def add_homework(request):
     '''Add new homework.'''
     if request.method == 'POST':
-        form = HomeworkForm(request.POST)
+        data = request.POST.dict()
+        data.update({'author': request.user})
+        form = HomeworkForm(data)
         if form.is_valid():
             form.save()
             context = {
@@ -83,7 +85,9 @@ def edit_homework(request, homework):
         'homework': homework
     }
     if request.method == 'POST':
-        form = HomeworkForm(request.POST, instance=homework)
+        data = request.POST.dict()
+        data.update({'author': request.user})
+        form = HomeworkForm(data, instance=homework)
         if form.is_valid():
             form.save()
             context['info'] = 'Успешно редактира домашно'

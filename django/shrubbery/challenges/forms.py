@@ -7,7 +7,7 @@ class ChallengeForm(forms.ModelForm):
 
     class Meta:
         model = Challenge
-        fields = ('title', 'content', 'deadline',
+        fields = ('title', 'content', 'deadline', 'author',
                   'points', 'sanity_test', 'full_test',
                   'hidden', 'verified')
 

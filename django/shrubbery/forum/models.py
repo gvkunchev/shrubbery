@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils import timezone
+from django.apps import apps
 from users.models import User
 
 from points.models import PointsGiver
@@ -32,7 +33,17 @@ class Forum(models.Model):
     def latest_comment(self):
         """Get last comment."""
         return self.forumcomment_set.first()
-
+    
+    def save(self, *args, **kwargs):
+        """Create action record for a new instance."""
+        is_new = self.id is None
+        super(Forum, self).save(*args, **kwargs)
+        if is_new:
+            action = apps.get_model('activity.Action').objects.create(author=self.author,
+                                                                      link=f'forum/{self.id}',
+                                                                      date=self.date,
+                                                                      type='F')
+            action.save()
 
 class ForumComment(PointsGiver):
     date = models.DateTimeField(default=timezone.now)
@@ -62,6 +73,13 @@ class ForumComment(PointsGiver):
         super(ForumComment, self).save(*args, **kwargs)
 
     def save(self, *args, **kwargs):
-        """Decorate saving with points assignments."""
+        """Decorate saving with points assignments and an action record."""
+        is_new = self.id is None
         super(ForumComment, self).save(*args, **kwargs)
         self._update_points(*args, **kwargs)
+        if is_new:
+            action = apps.get_model('activity.Action').objects.create(author=self.author,
+                                                                      link=f'forum/{self.forum.id}#comment{self.id}',
+                                                                      date=self.date,
+                                                                      type='FC')
+            action.save()

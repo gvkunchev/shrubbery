@@ -7,7 +7,7 @@ register = template.Library()
 
 from homeworksolutions.models import HomeworkSolution
 from homeworksolutions.models import HomeworkSolutionHistoryInlineComment
-from challengesolutions.models import ChallengeSolution
+from challengesolutions.models import ChallengeSolution, ChallengeSolutionHistoryInlineComment
 
 
 @register.simple_tag()
@@ -57,9 +57,14 @@ def challenge_solution_from(challenge, user):
         return False
 
 @register.filter()
-def inline_comments_from_history(history):
-    """Get the inline comments from a history."""
+def inline_hw_comments_from_history(history):
+    """Get the inline comments from a homework history."""
     return HomeworkSolutionHistoryInlineComment.objects.filter(history=history)
+
+@register.filter()
+def inline_c_comments_from_history(history):
+    """Get the inline comments from a challenge history."""
+    return ChallengeSolutionHistoryInlineComment.objects.filter(history=history)
 
 @register.filter(name='times') 
 def times(number):
