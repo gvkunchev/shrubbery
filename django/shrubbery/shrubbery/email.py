@@ -13,16 +13,18 @@ class Emailer:
 
     def __init__(self):
         """Initializator."""
-        self._smtp = smtplib.SMTP('smtp.gmail.com', 587)
-        self._smtp.starttls()
-        self._smtp.login(self.SENDER, self.PASSWORD)
+        pass
 
     def send_email(self, recipients, subject, body):
         """Send email."""
+        smtp = smtplib.SMTP('smtp.gmail.com', 587)
+        smtp.starttls()
+        smtp.login(self.SENDER, self.PASSWORD)
         message = MIMEMultipart()
         message['From'] = formataddr(('Python @ ФМИ', self.SENDER_ALIAS))
         message['To'] = self.SENDER_ALIAS
         message['Bcc'] = ','.join(recipients)
         message['Subject'] = subject
         message.attach(MIMEText(body, 'html'))
-        self._smtp.send_message(message)
+        smtp.send_message(message)
+        smtp.quit()
