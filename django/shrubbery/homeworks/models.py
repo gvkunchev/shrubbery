@@ -1,11 +1,13 @@
 from django.db import models
 from django.utils import timezone
+from django.apps import apps
 
 from users.models import User
 from points.models import PointsGiver
 
 
 class Homework(models.Model):
+    author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     title = models.CharField(max_length=200)
     content = models.TextField()
     creation_date = models.DateTimeField(default=timezone.now)
@@ -50,6 +52,17 @@ class Homework(models.Model):
     def parsable_deadline(self):
         """Deadline that can be parsed by front-end."""
         return self.deadline.astimezone(timezone.get_current_timezone()).strftime("%Y-%m-%dT%H:%M")
+    
+    def save(self, *args, **kwargs):
+        """Create action record for a new instance."""
+        is_new = self.id is None
+        super(Homework, self).save(*args, **kwargs)
+        if is_new:
+            action = apps.get_model('activity.Action').objects.create(author=self.author,
+                                                                      link=f'homework/{self.id}',
+                                                                      date=self.creation_date,
+                                                                      type='HW')
+            action.save()
 
 
 class HomeworkComment(PointsGiver):
@@ -80,6 +93,13 @@ class HomeworkComment(PointsGiver):
         super(HomeworkComment, self).save(*args, **kwargs)
 
     def save(self, *args, **kwargs):
-        """Decorate saving with points assignments."""
+        """Decorate saving with points assignments and action record."""
+        is_new = self.id is None
         super(HomeworkComment, self).save(*args, **kwargs)
         self._update_points(*args, **kwargs)
+        if is_new:
+            action = apps.get_model('activity.Action').objects.create(author=self.author,
+                                                                      link=f'homework/{self.homework.id}#comment{self.id}',
+                                                                      date=self.date,
+                                                                      type='HWC')
+            action.save()

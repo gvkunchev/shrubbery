@@ -5,6 +5,7 @@ from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils import timezone
+from django.apps import apps
 
 from challenges.models import Challenge
 from users.models import User
@@ -132,7 +133,11 @@ class ChallengeSolution(PointsGiver):
         if is_new:
             teacher_points = ChallengeSolutionTeacherPoints.objects.create(solution=self)
             teacher_points.save()
-
+            action = apps.get_model('activity.Action').objects.create(author=self.author,
+                                                                      link=f'challenge/{self.challenge.id}/solution/{self.id}',
+                                                                      date=self.upload_date,
+                                                                      type='CS')
+            action.save()
 
 class ChallengeSolutionHistory(models.Model):
     challenge = models.ForeignKey(Challenge, on_delete=models.CASCADE)
@@ -164,6 +169,16 @@ class ChallengeSolutionHistory(models.Model):
         """Ipload date format for human readers.."""
         return self.upload_date.astimezone(timezone.get_current_timezone()).strftime("%d.%m.%Y %H:%M")
 
+    def save(self, *args, **kwargs):
+        """Create action record for a new instance."""
+        is_new = self.id is None
+        super(ChallengeSolutionHistory, self).save(*args, **kwargs)
+        if is_new:
+            action = apps.get_model('activity.Action').objects.create(author=self.author,
+                                                                      link=f'challenge/{self.challenge.id}/solution/{self.solution.id}',
+                                                                      date=timezone.now(),
+                                                                      type='CSU')
+            action.save()
 
 class ChallengeSolutionComment(PointsGiver):
     date = models.DateTimeField(default=timezone.now)
@@ -193,10 +208,16 @@ class ChallengeSolutionComment(PointsGiver):
         super(ChallengeSolutionComment, self).save(*args, **kwargs)
 
     def save(self, *args, **kwargs):
-        """Decorate saving with points assignments."""
+        """Decorate saving with points assignments and action recording."""
+        is_new = self.id is None
         super(ChallengeSolutionComment, self).save(*args, **kwargs)
         self._update_points(*args, **kwargs)
-
+        if is_new:
+            action = apps.get_model('activity.Action').objects.create(author=self.author,
+                                                                      link=f'challenge/{self.solution.challenge.id}/solution/{self.solution.id}#comment{self.id}',
+                                                                      date=self.date,
+                                                                      type='CSC')
+            action.save()
 
 class ChallengeSolutionInlineComment(models.Model):
     date = models.DateTimeField(default=timezone.now)
@@ -216,6 +237,17 @@ class ChallengeSolutionInlineComment(models.Model):
     def __str__(self):
         """String representation for the admin panel."""
         return f"{self.author} - {self.human_date}"
+
+    def save(self, *args, **kwargs):
+        """Decorate saving with points assignments and action recording."""
+        is_new = self.id is None
+        super(ChallengeSolutionInlineComment, self).save(*args, **kwargs)
+        if is_new:
+            action = apps.get_model('activity.Action').objects.create(author=self.author,
+                                                                      link=f'challenge/{self.solution.challenge.id}/solution/{self.solution.id}#inlinecomment{self.id}',
+                                                                      date=self.date,
+                                                                      type='CSIC')
+            action.save()
 
 
 class ChallengeSolutionHistoryInlineComment(models.Model):

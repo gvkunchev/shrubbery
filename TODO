@@ -1,3 +1,3 @@
-Add activity monitoring (and/or emails) for teachers
 Refactor - there are complicated views and code duplication between homeworks/challenges
 Consider adding responses to forum comments
+filter activity by date, author, type...

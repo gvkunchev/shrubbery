@@ -1,11 +1,13 @@
 from django.db import models
 from django.utils import timezone
+from django.apps import apps
 
 from users.models import User
 from points.models import PointsGiver
 
 
 class Challenge(models.Model):
+    author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     title = models.CharField(max_length=200)
     content = models.TextField()
     creation_date = models.DateTimeField(default=timezone.now)
@@ -50,7 +52,17 @@ class Challenge(models.Model):
     def parsable_deadline(self):
         """Deadline that can be parsed by front-end."""
         return self.deadline.astimezone(timezone.get_current_timezone()).strftime("%Y-%m-%dT%H:%M")
-
+    
+    def save(self, *args, **kwargs):
+        """Create action record for a new instance."""
+        is_new = self.id is None
+        super(Challenge, self).save(*args, **kwargs)
+        if is_new:
+            action = apps.get_model('activity.Action').objects.create(author=self.author,
+                                                                      link=f'challenge/{self.id}',
+                                                                      date=self.creation_date,
+                                                                      type='C')
+            action.save()
 
 class ChallengeComment(PointsGiver):
     date = models.DateTimeField(default=timezone.now)
@@ -81,5 +93,13 @@ class ChallengeComment(PointsGiver):
 
     def save(self, *args, **kwargs):
         """Decorate saving with points assignments."""
+        is_new = self.id is None
         super(ChallengeComment, self).save(*args, **kwargs)
         self._update_points(*args, **kwargs)
+        if is_new:
+            action = apps.get_model('activity.Action').objects.create(author=self.author,
+                                                                      link=f'challenge/{self.challenge.id}#comment{self.id}',
+                                                                      date=self.date,
+                                                                      type='CC')
+            action.save()
+

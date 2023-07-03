@@ -23,7 +23,9 @@ def challenges(request):
 def add_challenge(request):
     '''Add new challenge.'''
     if request.method == 'POST':
-        form = ChallengeForm(request.POST)
+        data = request.POST.dict()
+        data.update({'author': request.user})
+        form = ChallengeForm(data)
         if form.is_valid():
             form.save()
             context = {
@@ -83,7 +85,9 @@ def edit_challenge(request, challenge):
         'challenge': challenge
     }
     if request.method == 'POST':
-        form = ChallengeForm(request.POST, instance=challenge)
+        data = request.POST.dict()
+        data.update({'author': request.user})
+        form = ChallengeForm(data, instance=challenge)
         if form.is_valid():
             form.save()
             context['info'] = 'Успешно редактира предизвикателство'

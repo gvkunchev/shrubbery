@@ -40,6 +40,7 @@ urlpatterns = [
     path('', include('homeworksolutions.urls')),
     path('', include('challenges.urls')),
     path('', include('challengesolutions.urls')),
+    path('', include('activity.urls')),
     re_path(r'^$', views.home, name='home'),
     re_path(r'^missing$', views.missing, name='missing')
 ]

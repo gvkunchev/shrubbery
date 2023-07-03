@@ -5,14 +5,14 @@ from .models import Homework, HomeworkComment
 
 class HomeworkAdmin(admin.ModelAdmin):
     model = Homework
-    ordering = ('creation_date', 'title')
-    search_fields = ('creation_date', 'title', 'title')
-    list_display = ('title', 'creation_date', 'deadline')
+    ordering = ('creation_date', 'title', 'author')
+    search_fields = ('creation_date', 'title', 'title', 'author')
+    list_display = ('title', 'creation_date', 'deadline', 'author')
     list_filter = ('hidden', 'verified')
     fieldsets = (
             (None, {
                 "fields": (
-                   ('title', 'content', 'creation_date',
+                   ('title', 'content', 'creation_date', 'author',
                     'deadline', 'points', 'sanity_test', 'full_test',
                     'hidden', 'verified', 'executing_tests')
                 ),
@@ -20,7 +20,7 @@ class HomeworkAdmin(admin.ModelAdmin):
         )
     add_fieldsets = (
         (None, {
-            'fields': ('title', 'content', 'creation_date',
+            'fields': ('title', 'content', 'creation_date', 'author',
                        'deadline', 'points', 'sanity_test', 'full_test',
                        'hidden', 'verified', 'executing_tests')
         }),

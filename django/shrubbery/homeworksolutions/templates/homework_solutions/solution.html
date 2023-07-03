@@ -207,7 +207,7 @@
                         </div>
                         <div class="collapse history-wrapper" id="history_{{ history_solution.pk }}">
                             <div class="history-inline-comments-wrapper hidden">
-                                {% with history_solution|inline_comments_from_history as inline_history_comments %}
+                                {% with history_solution|inline_hw_comments_from_history as inline_history_comments %}
                                     {% for comment in inline_history_comments %}
                                     <div class="inline-history-comment border border-primary rounded m-1" data-line="{{ comment.line }}">
                                         <i class="bi bi-arrow-90deg-right inline-comment-arrow text-primary inline-comment-hide-trigger"></i>

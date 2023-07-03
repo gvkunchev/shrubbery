@@ -5,6 +5,7 @@ from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils import timezone
+from django.apps import apps
 
 from homeworks.models import Homework
 from users.models import User
@@ -126,13 +127,17 @@ class HomeworkSolution(PointsGiver):
         return self.deadline.astimezone(timezone.get_current_timezone()).strftime("%d.%m.%Y %H:%M")
 
     def save(self, *args, **kwargs):
-        """Create teacher points when creating a solution."""
+        """Create teacher points when creating a solution and create an action record."""
         is_new = self.id is None
         super(HomeworkSolution, self).save(*args, **kwargs)
         if is_new:
             teacher_points = HomeworkSolutionTeacherPoints.objects.create(solution=self)
             teacher_points.save()
-
+            action = apps.get_model('activity.Action').objects.create(author=self.author,
+                                                                      link=f'homework/{self.homework.id}/solution/{self.id}',
+                                                                      date=self.upload_date,
+                                                                      type='HWS')
+            action.save()
 
 class HomeworkSolutionHistory(models.Model):
     homework = models.ForeignKey(Homework, on_delete=models.CASCADE)
@@ -163,6 +168,17 @@ class HomeworkSolutionHistory(models.Model):
     def human_upload_date(self):
         """Ipload date format for human readers.."""
         return self.upload_date.astimezone(timezone.get_current_timezone()).strftime("%d.%m.%Y %H:%M")
+    
+    def save(self, *args, **kwargs):
+        """Create action record for a new instance."""
+        is_new = self.id is None
+        super(HomeworkSolutionHistory, self).save(*args, **kwargs)
+        if is_new:
+            action = apps.get_model('activity.Action').objects.create(author=self.author,
+                                                                      link=f'homework/{self.homework.id}/solution/{self.solution.id}',
+                                                                      date=timezone.now(),
+                                                                      type='HWSU')
+            action.save()
 
 
 class HomeworkSolutionComment(PointsGiver):
@@ -193,9 +209,16 @@ class HomeworkSolutionComment(PointsGiver):
         super(HomeworkSolutionComment, self).save(*args, **kwargs)
 
     def save(self, *args, **kwargs):
-        """Decorate saving with points assignments."""
+        """Decorate saving with points assignments and action recording."""
+        is_new = self.id is None
         super(HomeworkSolutionComment, self).save(*args, **kwargs)
         self._update_points(*args, **kwargs)
+        if is_new:
+            action = apps.get_model('activity.Action').objects.create(author=self.author,
+                                                                      link=f'homework/{self.solution.homework.id}/solution/{self.solution.id}#comment{self.id}',
+                                                                      date=self.date,
+                                                                      type='HWSC')
+            action.save()
 
 
 class HomeworkSolutionInlineComment(models.Model):
@@ -216,6 +239,17 @@ class HomeworkSolutionInlineComment(models.Model):
     def __str__(self):
         """String representation for the admin panel."""
         return f"{self.author} - {self.human_date}"
+
+    def save(self, *args, **kwargs):
+        """Decorate saving with points assignments and action recording."""
+        is_new = self.id is None
+        super(HomeworkSolutionInlineComment, self).save(*args, **kwargs)
+        if is_new:
+            action = apps.get_model('activity.Action').objects.create(author=self.author,
+                                                                      link=f'homework/{self.solution.homework.id}/solution/{self.solution.id}#inlinecomment{self.id}',
+                                                                      date=self.date,
+                                                                      type='HWSIC')
+            action.save()
 
 
 class HomeworkSolutionHistoryInlineComment(models.Model):
