@@ -33,7 +33,7 @@
                     <li class="list-group-item text-truncate">
                         {% if student.github != "" %}
                             <i class="bi bi-github"></i>
-                            <a href="https://github.com/" target="_blank">{{ student.github }}</a>
+                            <a href="https://github.com/{{ student.github }}" target="_blank">{{ student.github }}</a>
                         {% else %}
                             <i class="bi bi-github"></i> Няма
                         {% endif %}
