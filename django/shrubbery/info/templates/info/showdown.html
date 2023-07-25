@@ -1,0 +1,25 @@
+{% extends "backbone/base.html" %}
+{% load static %}
+{% block location %}
+    <h6 class="location-info"><i class="bi bi-globe"></i> <a href="/info">Информация</a> > <a href="/info/showdown">Showdown</a></h6>
+{% endblock %}
+{% block body %}
+
+
+<div class="card mt-2">
+    <div class="card-header">
+        <h5 class="card-title">Синтаксис за коментари в сайта</h5>
+    </div>
+    <div class="card-body">
+        <div class="showdown-trigger">
+Всички полета за коментари в сайта поддържат [Showdown](https://github.com/showdownjs/showdown) синтаксис, което е разновидност на [Markdown](https://en.wikipedia.org/wiki/Markdown).  
+Използвайки този синтаксис, можете да добавяте стилистични елементи, линкове, картинки, емоджита...  
+Пълния списък с поддържани функции можете да откриете [тук](https://github.com/showdownjs/showdown/wiki/Showdown%27s-Markdown-syntax).  
+Пълен списък с емоджита е наличен [тук](https://github.com/showdownjs/showdown/wiki/emojis)  
+        </div>
+        <hr/>
+        Използвайте бутона <button class="btn btn-secondary mt-2 mx-1 align-text-bottom"><i class="bi bi-eye-fill"></i> Преглед</button>, за да видите коментара си преди да го публикувате.
+    </div>
+</div>
+
+{% endblock %}
