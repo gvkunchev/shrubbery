@@ -1,0 +1,23 @@
+{% extends "backbone/base.html" %}
+{% load static %}
+{% block location %}
+    <h6 class="location-info"><i class="bi bi-globe"></i> <a href="/info">Информация</a></h6>
+{% endblock %}
+{% block body %}
+
+    <table class="table table-hover">
+        <tbody>
+            <tr>
+                <td>
+                    <a href="/info/showdown">Showdown синтаксис за коментари в сайта</a>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <a href="/info/code">Как да (не) си изпращаме задачите</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+{% endblock %}

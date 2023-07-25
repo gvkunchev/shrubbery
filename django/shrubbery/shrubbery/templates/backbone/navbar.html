@@ -74,6 +74,8 @@
                 {% include 'common/navbar_inline_link.html' with url=settings_url text='<i class="bi bi-gear text-primary"></i> Настройки' %}
                 {% include 'common/navbar_inline_link.html' with url='/logout' text='<i class="bi bi-door-open text-primary"></i> Изход' %}
             {% endif %}
+            
+            {% include 'common/navbar_inline_link.html' with url='/info' text='<i class="bi bi-question-circle-fill text-primary"></i>' %}
         </ul>
     </div>
 </div>
