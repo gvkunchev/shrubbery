@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.utils.http import urlsafe_base64_decode
 from django.utils.encoding import force_str
 from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth.forms import SetPasswordForm
 
 from shrubbery.view_decorators import is_teacher
 
@@ -14,10 +15,9 @@ from .forms import (EditUserForm, PasswordSetForm,
                     RegisterStudent, EditStudentForm,
                     AddStudentForm, EditTeacherForm,
                     AddTeacherForm, EmailSettingsForm)
-from .emails import send_activation_email
+from .emails import send_activation_email, send_new_password_email
 from .models import User, Student, Teacher
 from .tokens import account_activation_token
-
 
 # Authorization views
 
@@ -46,6 +46,19 @@ def logout_(request):
     return redirect('/')
 
 
+def new_password(request):
+    '''Generate new password.'''
+    context = {'link_sent': False}
+    try:
+        user = User.objects.get(email=request.POST['email'])
+    except:
+        user = None
+    if user is not None and request.method == 'POST':
+        send_new_password_email(request, user)
+        context['link_sent'] = True
+    return render(request, "auth/new_password.html", context)
+
+
 def activate(request):
     """Activate an account."""
     if request.method == 'GET':
@@ -67,8 +80,6 @@ def activate(request):
             uid = force_str(urlsafe_base64_decode(uidb64))
             user = User.objects.get(pk=uid)
         except Exception as e:
-            print(request.POST['uidb64'])
-            print(request.POST['token'])
             user = None
         if user is not None and account_activation_token.check_token(user, token):
             form = PasswordSetForm(user, request.POST)
@@ -87,6 +98,47 @@ def activate(request):
                 return render(request, 'auth/activated.html', context)
         else:
             return render(request, 'auth/activated.html', {'correct': False})
+
+
+
+def set_new_password(request):
+    """Set new password for an account."""
+    if request.method == 'GET':
+        try:
+            uidb64 = request.GET['uidb64']
+            token = request.GET['token']
+            uid = force_str(urlsafe_base64_decode(uidb64))
+            user = User.objects.get(pk=uid)
+        except:
+            user = None
+        if user is not None and account_activation_token.check_token(user, token):
+            return render(request, 'auth/new_password_set.html', {'correct': True})
+        else:
+            return render(request, 'auth/new_password_set.html', {'correct': False})
+    else:
+        try:
+            uidb64 = request.POST['uidb64']
+            token = request.POST['token']
+            uid = force_str(urlsafe_base64_decode(uidb64))
+            user = User.objects.get(pk=uid)
+        except Exception as e:
+            user = None
+        if user is not None and account_activation_token.check_token(user, token):
+            form = SetPasswordForm(user, request.POST)
+            if form.is_valid():
+                user = form.save()
+                login(request, user)
+                update_session_auth_hash(request, user)
+                return render(request, "home.html")
+            else:
+                print(form.errors)
+                context = {
+                    'correct': True,
+                    'errors': form.errors
+                }
+                return render(request, 'auth/new_password_set.html', context)
+        else:
+            return render(request, 'auth/new_password_set.html', {'correct': False})
 
 
 def register(request):
