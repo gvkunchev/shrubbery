@@ -22,7 +22,7 @@
                                 {% if action.author.is_teacher %}
                                     href="teacher/{{ action.author.id }}" target="_blank"
                                 {% else %}
-                                    href="teacher/{{ action.author.id }}" target="_blank"
+                                    href="student/{{ action.author.id }}" target="_blank"
                                 {% endif %}
                             >{{ action.author.full_name }}</a>
 
