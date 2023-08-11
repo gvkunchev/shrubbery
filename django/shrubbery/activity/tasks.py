@@ -62,5 +62,5 @@ def alert_for_new_solution_comments(*args, **kwargs):
                 'domain':DOMAIN,
                 'comments': new_comments
             }
-            EMAILER.send_email(student.email, 'Python @ ФМИ - Нов коментар по решение',
+            EMAILER.send_email([student.email], 'Python @ ФМИ - Нов коментар по решение',
                                render_to_string('emails/solution_comment_created.html', context))
