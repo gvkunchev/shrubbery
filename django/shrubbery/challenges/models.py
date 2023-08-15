@@ -103,3 +103,12 @@ class ChallengeComment(PointsGiver):
                                                                       type='CC')
             action.save()
 
+    def is_answered_by_teacher(self):
+        """Is there an answer to the challenge from a teacher after this comment?"""
+        for comment in self.challenge.comments:
+            if comment.date > self.date:
+                if comment.author.is_teacher():
+                    return True
+        return False
+
+

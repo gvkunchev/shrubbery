@@ -42,7 +42,7 @@ class HomeworkSolution(PointsGiver):
     passed_tests = models.IntegerField(default=0)
     failed_tests = models.IntegerField(default=0)
     line_count = models.IntegerField(default=0)
-    subscribers = models.ManyToManyField(Teacher, related_name='subscribed_homeworks', blank=True, null=True)
+    subscribers = models.ManyToManyField(Teacher, related_name='subscribed_homeworks', blank=True)
 
     class Meta:
         ordering = ('-upload_date',)
@@ -140,6 +140,29 @@ class HomeworkSolution(PointsGiver):
                                                                       type='HWS')
             action.save()
 
+    def is_followed_up_by_teacher(self):
+        """Is there any comment to the solution from a teacher after this version of the solution?"""
+        for comment in self.comments:
+            if comment.date > self.upload_date:
+                if comment.author.is_teacher():
+                    return True
+        for comment in HomeworkSolutionInlineComment.objects.filter(solution=self):
+            if comment.date > self.upload_date:
+                if comment.author.is_teacher():
+                    return True
+        return False
+    
+    def has_history(self):
+        """If homework solution already has history."""
+        return len(HomeworkSolutionHistory.objects.filter(solution=self))
+    
+    def has_history_after(self, date):
+        """If has history after a given date."""
+        for history in HomeworkSolutionHistory.objects.filter(solution=self):
+            if history.upload_date > date:
+                return True
+        return False
+
 class HomeworkSolutionHistory(models.Model):
     homework = models.ForeignKey(Homework, on_delete=models.CASCADE)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -221,6 +244,17 @@ class HomeworkSolutionComment(PointsGiver):
                                                                       type='HWSC')
             action.save()
 
+    def is_followed_up_by_teacher(self):
+        """Is there any comment to the solution from a teacher after this comment?"""
+        for comment in self.solution.comments:
+            if comment.date > self.date:
+                if comment.author.is_teacher():
+                    return True
+        for comment in HomeworkSolutionInlineComment.objects.filter(solution=self.solution):
+            if comment.date > self.date:
+                if comment.author.is_teacher():
+                    return True
+        return False
 
 class HomeworkSolutionInlineComment(models.Model):
     date = models.DateTimeField(default=timezone.now)
@@ -251,6 +285,18 @@ class HomeworkSolutionInlineComment(models.Model):
                                                                       date=self.date,
                                                                       type='HWSIC')
             action.save()
+
+    def is_followed_up_by_teacher(self):
+        """Is there any comment to the solution from a teacher after this comment?"""
+        for comment in self.solution.comments:
+            if comment.date > self.date:
+                if comment.author.is_teacher():
+                    return True
+        for comment in HomeworkSolutionInlineComment.objects.filter(solution=self.solution):
+            if comment.date > self.date:
+                if comment.author.is_teacher():
+                    return True
+        return False
 
 
 class HomeworkSolutionHistoryInlineComment(models.Model):

@@ -63,6 +63,17 @@ def calculate_filter(current_vars, filter):
         resulting_vars.append(filter)
     return f"?{'&'.join(resulting_vars)}"
 
+
+@register.filter()
+def overwrite_to_history(link):
+    """Remove ID at the end of link and put histoyr ID instead.."""
+    return f"{link.split('#')[0]}#history"
+
+@register.filter()
+def has_newer_version(task, date):
+    """Check if a task has newer version than a date."""
+    return task.has_history_after(date)
+
 @register.filter()
 def challenge_solution_from(challenge, user):
     """Get the solution to a challenge from a user."""

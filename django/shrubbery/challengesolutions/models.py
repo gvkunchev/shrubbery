@@ -42,7 +42,7 @@ class ChallengeSolution(PointsGiver):
     passed_tests = models.IntegerField(default=0)
     failed_tests = models.IntegerField(default=0)
     line_count = models.IntegerField(default=0)
-    subscribers = models.ManyToManyField(Teacher, related_name='subscribed_challenges', blank=True, null=True)
+    subscribers = models.ManyToManyField(Teacher, related_name='subscribed_challenges', blank=True)
 
     class Meta:
         ordering = ('-upload_date',)
@@ -140,6 +140,30 @@ class ChallengeSolution(PointsGiver):
                                                                       type='CS')
             action.save()
 
+    def is_followed_up_by_teacher(self):
+        """Is there any comment to the solution from a teacher after this version of the solution?"""
+        for comment in self.comments:
+            if comment.date > self.upload_date:
+                if comment.author.is_teacher():
+                    return True
+        for comment in ChallengeSolutionInlineComment.objects.filter(solution=self):
+            if comment.date > self.upload_date:
+                if comment.author.is_teacher():
+                    return True
+        return False
+    
+    def has_history(self):
+        """If challenge solution already has history."""
+        return len(ChallengeSolutionHistory.objects.filter(solution=self))
+    
+    def has_history_after(self, date):
+        """If has history after a given date."""
+        for history in ChallengeSolutionHistory.objects.filter(solution=self):
+            if history.upload_date > date:
+                return True
+        return False
+
+
 class ChallengeSolutionHistory(models.Model):
     challenge = models.ForeignKey(Challenge, on_delete=models.CASCADE)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -220,6 +244,18 @@ class ChallengeSolutionComment(PointsGiver):
                                                                       type='CSC')
             action.save()
 
+    def is_followed_up_by_teacher(self):
+        """Is there any comment to the solution from a teacher after this comment?"""
+        for comment in self.solution.comments:
+            if comment.date > self.date:
+                if comment.author.is_teacher():
+                    return True
+        for comment in ChallengeSolutionInlineComment.objects.filter(solution=self.solution):
+            if comment.date > self.date:
+                if comment.author.is_teacher():
+                    return True
+        return False
+
 class ChallengeSolutionInlineComment(models.Model):
     date = models.DateTimeField(default=timezone.now)
     author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
@@ -249,6 +285,18 @@ class ChallengeSolutionInlineComment(models.Model):
                                                                       date=self.date,
                                                                       type='CSIC')
             action.save()
+
+    def is_followed_up_by_teacher(self):
+        """Is there any comment to the solution from a teacher after this comment?"""
+        for comment in self.solution.comments:
+            if comment.date > self.date:
+                if comment.author.is_teacher():
+                    return True
+        for comment in ChallengeSolutionInlineComment.objects.filter(solution=self.solution):
+            if comment.date > self.date:
+                if comment.author.is_teacher():
+                    return True
+        return False
 
 
 class ChallengeSolutionHistoryInlineComment(models.Model):
