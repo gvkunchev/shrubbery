@@ -1,4 +1,5 @@
 {% extends "backbone/base.html" %}
+{% load extras %}
 {% block location %}
     <h6 class="location-info"><i class="bi bi-globe"></i> <a href="/activity">Активност</a></h6>
 {% endblock %}
@@ -10,6 +11,11 @@
         <table class="table table-hover table-bordered">
             <thead>
                 <tr>
+                    <th scope="col">
+                        <span data-toggle="tooltip" title="Коментари от студенти във форуми/домашни/предизвикатества, след които няма коментари на учители; Качени решения от студенти на домашни/предизвикателства, за които си абониран, или за които все още няма никой абониран, след които няма активност от учител.">
+                            Важно
+                        </span>
+                    </th>
                     <th scope="col">Събитие</th>
                     <th scope="col">Дата</th>
                 </tr>
@@ -17,6 +23,93 @@
             <tbody>
                 {% for action in actions %}
                     <tr>
+                        <td class="text-center">
+                            {% if action.type == 'FC' %}
+                                {% if action.object.author.is_student and not action.object.is_answered_by_teacher %}
+                                    <i class="text-danger bi bi-exclamation-octagon-fill"></i>
+                                {% endif %}
+                            {% endif %}
+                            {% if action.type == 'HWC' %}
+                                {% if action.object.author.is_student and not action.object.is_answered_by_teacher %}
+                                    <i class="text-danger bi bi-exclamation-octagon-fill"></i>
+                                {% endif %}
+                            {% endif %}
+                            {% if action.type == 'HWS' %}
+                                {% if action.object.author.is_student %}
+                                    {% if request.user|is_subscribed_to:action.object or not action.object.subscribers.all %}
+                                        {% if not action.object.has_history and not action.object.is_followed_up_by_teacher %}
+                                            <i class="text-danger bi bi-exclamation-octagon-fill"></i>
+                                        {% endif %}
+                                    {% endif %}
+                                {% endif %}
+                            {% endif %}
+                            {% if action.type == 'HWSU' %}
+                                {% if action.object.author.is_student %}
+                                    {% if request.user|is_subscribed_to:action.object or not action.object.subscribers.all %}
+                                        {% if not action.object|has_newer_version:action.date and not action.object.is_followed_up_by_teacher %}
+                                            <i class="text-danger bi bi-exclamation-octagon-fill"></i>
+                                        {% endif %}
+                                    {% endif %}
+                                {% endif %}
+                            {% endif %}
+                            {% if action.type == 'HWSC' %}
+                                {% if action.object.author.is_student %}
+                                    {% if request.user|is_subscribed_to:action.object.solution or not action.object.solution.subscribers.all %}
+                                        {% if not action.object.is_followed_up_by_teacher %}
+                                            <i class="text-danger bi bi-exclamation-octagon-fill"></i>
+                                        {% endif %}
+                                    {% endif %}
+                                {% endif %}
+                            {% endif %}
+                            {% if action.type == 'HWSIC' %}
+                                {% if action.object.author.is_student %}
+                                    {% if request.user|is_subscribed_to:action.object.solution or not action.object.solution.subscribers.all %}
+                                        {% if not action.object.is_followed_up_by_teacher %}
+                                            <i class="text-danger bi bi-exclamation-octagon-fill"></i>
+                                        {% endif %}
+                                    {% endif %}
+                                {% endif %}
+                            {% endif %}
+                            {% if action.type == 'CC' %}
+                                {% if action.object.author.is_student and not action.object.is_answered_by_teacher %}
+                                    <i class="text-danger bi bi-exclamation-octagon-fill"></i>
+                                {% endif %}
+                            {% endif %}
+                            {% if action.type == 'CS' %}
+                                {% if action.object.author.is_student %}
+                                    {% if not action.object.has_history and not action.object.is_followed_up_by_teacher %}
+                                        <i class="text-danger bi bi-exclamation-octagon-fill"></i>
+                                    {% endif %}
+                                {% endif %}
+                            {% endif %}
+                            {% if action.type == 'CSU' %}
+                                {% if action.object.author.is_student %}
+                                    {% if request.user|is_subscribed_to:action.object or not action.object.subscribers.all %}
+                                        {% if not action.object|has_newer_version:action.date and not action.object.is_followed_up_by_teacher %}
+                                            <i class="text-danger bi bi-exclamation-octagon-fill"></i>
+                                        {% endif %}
+                                    {% endif %}
+                                {% endif %}
+                            {% endif %}
+                            {% if action.type == 'CSC' %}
+                                {% if action.object.author.is_student %}
+                                    {% if request.user|is_subscribed_to:action.object.solution or not action.object.solution.subscribers.all %}
+                                        {% if not action.object.is_followed_up_by_teacher %}
+                                            <i class="text-danger bi bi-exclamation-octagon-fill"></i>
+                                        {% endif %}
+                                    {% endif %}
+                                {% endif %}
+                            {% endif %}
+                            {% if action.type == 'CSIC' %}
+                                {% if action.object.author.is_student %}
+                                    {% if request.user|is_subscribed_to:action.object.solution or not action.object.solution.subscribers.all %}
+                                        {% if not action.object.is_followed_up_by_teacher %}
+                                            <i class="text-danger bi bi-exclamation-octagon-fill"></i>
+                                        {% endif %}
+                                    {% endif %}
+                                {% endif %}
+                            {% endif %}
+                        </td>
                         <td>
                             <a 
                                 {% if action.author.is_teacher %}
@@ -69,7 +162,7 @@
                                 добави <a href="{{ action.link }}" target="_blank">коментар на решение на предизвикателство</a>.
                             {% endif %}
                             {% if action.type == 'CSIC' %}
-                                добави <a href="{{ action.link }}" target="_blank">коментар в кода на решение на предизвикателство</a>.
+                                добави <a href="{% if action.object.solution %}{{ action.link }}{% else %}{{ action.link|overwrite_to_history }}{% endif %}" target="_blank">коментар в кода на решение на предизвикателство</a>.
                             {% endif %}
                         </td>
                         <td>{{ action.human_date }}</td>

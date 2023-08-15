@@ -4,6 +4,7 @@ from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from shrubbery.view_decorators import is_teacher
 
 from challenges.models import Challenge
+from users.models import Teacher
 from .models import (ChallengeSolution, ChallengeSolutionComment,
                      ChallengeSolutionHistory, ChallengeSolutionInlineComment,
                      ChallengeSolutionTeacherPoints)
@@ -27,9 +28,22 @@ def challenge_solutions(request, challenge):
                 raise ObjectDoesNotExist
     except ObjectDoesNotExist:
         return redirect('missing')
+    solutions = list(ChallengeSolution.objects.filter(challenge=challenge))
+    filtered_solutions = solutions[:]
+    for solution in solutions:
+        subscribers = map(lambda x: x.pk, solution.subscribers.all())
+        if 'filter_subscribed' in request.GET:
+            if request.user.pk in subscribers:
+                filtered_solutions.remove(solution)
+        if 'filter_no_subscribers' in request.GET:
+            if not len(solution.subscribers.all()):
+                filtered_solutions.remove(solution)
+        if 'filter_foreign_subscribers_only' in request.GET:
+            if request.user.pk not in subscribers and len(solution.subscribers.all()):
+                filtered_solutions.remove(solution)
     context = {
         'challenge': challenge,
-        'solutions': ChallengeSolution.objects.filter(challenge=challenge)
+        'solutions': filtered_solutions
     }
     return render(request, "challenge_solutions/solutions.html", context)
 
@@ -119,6 +133,33 @@ def add_challenge_solution(request, challenge):
         else:
             context['errors'] = form.errors
     return render(request, "challenge_solutions/add_solution.html", context)
+
+
+@is_teacher
+def subscribe(request, challenge, solution):
+    """Subscribe to a challenge."""
+    try:
+        challenge = Challenge.objects.get(pk=challenge)
+        solution = ChallengeSolution.objects.get(pk=solution)
+        teacher = Teacher.objects.get(pk=request.user.pk)
+    except ObjectDoesNotExist:
+        return redirect('missing')
+    solution.subscribers.add(teacher)
+    return redirect(f"/challenge/{challenge.pk}/solution/{solution.pk}")
+
+
+@is_teacher
+def unsubscribe(request, challenge, solution):
+    """Unsubscribe to a challenge."""
+    try:
+        challenge = Challenge.objects.get(pk=challenge)
+        solution = ChallengeSolution.objects.get(pk=solution)
+        teacher = Teacher.objects.get(pk=request.user.pk)
+    except ObjectDoesNotExist:
+        return redirect('missing')
+    solution.subscribers.remove(teacher)
+    return redirect(f"/challenge/{challenge.pk}/solution/{solution.pk}")
+
 
 
 class AddChallengeSolutionComment(AddComment):

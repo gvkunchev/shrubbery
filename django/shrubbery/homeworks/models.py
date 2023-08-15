@@ -103,3 +103,11 @@ class HomeworkComment(PointsGiver):
                                                                       date=self.date,
                                                                       type='HWC')
             action.save()
+
+    def is_answered_by_teacher(self):
+        """Is there an answer to the homework from a teacher after this comment?"""
+        for comment in self.homework.comments:
+            if comment.date > self.date:
+                if comment.author.is_teacher():
+                    return True
+        return False

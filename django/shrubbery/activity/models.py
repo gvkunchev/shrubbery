@@ -6,6 +6,17 @@ from django.utils import timezone
 from . import signal_monitor
 
 
+from forum.models import ForumComment
+from homeworks.models import HomeworkComment
+from homeworksolutions.models import (HomeworkSolution,
+                                      HomeworkSolutionComment,
+                                      HomeworkSolutionInlineComment)
+from challenges.models import ChallengeComment
+from challengesolutions.models import (ChallengeSolution,
+                                      ChallengeSolutionComment,
+                                      ChallengeSolutionInlineComment)
+
+
 class Action(models.Model):
 
     class Meta:
@@ -41,3 +52,37 @@ class Action(models.Model):
     def human_date(self):
         """Date format for human readers.."""
         return self.date.astimezone(timezone.get_current_timezone()).strftime("%d.%m.%Y %H:%M:%S")
+
+    @property
+    def object(self):
+        """Try to determine the object based on the link and return it."""
+        try:
+            if self.type == 'FC':
+                pk = int(self.link.split('#comment')[-1])
+                return ForumComment.objects.get(pk=pk)
+            elif self.type == 'HWC':
+                pk = int(self.link.split('#comment')[-1])
+                return HomeworkComment.objects.get(pk=pk)
+            elif self.type in ('HWS', 'HWSU'):
+                pk = int(self.link.split('/')[-1])
+                return HomeworkSolution.objects.get(pk=pk)
+            elif self.type == 'HWSC':
+                pk = int(self.link.split('#comment')[-1])
+                return HomeworkSolutionComment.objects.get(pk=pk)
+            elif self.type == 'HWSIC':
+                pk = int(self.link.split('#inlinecomment')[-1])
+                return HomeworkSolutionInlineComment.objects.get(pk=pk)
+            elif self.type == 'CC':
+                pk = int(self.link.split('#comment')[-1])
+                return ChallengeComment.objects.get(pk=pk)
+            elif self.type in ('CS', 'CSU'):
+                pk = int(self.link.split('/')[-1])
+                return ChallengeSolution.objects.get(pk=pk)
+            elif self.type == 'CSC':
+                pk = int(self.link.split('#comment')[-1])
+                return ChallengeSolutionComment.objects.get(pk=pk)
+            elif self.type == 'CSIC':
+                pk = int(self.link.split('#inlinecomment')[-1])
+                return ChallengeSolutionInlineComment.objects.get(pk=pk)
+        except:
+            return None

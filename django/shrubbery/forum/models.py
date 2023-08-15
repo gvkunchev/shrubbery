@@ -83,3 +83,11 @@ class ForumComment(PointsGiver):
                                                                       date=self.date,
                                                                       type='FC')
             action.save()
+
+    def is_answered_by_teacher(self):
+        """Is there an answer to the forum from a teacher after this comment?"""
+        for comment in self.forum.comments:
+            if comment.date > self.date:
+                if comment.author.is_teacher():
+                    return True
+        return False
