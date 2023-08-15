@@ -16,14 +16,16 @@ class HomeworkSolutionAdmin(admin.ModelAdmin):
             (None, {
                 "fields": (
                    ('homework', 'author', 'content', 'upload_date', 'points',
-                       'line_count', 'result', 'passed_tests', 'failed_tests')
+                       'line_count', 'result', 'passed_tests', 'failed_tests',
+                       'subscribers')
                 ),
             }),
         )
     add_fieldsets = (
         (None, {
             'fields': ('homework', 'author', 'content', 'upload_date', 'points',
-                       'line_count', 'result', 'passed_tests', 'failed_tests')
+                       'line_count', 'result', 'passed_tests', 'failed_tests',
+                       'subscribers')
         }),
     )
 

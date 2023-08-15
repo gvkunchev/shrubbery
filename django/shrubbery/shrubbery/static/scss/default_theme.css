@@ -9732,6 +9732,15 @@ span.linenos.special {
 img {
   max-width: 100%; }
 
+.subscribers-profile-picture {
+  width: 1em;
+  height: 1em;
+  border-radius: 50%;
+  border: 1px solid #adb5bd; }
+
+.form-switch * {
+  cursor: pointer; }
+
 .linenos {
   -webkit-touch-callout: none;
   -webkit-user-select: none;

@@ -49,6 +49,21 @@ def homework_solution_from(homework, user):
         return False
 
 @register.filter()
+def is_subscribed_to(user, task):
+    """Check if teacher is subscribed to a homework/challenge."""
+    return user.pk in map(lambda x: x.pk, task.subscribers.all())
+
+@register.filter()
+def calculate_filter(current_vars, filter):
+    """Calculate filter variables for a link."""
+    resulting_vars = list(current_vars.keys())
+    if filter in resulting_vars:
+        resulting_vars.remove(filter)
+    else:
+        resulting_vars.append(filter)
+    return f"?{'&'.join(resulting_vars)}"
+
+@register.filter()
 def challenge_solution_from(challenge, user):
     """Get the solution to a challenge from a user."""
     try:

@@ -4,6 +4,7 @@ from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from shrubbery.view_decorators import is_teacher
 
 from homeworks.models import Homework
+from users.models import Teacher
 from .models import (HomeworkSolution, HomeworkSolutionComment,
                      HomeworkSolutionHistory, HomeworkSolutionInlineComment,
                      HomeworkSolutionTeacherPoints)
@@ -27,9 +28,22 @@ def homework_solutions(request, homework):
                 raise ObjectDoesNotExist
     except ObjectDoesNotExist:
         return redirect('missing')
+    solutions = list(HomeworkSolution.objects.filter(homework=homework))
+    filtered_solutions = solutions[:]
+    for solution in solutions:
+        subscribers = map(lambda x: x.pk, solution.subscribers.all())
+        if 'filter_subscribed' in request.GET:
+            if request.user.pk in subscribers:
+                filtered_solutions.remove(solution)
+        elif 'filter_no_subscribers' in request.GET:
+            if not len(solution.subscribers.all()):
+                filtered_solutions.remove(solution)
+        elif 'filter_foreign_subscribers_only' in request.GET:
+            if request.user.pk not in subscribers and len(solution.subscribers.all()):
+                filtered_solutions.remove(solution)
     context = {
         'homework': homework,
-        'solutions': HomeworkSolution.objects.filter(homework=homework)
+        'solutions': filtered_solutions
     }
     return render(request, "homework_solutions/solutions.html", context)
 
@@ -119,6 +133,32 @@ def add_homework_solution(request, homework):
         else:
             context['errors'] = form.errors
     return render(request, "homework_solutions/add_solution.html", context)
+
+
+@is_teacher
+def subscribe(request, homework, solution):
+    """Subscribe to a homework."""
+    try:
+        homework = Homework.objects.get(pk=homework)
+        solution = HomeworkSolution.objects.get(pk=solution)
+        teacher = Teacher.objects.get(pk=request.user.pk)
+    except ObjectDoesNotExist:
+        return redirect('missing')
+    solution.subscribers.add(teacher)
+    return redirect(f"/homework/{homework.pk}/solution/{solution.pk}")
+
+
+@is_teacher
+def unsubscribe(request, homework, solution):
+    """Unsubscribe to a homework."""
+    try:
+        homework = Homework.objects.get(pk=homework)
+        solution = HomeworkSolution.objects.get(pk=solution)
+        teacher = Teacher.objects.get(pk=request.user.pk)
+    except ObjectDoesNotExist:
+        return redirect('missing')
+    solution.subscribers.remove(teacher)
+    return redirect(f"/homework/{homework.pk}/solution/{solution.pk}")
 
 
 class AddHomeworkSolutionComment(AddComment):

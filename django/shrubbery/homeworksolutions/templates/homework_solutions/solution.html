@@ -16,7 +16,23 @@
         </a>
         <hr class="mt-2 mb-1"/>
     {% endif %}
-    
+    {% if request.user.is_teacher %}
+        <div class="subscribers ajax-toggle">
+            <a href="/homework/{{ homework.pk }}/solution/{{ solution.id }}/unsubscribe" class="ajax-toggle-trigger {% if request.user|is_subscribed_to:solution %} active {% endif %}">
+                <div class="form-check form-switch text-primary">
+                    <input class="form-check-input" type="checkbox" role="switch" data-trigger="subscribe" id="subscribe" checked="checked">
+                    <label class="form-check-label" for="subscribe"><i class="bi bi-binoculars-fill"></i> Абониран съм</label>
+                </div>
+            </a>
+            <a href="/homework/{{ homework.pk }}/solution/{{ solution.id }}/subscribe" class="ajax-toggle-trigger {% if not request.user|is_subscribed_to:solution %} active {% endif %}">
+                <div class="form-check form-switch text-primary">
+                    <input class="form-check-input" type="checkbox" role="switch" data-trigger="subscribe" id="subscribe">
+                    <label class="form-check-label" for="subscribe"><i class="bi bi-binoculars-fill"></i> Абонирай ме</label>
+                </div>
+            </a>
+        </div>
+        <hr class="mt-2 mb-1"/>
+    {% endif %}
 
 
     {% if request.user.is_teacher or homework.verified %}

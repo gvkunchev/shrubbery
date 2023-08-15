@@ -48,3 +48,14 @@
 img {
     max-width: 100%;
 }
+
+.subscribers-profile-picture {
+    width: 1em;
+    height: 1em;
+    border-radius: 50%;
+    border: 1px solid $gray-500;
+}
+
+.form-switch *{
+    cursor: pointer;
+}
