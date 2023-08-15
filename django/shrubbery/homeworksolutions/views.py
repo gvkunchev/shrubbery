@@ -39,7 +39,7 @@ def homework_solutions(request, homework):
             if not len(solution.subscribers.all()):
                 filtered_solutions.remove(solution)
         if 'filter_foreign_subscribers_only' in request.GET:
-            if request.user.pk not in subscribers and len(solution.subscribers.all()):
+            if solution in filtered_solutions and request.user.pk not in subscribers and len(solution.subscribers.all()):
                 filtered_solutions.remove(solution)
     context = {
         'homework': homework,
