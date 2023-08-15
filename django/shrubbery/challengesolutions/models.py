@@ -8,7 +8,7 @@ from django.utils import timezone
 from django.apps import apps
 
 from challenges.models import Challenge
-from users.models import User
+from users.models import User, Teacher
 from points.models import PointsGiver
 
 from .pygment import pygmentize
@@ -42,6 +42,7 @@ class ChallengeSolution(PointsGiver):
     passed_tests = models.IntegerField(default=0)
     failed_tests = models.IntegerField(default=0)
     line_count = models.IntegerField(default=0)
+    subscribers = models.ManyToManyField(Teacher, related_name='subscribed_challenges', blank=True, null=True)
 
     class Meta:
         ordering = ('-upload_date',)
