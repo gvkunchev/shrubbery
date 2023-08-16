@@ -11,23 +11,23 @@
 
     {% if request.user.is_teacher %}
         {% if challenge.executing_tests %}
-            <button type="button" class="btn btn-primary m-1" disabled="disabled">
+            <button type="button" class="mobile-expand btn btn-primary m-1" disabled="disabled">
                 <i class="bi bi-filetype-py"></i> В момента се изпълняват тестове
             </button>
         {% else %}
             <a href="/challenge/{{ challenge.pk }}/run_tests?goto={{ request.path }}" class="text-reset text-decoration-none">
-                <button type="button" class="btn btn-primary m-1">
+                <button type="button" class="mobile-expand btn btn-primary m-1">
                     <i class="bi bi-filetype-py"></i> Пусни тестовете
                 </button>
             </a>
         {% endif %}
         <a href="/challenge/{{ challenge.pk }}/edit" class="text-reset text-decoration-none">
-            <button type="button" class="btn btn-primary m-1">
+            <button type="button" class="mobile-expand btn btn-primary m-1">
                 <i class="bi bi-pencil-square"></i> Редактирай
             </button>
         </a>
         <a href="/challenge/{{ challenge.pk }}/delete" class="text-reset text-decoration-none confirm-delete-challenge">
-            <button type="button" class="btn btn-danger m-1">
+            <button type="button" class="mobile-expand btn btn-danger m-1">
                 <i class="bi bi-x-circle-fill"></i> Изтрий
             </button>
         </a>
@@ -38,7 +38,7 @@
 
     {% if request.user.is_teacher and not challenge.verified or request.user.is_student and challenge.can_upload %}
         <a href="/challenge/{{ challenge.pk }}/solution/add" class="text-reset text-decoration-none">
-            <button type="button" class="btn btn-primary m-1">
+            <button type="button" class="mobile-expand btn btn-primary m-1">
                 <i class="bi bi-file-arrow-up-fill"></i> Качи решение
             </button>
         </a>
@@ -46,7 +46,7 @@
     {% with challenge|challenge_solution_from:request.user as user_solution %}
         {% if user_solution %}
             <a href="/challenge/{{ challenge.pk }}/solution/{{ user_solution.pk }}" class="text-reset text-decoration-none">
-                <button type="button" class="btn btn-primary m-1">
+                <button type="button" class="mobile-expand btn btn-primary m-1">
                     <i class="bi bi-file-code-fill"></i> Виж своето решение
                 </button>
             </a>
@@ -55,7 +55,7 @@
 
     {% if request.user.is_teacher or challenge.verified and not challenge.hidden %}
         <a href="/challenge/{{ challenge.pk }}/solutions" class="text-reset text-decoration-none">
-            <button type="button" class="btn btn-primary m-1">
+            <button type="button" class="mobile-expand btn btn-primary m-1">
                 <i class="bi bi-file-code-fill"></i> Виж всички решенията
             </button>
         </a>

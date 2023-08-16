@@ -9721,6 +9721,13 @@ span.linenos.special {
     display: block !important;
     height: auto !important; } }
 
+@media (max-width: 575.98px) {
+  .mobile-expand {
+    display: block;
+    width: 90% !important;
+    margin-left: auto !important;
+    margin-right: auto !important; } }
+
 .ajax-toggle-trigger {
   display: none; }
   .ajax-toggle-trigger.active {
