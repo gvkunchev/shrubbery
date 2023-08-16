@@ -28,6 +28,7 @@
             <thead>
                 <tr>
                     <th scope="col">Име</th>
+                    <th scope="col"></th>
                     <th scope="col">Точки</th>
                     <th scope="col">Краен срок</th>
                 </tr>
@@ -40,10 +41,12 @@
                                 <a href="/homework/{{ homework.pk }}">
                                     {{ homework.title }}
                                 </a>
-                                {% if homework.verified %}
-                                    <i class="float-end bi bi-check-circle-fill text-primary" data-toggle="tooltip" title="Проверено"></i>
-                                {% endif %}
                             </th>
+                            <td>
+                                {% if homework.verified %}
+                                    <i class="bi bi-check-circle-fill text-primary" data-toggle="tooltip" title="Проверено"></i>
+                                {% endif %}
+                            </td>
                             <td>
                                 {{ homework.points }}
                             </td>
@@ -58,8 +61,10 @@
                                     <a href="/homework/{{ homework.pk }}">
                                         <span class="opacity-50">{{ homework.title }}</span>
                                     </a>
-                                    <i class="float-end bi bi-eye-slash-fill text-primary" data-toggle="tooltip" title="Скрито"></i>
                                 </th>
+                                <td>
+                                    <i class="bi bi-eye-slash-fill text-primary" data-toggle="tooltip" title="Скрито"></i>
+                                </td>
                                 <td>
                                     {{ homework.points }}
                                 </td>

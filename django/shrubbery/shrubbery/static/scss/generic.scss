@@ -33,6 +33,15 @@
     }
 }
 
+@include media-breakpoint-down(sm) {
+    .mobile-expand {
+        display: block;
+        width: 90% !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+    }
+}
+
 .ajax-toggle-trigger {
     display: none;
 

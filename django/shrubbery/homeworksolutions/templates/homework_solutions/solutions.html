@@ -76,7 +76,7 @@
                                     <td scope="col">
                                         {% if solution.subscribers.all %}
                                             {% for teacher in solution.subscribers.all %}
-                                                <a href="/teacher/{{ teacher.pk }}" target="_blank">
+                                                <a href="/teacher/{{ teacher.pk }}" target="_blank" class="text-decoration-none">
                                                     <img src="{% include 'common/profile_picture' with user=teacher %}" class="subscribers-profile-picture" data-toggle="tooltip" title="{{ teacher.full_name }}" />
                                                 </a>
                                             {% endfor %}
