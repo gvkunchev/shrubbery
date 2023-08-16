@@ -28,6 +28,7 @@
             <thead>
                 <tr>
                     <th scope="col">Име</th>
+                    <th scope="col"></th>
                     <th scope="col">Точки</th>
                     <th scope="col">Краен срок</th>
                 </tr>
@@ -40,10 +41,12 @@
                                 <a href="/challenge/{{ challenge.pk }}">
                                     {{ challenge.title }}
                                 </a>
+                            </th>
+                            <td>
                                 {% if challenge.verified %}
                                     <i class="float-end bi bi-check-circle-fill text-primary" data-toggle="tooltip" title="Проверено"></i>
                                 {% endif %}
-                            </th>
+                            </td>
                             <td>
                                 {{ challenge.points }}
                             </td>
@@ -58,8 +61,10 @@
                                     <a href="/challenge/{{ challenge.pk }}">
                                         <span class="opacity-50">{{ challenge.title }}</span>
                                     </a>
-                                    <i class="float-end bi bi-eye-slash-fill text-primary" data-toggle="tooltip" title="Скрито"></i>
                                 </th>
+                                <td>
+                                    <i class="float-end bi bi-eye-slash-fill text-primary" data-toggle="tooltip" title="Скрито"></i>
+                                </td>
                                 <td>
                                     {{ challenge.points }}
                                 </td>
