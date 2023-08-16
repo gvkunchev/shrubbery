@@ -56,7 +56,7 @@
     {% if request.user.is_teacher or homework.verified and not homework.hidden %}
         <a href="/homework/{{ homework.pk }}/solutions" class="text-reset text-decoration-none">
             <button type="button" class="mobile-expand btn btn-primary m-1">
-                <i class="bi bi-file-code-fill"></i> Виж всички решенията
+                <i class="bi bi-file-code-fill"></i> Виж всички решения
             </button>
         </a>
     {% endif %}
