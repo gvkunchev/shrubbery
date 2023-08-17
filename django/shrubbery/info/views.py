@@ -1,9 +1,13 @@
 from django.shortcuts import render
 
+from users.models import Teacher
 
 def info(request):
     '''Information pages content.'''
-    return render(request, "info/info.html")
+    context = {
+        'teachers': map(lambda x: x.email, Teacher.objects.filter(is_active=True))
+    }
+    return render(request, "info/info.html", context)
 
 
 def info_showdown(request):
