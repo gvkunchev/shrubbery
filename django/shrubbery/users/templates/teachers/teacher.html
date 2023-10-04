@@ -1,4 +1,5 @@
 {% extends "backbone/base.html" %}
+{% load extras %}
 {% block location %}
     <h6 class="location-info"><i class="bi bi-globe"></i> <a href="/teachers">Учители</a> > <a href="/teacher/{{ teacher.id }}">{{ teacher.full_name }}</a></h6>
 {% endblock %}
@@ -16,7 +17,7 @@
     <h6>
         {% if teacher.github != "" %}
             <i class="bi bi-github"></i>
-            <a href="https://github.com/{{ teacher.github }}" target="_blank">{{ teacher.github }}</a>
+            <a href="https://github.com/{{ teacher.github|clean_github_profile }}" target="_blank">{{ teacher.github|clean_github_profile }}</a>
         {% else %}
             <i class="bi bi-github"></i> Няма
         {% endif %}

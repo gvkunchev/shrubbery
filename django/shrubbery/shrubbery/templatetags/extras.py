@@ -66,8 +66,15 @@ def calculate_filter(current_vars, filter):
 
 @register.filter()
 def overwrite_to_history(link):
-    """Remove ID at the end of link and put histoyr ID instead.."""
+    """Remove ID at the end of link and put histoyr ID instead."""
     return f"{link.split('#')[0]}#history"
+
+
+@register.filter()
+def clean_github_profile(profile):
+    """Remove link form GitHub profile (if any)."""
+    return profile.split('/')[-1]
+
 
 @register.filter()
 def has_newer_version(task, date):
