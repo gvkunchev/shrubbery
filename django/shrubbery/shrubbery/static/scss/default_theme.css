@@ -9748,6 +9748,9 @@ img {
 .form-switch * {
   cursor: pointer; }
 
+.fixed-table {
+  table-layout: fixed; }
+
 .linenos {
   -webkit-touch-callout: none;
   -webkit-user-select: none;
