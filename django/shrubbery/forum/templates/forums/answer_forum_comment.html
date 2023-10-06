@@ -11,28 +11,30 @@
         <div class="card-header">
             {% include 'common/user_dated_card.html' with user=parent.author date=parent.human_date %}
             <div class="showdown-trigger">{{ parent.content }}</div>
-            <div class="thread-comments">
-                <div class="card mt-2">
-                    <div class="card-header">
-                        <h6 class="card-title">Нишка</h6>
-                    </div>
-                    <div class="card-body">
-                        <table class="table table-hover fixed-table">
-                            <tbody>
-                                {% for subcomment in parent.forumcomment_set.all reversed %}
-                                    <tr><td id="comment{{ subcomment.pk }}">
-                                        <div class="ajax-toggle-container">
-                                            {% include 'common/user_dated_card.html' with user=subcomment.author date=subcomment.human_date add_star=subcomment.starred %}
-                                            <br/>
-                                            <div class="showdown-trigger">{{ subcomment.content }}</div>
-                                        </div>
-                                    </td></tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
+            {% if parent.forumcomment_set.all %}
+                <div class="thread-comments">
+                    <div class="card mt-2">
+                        <div class="card-header">
+                            <h6 class="card-title">Нишка</h6>
+                        </div>
+                        <div class="card-body">
+                            <table class="table table-hover fixed-table">
+                                <tbody>
+                                    {% for subcomment in parent.forumcomment_set.all reversed %}
+                                        <tr><td id="comment{{ subcomment.pk }}">
+                                            <div class="ajax-toggle-container">
+                                                {% include 'common/user_dated_card.html' with user=subcomment.author date=subcomment.human_date add_star=subcomment.starred %}
+                                                <br/>
+                                                <div class="showdown-trigger">{{ subcomment.content }}</div>
+                                            </div>
+                                        </td></tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
-            </div>
+            {% endif %}
         </div>
         <div class="card-body">
             <form method="post" id="answer">
