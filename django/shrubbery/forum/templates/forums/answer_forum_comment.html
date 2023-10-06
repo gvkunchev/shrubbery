@@ -12,7 +12,7 @@
             {% include 'common/user_dated_card.html' with user=parent.author date=parent.human_date %}
             <div class="showdown-trigger">{{ parent.content }}</div>
             {% if parent.forumcomment_set.all %}
-                <div class="thread-comments">
+                <div class="thread-comments ps-sm-5">
                     <div class="card mt-2">
                         <div class="card-header">
                             <h6 class="card-title">Нишка</h6>
