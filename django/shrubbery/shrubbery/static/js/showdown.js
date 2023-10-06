@@ -9,6 +9,13 @@ $(document).ready(function(){
         $(this).html(showDownConverter.makeHtml($(this).text()));
     })
 
+    
+    // Add syntax highlighting
+    $('code').each(function(i, e){
+        var parsed = hljs.highlightAuto($(e).html());
+        $(e).html(parsed.value);
+    })
+
     // Dynamic preview
     $('.showdown-preview').bind('click', function(e){
         var source_id = $(this).data('showdown-source');

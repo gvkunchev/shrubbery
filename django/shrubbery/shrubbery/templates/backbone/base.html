@@ -9,6 +9,13 @@
     
     <link href="{% sass_src  'default_theme.scss' %}" rel="stylesheet" type="text/css">
 
+    {# Syntax highlighter for Showdown #}
+    {% if request.user and request.user.dark_theme %}
+      <link href="{% static 'css/dark.min.css' %}" rel="stylesheet" type="text/css">
+    {% else %}
+      <link href="{% static 'css/default.min.css' %}" rel="stylesheet" type="text/css">
+    {% endif %}
+
     {% block css %}
         {# Add custom content when extending this template #}
     {% endblock %}
@@ -18,8 +25,9 @@
     <script src="{% static 'js/bootstrap.min.js' %}"></script>
     <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
     <script src="{% static 'js/showdown.min.js' %}"></script>
-    <script src="{% static 'js/showdown.js' %}?1"></script>
-    <script src="{% static 'js/controls.js' %}"></script>
+    <script src="{% static 'js/showdown.js' %}?v2"></script>
+    <script src="{% static 'js/highlight.min.js' %}?v2"></script>
+    <script src="{% static 'js/controls.js' %}?v2"></script>
     <script src="{% static 'js/clipboard.js' %}"></script>
     <script src="{% static 'js/tooltip.js' %}"></script>
     <script src="{% static 'js/dialogs.js' %}"></script>

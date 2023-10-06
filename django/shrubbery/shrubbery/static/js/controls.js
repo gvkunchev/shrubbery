@@ -12,4 +12,9 @@ $(document).ready(function(){
             $(this).parents('.code-diff-container, .code').removeClass('word-wrap-diff');
         }
     })
+
+    $('.form-check-trigger-link').click(function(){
+        var link = $(this).parent().find('a');
+        window.location = link.attr('href');
+    })
 })
