@@ -27,6 +27,6 @@ app.conf.beat_schedule = {
     },
     'backup_points': {
         'task': 'backup_points',
-        'schedule': crontab(minute='*/5'), # Hourly UTC - TODO Adjust back to minute=0
+        'schedule': crontab(minute=0, hour=0) # Daily at midnight UTC
     }
 }
