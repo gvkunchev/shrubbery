@@ -21,7 +21,6 @@ class AddComment(View):
     @method_decorator(login_required)
     def post(self, request, **kwargs):
         try:
-            print(kwargs.get(self.HOST_KEY))
             self.HOST.objects.get(pk=kwargs.get(self.HOST_KEY))
         except ObjectDoesNotExist:
             return redirect('missing')
@@ -66,6 +65,7 @@ class EditComment(View):
         data = {
             'content': request.POST.get('content'),
             'line': request.POST.get('line'),
+            'parent': request.POST.get('parent'),
             'author': comment.author
         }
         data.update(kwargs)

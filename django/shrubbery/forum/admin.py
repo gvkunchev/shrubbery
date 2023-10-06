@@ -7,7 +7,7 @@ class ForumAdmin(admin.ModelAdmin):
     ordering = ('date', 'author')
     search_fields = ('date', 'author', 'title', 'content')
     list_display = ('title', 'date', 'author')
-    list_filter = ('author', )
+    list_filter = ('author',)
     fieldsets = (
             (None, {
                 "fields": (
@@ -25,19 +25,19 @@ class ForumAdmin(admin.ModelAdmin):
 class ForumCommentAdmin(admin.ModelAdmin):
     model = ForumComment
     ordering = ('date', 'author')
-    search_fields = ('date', 'author', 'forum', 'content')
+    search_fields = ('date', 'author', 'forum', 'parent', 'content')
     list_display = ('date', 'author', 'forum')
     list_filter = ('author', 'forum')
     fieldsets = (
             (None, {
                 "fields": (
-                   ('date', 'author', 'forum', 'content', 'starred')
+                   ('date', 'author', 'forum', 'parent', 'content', 'starred')
                 ),
             }),
         )
     add_fieldsets = (
         (None, {
-            'fields': ('date', 'author', 'forum', 'content', 'starred')
+            'fields': ('date', 'author', 'forum', 'parent', 'content', 'starred')
         }),
     )
 

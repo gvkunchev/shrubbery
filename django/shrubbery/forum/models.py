@@ -51,6 +51,7 @@ class ForumComment(PointsGiver):
     forum = models.ForeignKey(Forum, on_delete=models.CASCADE)
     content = models.TextField()
     starred = models.BooleanField(default=False)
+    parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
 
     class Meta:
         ordering = ('-date', )
@@ -88,6 +89,7 @@ class ForumComment(PointsGiver):
         """Is there an answer to the forum from a teacher after this comment?"""
         for comment in self.forum.comments:
             if comment.date > self.date:
-                if comment.author.is_teacher():
-                    return True
+                if (comment.parent is None and self.parent is None) or comment.parent == self.parent or comment.parent == self:
+                    if comment.author.is_teacher():
+                        return True
         return False

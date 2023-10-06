@@ -14,4 +14,4 @@ class ForumCommentForm(forms.ModelForm):
 
     class Meta:
         model = ForumComment
-        fields = ('forum', 'content', 'author')
+        fields = ('forum', 'content', 'author', 'parent')
