@@ -2,7 +2,6 @@ import os
 from celery import Celery
 from celery.schedules import crontab
 
-
 # set the default Django settings module for the 'celery' program.
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'shrubbery.settings')
 
@@ -25,5 +24,9 @@ app.conf.beat_schedule = {
     'alert_for_new_solution_comments': {
         'task': 'alert_for_new_solution_comments',
         'schedule': crontab(minute=0), # Hourly UTC
+    },
+    'backup_points': {
+        'task': 'backup_points',
+        'schedule': crontab(minute='*/5'), # Hourly UTC - TODO Adjust back to minute=0
     }
 }

@@ -9,7 +9,9 @@ from shrubbery.email import Emailer
 from users.models import Student
 from homeworksolutions.models import HomeworkSolution
 from challengesolutions.models import ChallengeSolution
+from points.getters import get_point_summary
 
+BACKUP_POINTS_EMAIL = 'gvkunchev@gmail.com'
 
 EMAILER = Emailer()
 if os.environ.get('SHRUBBERY_ENV') == 'prd':
@@ -64,3 +66,15 @@ def alert_for_new_solution_comments(*args, **kwargs):
             }
             EMAILER.send_email([student.email], 'Python @ ФМИ - Нов коментар по решение',
                                render_to_string('emails/solution_comment_created.html', context))
+
+
+@shared_task(name="backup_points")
+def backup_points(*args, **kwargs):
+    """Backup the points via email send."""
+    points = {}
+    for student in Student.objects.filter(is_active=True):
+        points[student.fn] = {
+            'name': student.full_name,
+            'points': get_point_summary(student)
+        }
+    EMAILER.send_email([BACKUP_POINTS_EMAIL], 'Python @ ФМИ - Points backup', str(points))
