@@ -21,6 +21,11 @@ $(document).ready(function(){
         var source_id = $(this).data('showdown-source');
         var source = $('#' + source_id);
         $('#showdown-modal').find('.modal-body').html(showDownConverter.makeHtml(source.val()));
+        // Add syntax highlighting
+        $('#showdown-modal').find('.modal-body').find('code').each(function(i, e){
+            var parsed = hljs.highlightAuto($(e).html());
+            $(e).html(parsed.value);
+        })
         $('#showdown-modal').modal('show');
         e.preventDefault();
     })
