@@ -9,7 +9,7 @@ $(document).ready(function(){
                     var passive = $(e).parents('.ajax-toggle').find('.ajax-toggle-trigger').not('.active');
                     active.removeClass('active');
                     passive.addClass('active');
-                    $(e).parents('.ajax-toggle-container').find('.ajax-toggle-target').toggleClass('hidden');
+                    $(e).parents('.ajax-toggle-container').first().find('.ajax-toggle-target').toggleClass('hidden');
                 },
                 error: function(){
                     window.location = $(e).attr('href');

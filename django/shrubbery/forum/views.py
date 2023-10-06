@@ -20,7 +20,8 @@ def forum(request, forum):
     '''Forum article page.'''
     try:
         forum = Forum.objects.get(pk=forum)
-        paginator = Paginator(forum.comments, 10)
+        main_comments = forum.comments.filter(parent=None)
+        paginator = Paginator(main_comments, 10)
         page_number = request.GET.get("page")
         page_obj = paginator.get_page(page_number)
     except ObjectDoesNotExist:
@@ -86,6 +87,33 @@ def edit_forum(request, forum):
             return render(request, "forums/edit_forum.html", context)
     else:
         return render(request, "forums/edit_forum.html", {'forum': forum})
+
+
+@login_required
+def answer_forum_comment(request, forum, parent):
+    '''Answer forum comment in a thread.'''
+    try:
+        forum = Forum.objects.get(pk=forum)
+        parent = ForumComment.objects.get(pk=parent)
+    except ObjectDoesNotExist:
+        return redirect('missing')
+    if request.method == 'POST':
+        data = {
+            'forum': forum,
+            'content': request.POST.get('content'),
+            'parent': parent,
+            'author': request.user
+        }
+        form = ForumCommentForm(data)
+        if form.is_valid():
+            comment = form.save()
+            return redirect(f"/forum/{forum.pk}?page={request.POST.get('page')}#comment{comment.pk}")
+        else:
+            return render(request, "forums/answer_forum_comment.html", {'forum': forum,
+                                                                        'parent': parent,
+                                                                        'errors': form.errors})
+    else:
+        return render(request, "forums/answer_forum_comment.html", {'forum': forum, 'parent': parent})
 
 
 class AddForumComment(AddComment):
