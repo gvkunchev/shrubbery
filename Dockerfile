@@ -19,7 +19,7 @@ COPY django/shrubbery /var/shrubbery
 ADD nginx.conf /etc/nginx/conf.d/default.conf
 
 # Link nginx logs to container stdout
-RUN ln -sf /dev/stdout /var/log/nginx/access.log && ln -sf /dev/stderr /var/log/nginx/error.log
+#RUN ln -sf /dev/stdout /var/log/nginx/access.log && ln -sf /dev/stderr /var/log/nginx/error.log
 
 # Expose the port
 EXPOSE 80
