@@ -17,7 +17,15 @@
             </thead>
             <tbody>
                 {% for row in data %}
-                <tr>
+                <tr
+                    {% if row.student.pk is request.user.pk %}
+                        {% if request.user.dark_theme %}
+                            class="bg-light text-dark"
+                        {% else %}
+                            class="bg-info text-dark"
+                        {% endif %}
+                    {% endif %}
+                >
                     <th scope="row">{{ row.rank }}</th>
                     <td>
                         <a href="/student/{{ row.student.pk }}" target="_blank">
