@@ -47,6 +47,7 @@ class Action(models.Model):
         choices=ActionType.choices,
         default=None, blank=True, null=True
     )
+    forced_seen = models.BooleanField(default=False)
 
     @property
     def human_date(self):
