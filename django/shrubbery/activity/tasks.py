@@ -15,7 +15,7 @@ BACKUP_POINTS_EMAIL = 'gvkunchev@gmail.com'
 
 EMAILER = Emailer()
 if os.environ.get('SHRUBBERY_ENV') == 'prd':
-    DOMAIN = 'https://shrubbery.onrender.com'
+    DOMAIN = 'https://py-fmi.org'
 else:
     DOMAIN = 'http://localhost:8080'
 
