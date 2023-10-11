@@ -34,6 +34,19 @@
         <hr class="mt-2 mb-1"/>
     {% endif %}
 
+    {% if request.user.is_teacher and solution.author.is_student %}
+        <div class="card mt-2">
+            <div class="card-header">
+                <h6 class="card-title">
+                    <img src="{% include 'common/profile_picture' with user=solution.auhtor %}" class="thumbnail-profile-picture" />
+                    <a href="/student/{{ solution.author.pk }}" target="_blank">
+                        {{ solution.author.full_name }}
+                    </a>
+                </h6>
+            </div>
+        </div>
+    {% endif %}
+
     {% if request.user.is_teacher or challenge.verified %}
         <div class="card mt-2">
             <div class="card-header">
