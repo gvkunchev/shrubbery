@@ -34,6 +34,7 @@ $(document).ready(function(){
         var line = $(this).parents('[id*=code-line]');
         var line_number = line.attr('id').replace('code-line-', '');
         form.insertAfter(line);
+        form.find('textarea').focus();
         form.find('input[name=line]').val(line_number);
     })
 
