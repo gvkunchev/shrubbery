@@ -287,11 +287,13 @@ pre {
   color: $pre-color;
 
   // Account for some code outputs that place code tags in pre tags
+  /* Disabled for the current project
   code {
     @include font-size(inherit);
     color: inherit;
     word-break: normal;
   }
+  */
 }
 
 code {

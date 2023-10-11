@@ -320,11 +320,14 @@ pre {
   margin-top: 0;
   margin-bottom: 1rem;
   overflow: auto;
-  font-size: 0.875em; }
-  pre code {
-    font-size: inherit;
+  font-size: 0.875em;
+  /* Disabled for the current project
+  code {
+    @include font-size(inherit);
     color: inherit;
-    word-break: normal; }
+    word-break: normal;
+  }
+  */ }
 
 code {
   font-size: 0.875em;
