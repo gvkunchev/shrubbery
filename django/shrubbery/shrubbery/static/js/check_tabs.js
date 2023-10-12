@@ -1,7 +1,7 @@
 $(document).ready(function(){
     $('.code pre').each(function(){
         if ($(this).text().indexOf('\t') != -1){
-            alert('Учителю, в това решение има табулации!')
+            $('pre').prepend($('<div class="text-danger">').html('Учителю, в това решение има табулации!'))
         }
     })
 })
