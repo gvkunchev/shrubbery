@@ -1,0 +1,74 @@
+{% extends "backbone/base.html" %}
+{% load extras %}
+{% block location %}
+    <h6 class="location-info"><i class="bi bi-globe"></i> <a href="/my_points">Моите точки</a></h6>
+{% endblock %}
+{% block body %}
+    <div class="overflow-auto">
+        <table class="table table-hover table-bordered">
+            <thead>
+                <tr>
+                    <th class="align-middle text-center" scope="col" rowspan="2">Профилна снимка</th>
+                    <th class="align-middle text-center" scope="col" rowspan="2">Ваучери</th>
+                    <th class="align-middle text-center" scope="col" rowspan="2">Коментари</th>
+                    <th class="align-middle text-center" scope="col" colspan="{{ homeworks|length }}">Домашни</th>
+                    <th class="align-middle text-center" scope="col" colspan="{{ challenges|length }}">Предизвикателства</th>
+                    <th class="align-middle text-center" scope="col" colspan="{{ exams|length }}">Изпити</th>
+                    <th class="align-middle text-center" scope="col" rowspan="2">Общо</th>
+                </tr>
+                <tr>
+                    {% if homeworks %}
+                        {% for homework in homeworks %}
+                            <th class="align-middle text-center" scope="col">{{ homework.title }}</th>
+                        {% endfor %}
+                    {% else %}
+                        <td class="text-center">-</td>
+                    {% endif %}
+                    {% if challenges %}
+                        {% for challenge in challenges %}
+                            <th class="align-middle text-center" scope="col">{{ challenge.title }}</th>
+                        {% endfor %}
+                    {% else %}
+                        <td class="text-center">-</td>
+                    {% endif %}
+                    {% if exams %}
+                        {% for exam in exams %}
+                            <th class="align-middle text-center" scope="col">{{ exam.title }}</th>
+                        {% endfor %}
+                    {% else %}
+                        <td class="text-center">-</td>
+                    {% endif %}
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="text-center">{{ data.profile_picture }}</td>
+                    <td class="text-center">{{ data.vouchers }}</td>
+                    <td class="text-center">{{ data.comments }}</td>
+                    {% if homeworks %}
+                        {% for homework in homeworks %}
+                            <td class="align-middle text-center" scope="col">{% get_homework_results data homework %}</td>
+                        {% endfor %}
+                    {% else %}
+                        <td class="text-center">-</td>
+                    {% endif %}
+                    {% if challenges %}
+                        {% for challenge in challenges %}
+                            <td class="align-middle text-center" scope="col">{% get_challenge_results data challenge %}</td>
+                        {% endfor %}
+                    {% else %}
+                        <td class="text-center">-</td>
+                    {% endif %}
+                    {% if exams %}
+                        {% for exam in exams %}
+                            <td class="align-middle text-center" scope="col">{% get_exam_results data exam %}</td>
+                        {% endfor %}
+                    {% else %}
+                        <td class="text-center">-</td>
+                    {% endif %}
+                    <td class="text-center">{{ data.total }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
