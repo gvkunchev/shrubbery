@@ -9861,4 +9861,7 @@ table.diff[summary="Legends"] {
   .inline-history-comment .inline-comment-arrow {
     display: none; }
 
+.inline-comment pre {
+  white-space: break-spaces; }
+
 /*# sourceMappingURL=default_theme.css.map */
