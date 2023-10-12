@@ -53,83 +53,85 @@
         </div>
         <div class="card-body">
             {% if solutions %}
-                <table class="table table-hover">
-                    <thead>
-                        <tr>
-                            <th scope="col">Име</th>
-                            {% if request.user.is_teacher %}
-                                <th scope="col">Абонаменти</th>
-                            {% endif %}
-                            <th scope="col">Точки</th>
-                            <th scope="col">Информация</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for solution in solutions %}
+                <div class="overflow-auto">
+                    <table class="table table-hover">
+                        <thead>
                             <tr>
-                                <th scope="row">
-                                    <a href="/homework/{{ homework.pk }}/solution/{{ solution.pk }}">
-                                        {{ solution.author.full_name }}
-                                    </a>
-                                </th>
+                                <th scope="col">Име</th>
                                 {% if request.user.is_teacher %}
-                                    <td scope="col">
-                                        {% if solution.subscribers.all %}
-                                            {% for teacher in solution.subscribers.all %}
-                                                <a href="/teacher/{{ teacher.pk }}" target="_blank" class="text-decoration-none">
-                                                    <img src="{% include 'common/profile_picture' with user=teacher %}" class="subscribers-profile-picture" data-toggle="tooltip" title="{{ teacher.full_name }}" />
-                                                </a>
-                                            {% endfor %}
-                                        {% else %}
-                                            -
-                                        {% endif %}
-                                    </td>
+                                    <th scope="col">Абонаменти</th>
                                 {% endif %}
-                                <td>
-                                    <span data-toggle="tooltip" title="{{ solution.points|add:solution.homeworksolutionteacherpoints.points }}/{{ solution.homework.points }} точки">
-                                        {% if solution.result != '' %}
-                                            {% if solution.points|add:solution.homeworksolutionteacherpoints.points > 0 %}
-                                                {% if solution.homeworksolutionteacherpoints.points < 0 %}
-                                                    {% for i in solution.points|add:solution.homeworksolutionteacherpoints.points|times %}
-                                                        <i class="bi bi-emoji-smile-fill yellow"></i>
-                                                    {% endfor %}
-                                                    {% for i in solution.homeworksolutionteacherpoints.points|abs|times %}
-                                                        <i class="bi bi-emoji-smile-fill red"></i>
-                                                    {% endfor %}
-                                                {% else %}
-                                                    {% for i in solution.points|times %}
-                                                        <i class="bi bi-emoji-smile-fill yellow"></i>
-                                                    {% endfor %}
-                                                    {% for i in solution.homeworksolutionteacherpoints.points|times %}
-                                                        <i class="bi bi-star-fill yellow"></i>
-                                                    {% endfor %}
-                                                {% endif %}
+                                <th scope="col">Точки</th>
+                                <th scope="col">Информация</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for solution in solutions %}
+                                <tr>
+                                    <th scope="row">
+                                        <a href="/homework/{{ homework.pk }}/solution/{{ solution.pk }}">
+                                            {{ solution.author.full_name }}
+                                        </a>
+                                    </th>
+                                    {% if request.user.is_teacher %}
+                                        <td scope="col">
+                                            {% if solution.subscribers.all %}
+                                                {% for teacher in solution.subscribers.all %}
+                                                    <a href="/teacher/{{ teacher.pk }}" target="_blank" class="text-decoration-none">
+                                                        <img src="{% include 'common/profile_picture' with user=teacher %}" class="subscribers-profile-picture" data-toggle="tooltip" title="{{ teacher.full_name }}" />
+                                                    </a>
+                                                {% endfor %}
                                             {% else %}
                                                 -
                                             {% endif %}
-                                        {% else %}
-                                            Все още не са пуснати тестове
-                                        {% endif %}
-                                    </span>
-                                </td>
-                                <td>
-                                    <span data-toggle="tooltip" title="Успешни тестове">
-                                        <i class="bi bi-flag-fill green"></i> {{ solution.passed_tests }}
-                                    </span>
-                                    <span data-toggle="tooltip" title="Неуспешни тестове">
-                                        <i class="bi bi-flag-fill red"></i> {{ solution.failed_tests }}
-                                    </span>
-                                    <span data-toggle="tooltip" title="Брой редове в кода">
-                                        <i class="bi bi-file-text-fill"></i> {{ solution.line_count }}
-                                    </span>
-                                    <span data-toggle="tooltip" title="Брой коментари по решението">
-                                        <i class="bi bi-chat-left-dots-fill"></i> {{ solution.comments|length|add:solution.inline_comments_count }}
-                                    </span>
-                                </td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+                                        </td>
+                                    {% endif %}
+                                    <td>
+                                        <span data-toggle="tooltip" title="{{ solution.points|add:solution.homeworksolutionteacherpoints.points }}/{{ solution.homework.points }} точки">
+                                            {% if solution.result != '' %}
+                                                {% if solution.points|add:solution.homeworksolutionteacherpoints.points > 0 %}
+                                                    {% if solution.homeworksolutionteacherpoints.points < 0 %}
+                                                        {% for i in solution.points|add:solution.homeworksolutionteacherpoints.points|times %}
+                                                            <i class="bi bi-emoji-smile-fill yellow"></i>
+                                                        {% endfor %}
+                                                        {% for i in solution.homeworksolutionteacherpoints.points|abs|times %}
+                                                            <i class="bi bi-emoji-smile-fill red"></i>
+                                                        {% endfor %}
+                                                    {% else %}
+                                                        {% for i in solution.points|times %}
+                                                            <i class="bi bi-emoji-smile-fill yellow"></i>
+                                                        {% endfor %}
+                                                        {% for i in solution.homeworksolutionteacherpoints.points|times %}
+                                                            <i class="bi bi-star-fill yellow"></i>
+                                                        {% endfor %}
+                                                    {% endif %}
+                                                {% else %}
+                                                    -
+                                                {% endif %}
+                                            {% else %}
+                                                Все още не са пуснати тестове
+                                            {% endif %}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span data-toggle="tooltip" title="Успешни тестове">
+                                            <i class="bi bi-flag-fill green"></i> {{ solution.passed_tests }}
+                                        </span>
+                                        <span data-toggle="tooltip" title="Неуспешни тестове">
+                                            <i class="bi bi-flag-fill red"></i> {{ solution.failed_tests }}
+                                        </span>
+                                        <span data-toggle="tooltip" title="Брой редове в кода">
+                                            <i class="bi bi-file-text-fill"></i> {{ solution.line_count }}
+                                        </span>
+                                        <span data-toggle="tooltip" title="Брой коментари по решението">
+                                            <i class="bi bi-chat-left-dots-fill"></i> {{ solution.comments|length|add:solution.inline_comments_count }}
+                                        </span>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
             {% else %}
                 Все още няма предадени решения.
             {% endif %}
