@@ -1,6 +1,6 @@
 from django.shortcuts import render
 
-from shrubbery.view_decorators import is_teacher
+from shrubbery.view_decorators import is_teacher, is_student
 
 from exams.models import Exam
 from homeworks.models import Homework
@@ -19,6 +19,24 @@ def points(request):
         'challenges': Challenge.objects.filter(verified=True).reverse()
     }
     return render(request, "points/points.html", context)
+
+
+@is_student
+def my_points(request):
+    '''Student's points page.'''
+    for student_data in get_scoreboard_summary():
+        if student_data['student'].pk == request.user.pk:
+            data = student_data
+            break
+    else:
+        data = None
+    context = {
+        'data': data,
+        'exams': Exam.objects.all(),
+        'homeworks': Homework.objects.filter(verified=True).reverse(),
+        'challenges': Challenge.objects.filter(verified=True).reverse()
+    }
+    return render(request, "points/my_points.html", context)
 
 
 def scoreboard(request):
