@@ -1,7 +1,7 @@
 import os
 from uuid import uuid4
 
-from PIL import Image
+from PIL import Image, ImageOps
 
 from django.db import models
 from django.contrib.auth.models import AbstractUser
@@ -71,6 +71,10 @@ class User(AbstractUser):
         height = 250
 
         img = Image.open(self.image.path)
+
+        # Take orientation into account
+        img = ImageOps.exif_transpose(img)
+
         original_aspect = img.width/img.height
         thumbnail_aspect = width/height
         
