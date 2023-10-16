@@ -10,6 +10,11 @@
 {% block body %}
 
     {% if request.user.is_teacher %}
+        <a href="/challenge/{{ challenge.pk }}/get_slackers" target="_blank" class="text-reset text-decoration-none">
+            <button type="button" class="mobile-expand d-md-inline-block btn btn-primary m-1">
+                <i class="bi bi-radioactive"></i> Виж преписвачите
+            </button>
+        </a>
         {% if challenge.executing_tests %}
             <button type="button" class="mobile-expand btn btn-primary m-1" disabled="disabled">
                 <i class="bi bi-filetype-py"></i> В момента се изпълняват тестове

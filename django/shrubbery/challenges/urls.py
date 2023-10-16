@@ -10,6 +10,7 @@ urlpatterns = [
     re_path(r'^challenges$', views.challenges, name='challenges'),
     re_path(r'^challenge/(?P<challenge>\d+)$', views.challenge, name='challenge'),
     re_path(r'^challenge/(?P<challenge>\d+)/run_tests$', views.run_tests, name='run_tests'),
+    re_path(r'^challenge/(?P<challenge>\d+)/get_slackers$', views.get_slackers, name='get_slackers'),
     re_path(r'^challenge/add$', views.add_challenge, name='add_challenge'),
     re_path(r'^challenge/(?P<challenge>\d+)/edit$', views.edit_challenge, name='edit_challenge'),
     re_path(r'^challenge/(?P<challenge>\d+)/delete$', views.delete_challenge, name='delete_challenge'),

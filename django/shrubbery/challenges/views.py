@@ -1,8 +1,12 @@
 import os
+import subprocess
+import sys
 
 from django.core.paginator import Paginator
 from django.shortcuts import render, redirect
 from django.core.exceptions import ObjectDoesNotExist
+from django.conf import settings
+from django.http import HttpResponse
 
 from shrubbery.view_decorators import is_teacher
 
@@ -143,3 +147,17 @@ def run_tests(request, challenge):
     else:
         run_challenge_tests(challenge.pk)
     return redirect(request.GET.get('goto', f'/challenge/{challenge.pk}'))
+
+
+@is_teacher
+def get_slackers(request, challenge):
+    '''Compare solutions and get slackers report..'''
+    try:
+        challenge = Challenge.objects.get(pk=challenge)
+    except ObjectDoesNotExist:
+        return redirect('missing')
+    path = os.path.join(settings.MEDIA_ROOT, 'challengesolutions', str(challenge.pk))
+    slackers_run = subprocess.Popen([sys.executable, os.path.join(os.path.dirname(__file__), 'slackers.py'), path],
+                                    stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    stdout, _ = slackers_run.communicate()
+    return HttpResponse(stdout)
