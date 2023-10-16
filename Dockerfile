@@ -19,7 +19,7 @@ COPY django/shrubbery /var/shrubbery
 ADD nginx.conf /etc/nginx/conf.d/default.conf
 
 # Create directory for NginX log files
-RUN mkdir -p /var/media/log
+RUN mkdir -p /var/shrubbery/media/log
 
 # Expose the port
 EXPOSE 80
