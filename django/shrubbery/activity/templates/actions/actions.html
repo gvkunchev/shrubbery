@@ -180,9 +180,17 @@
     {% if actions.paginator.num_pages > 1 %}
         <nav class="mt-2">
             <ul class="pagination justify-content-center">
+                    {% if actions.paginator.num_pages > 5 and actions.number > 3 %}
+                        <li class="page-item"><a class="page-link {% if actions.number == 1 %}active{% endif %}" href="?page=1">Първа</a></li>
+                    {% endif %}
                     {% for page in actions.paginator.page_range %}
-                        <li class="page-item"><a class="page-link {% if page == actions.number %}active{% endif %}" href="?page={{ page }}">{{ page }}</a></li>
+                        {% if actions.number|add:"-3" < page and page < actions.number|add:"+3" %}
+                            <li class="page-item"><a class="page-link {% if page == actions.number %}active{% endif %}" href="?page={{ page }}">{{ page }}</a></li>
+                        {% endif %}
                     {% endfor %}
+                    {% if actions.paginator.num_pages > 5 and actions.number < actions.paginator.num_pages|add:"-2" %}
+                        <li class="page-item"><a class="page-link {% if actions.number == actions.paginator.num_pages %}active{% endif %}" href="?page={{ actions.paginator.num_pages }}">Последна</a></li>
+                    {% endif %}
             </ul>
         </nav>
     {% endif %}
