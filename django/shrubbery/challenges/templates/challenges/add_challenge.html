@@ -33,7 +33,7 @@
                 <br/>
                 <div class="form-group d-inline-block">
                     <label for="points">Точки</label>
-                    <input type="number" required="required" name="points" class="form-control" id="points" value="{% if request.POST.points %}{{ request.POST.points }}{% else %}10{% endif %}">
+                    <input type="number" required="required" name="points" class="form-control" id="points" value="{% if request.POST.points %}{{ request.POST.points }}{% else %}1{% endif %}">
                     <div class="text-danger">{{ errors.points.as_text }}</div>
                 </div>
                 <div class="form-group">
