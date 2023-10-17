@@ -12,7 +12,7 @@ class Challenge(models.Model):
     content = models.TextField()
     creation_date = models.DateTimeField(default=timezone.now)
     deadline = models.DateTimeField()
-    points = models.IntegerField(default=10)
+    points = models.IntegerField(default=1)
     sanity_test = models.TextField()
     full_test = models.TextField(default="", null=True, blank=True)
     hidden = models.BooleanField(default=True)
