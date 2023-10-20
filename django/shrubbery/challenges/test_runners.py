@@ -63,8 +63,8 @@ class TestsRunner(ABC):
             # Copy the solution
             shutil.copy(source_code, os.path.join(self._work_dir, 'tmp/solution.py'))
             # Build the command
-            return (f'env -i /usr/sbin/chroot {self._work_dir} '
-                     '/usr/bin/python3.10 /tmp/test_runner.py /tmp/test.py')
+            return (f'runuser -l tester -c "env -i /usr/sbin/chroot {self._work_dir} '
+                     '/usr/bin/python3.10 /tmp/test_runner.py /tmp/test.py"')
         else:
             # Copy the solution
             shutil.copy(source_code, os.path.join(self._work_dir, 'solution.py'))
@@ -104,11 +104,18 @@ class FullTestsRunner(TestsRunner):
         for solution in self._solutions:
             command = self._prepare_command(solution)
             process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-            stdout, _ = process.communicate(timeout=self.TIMEOUT)
-            json_result = json.loads(stdout)
-            solution.passed_tests = len(json_result['passed'])
-            solution.failed_tests = len(json_result['failed'])
-            solution.result = json_result['log']
+            try:
+                stdout, _ = process.communicate(timeout=self.TIMEOUT)
+                json_result = json.loads(stdout)
+                solution.passed_tests = len(json_result['passed'])
+                solution.failed_tests = len(json_result['failed'])
+                solution.result = json_result['log']
+            except subprocess.TimeoutExpired:
+                solution.passed_tests = 0
+                solution.failed_tests = 0
+                solution.result = 'Timed out.'
+            finally:
+                process = subprocess.Popen('killall -9 -u tester', shell=True)
             solution.save()
             solution.assign_points()
 
@@ -138,8 +145,17 @@ class SanityTestsRunner(TestsRunner):
         """Execute all tests."""
         command = self._prepare_command(self._solution)
         process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        stdout, _ = process.communicate(timeout=self.TIMEOUT)
-        self._json_result = json.loads(stdout)
+        try:
+            stdout, _ = process.communicate(timeout=self.TIMEOUT)
+            self._json_result = json.loads(stdout)
+        except subprocess.TimeoutExpired:
+            self._json_result = {
+                'failed': 0,
+                'passed': 0,
+                'log': 'Timed out'
+            }
+        finally:
+            process = subprocess.Popen('killall -9 -u tester', shell=True)
 
     def _cleanup(self):
         """Cleanup temp dirs and release the model."""

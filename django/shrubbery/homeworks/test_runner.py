@@ -9,8 +9,6 @@ import sys
 import unittest
 import traceback
 
-TEST_PROCESS_TIMEOUT = 2  # in seconds.
-
 
 class StdBuffer:
     def __init__(self, buffer):
