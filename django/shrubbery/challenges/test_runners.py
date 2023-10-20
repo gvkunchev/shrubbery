@@ -114,6 +114,10 @@ class FullTestsRunner(TestsRunner):
                 solution.passed_tests = 0
                 solution.failed_tests = 0
                 solution.result = 'Timed out.'
+            except json.decoder.JSONDecodeError:
+                solution.passed_tests = 0
+                solution.failed_tests = 0
+                solution.result = stdout
             finally:
                 process = subprocess.Popen('killall -9 -u tester', shell=True)
             solution.save()
@@ -153,6 +157,12 @@ class SanityTestsRunner(TestsRunner):
                 'failed': 0,
                 'passed': 0,
                 'log': 'Timed out'
+            }
+        except json.decoder.JSONDecodeError:
+            self._json_result = {
+                'failed': 0,
+                'passed': 0,
+                'log': stdout
             }
         finally:
             process = subprocess.Popen('killall -9 -u tester', shell=True)
