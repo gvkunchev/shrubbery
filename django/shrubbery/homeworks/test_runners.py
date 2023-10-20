@@ -119,7 +119,8 @@ class FullTestsRunner(TestsRunner):
                 solution.failed_tests = 0
                 solution.result = stdout
             finally:
-                pass#process = subprocess.Popen('killall -9 -u tester', shell=True)
+                subprocess.Popen(f'kill -9 {process.pid}', shell=True)
+                subprocess.Popen('runuser -l tester -c "pkill -u tester"', shell=True)
             solution.save()
             solution.assign_points()
 
@@ -154,18 +155,19 @@ class SanityTestsRunner(TestsRunner):
             self._json_result = json.loads(stdout)
         except subprocess.TimeoutExpired:
             self._json_result = {
-                'failed': 0,
-                'passed': 0,
+                'failed': [],
+                'passed': [],
                 'log': 'Timed out'
             }
         except json.decoder.JSONDecodeError:
             self._json_result = {
-                'failed': 0,
-                'passed': 0,
+                'failed': [],
+                'passed': [],
                 'log': stdout
             }
         finally:
-            pass#process = subprocess.Popen('killall -9 -u tester', shell=True)
+            subprocess.Popen(f'kill -9 {process.pid}', shell=True)
+            subprocess.Popen('runuser -l tester -c "pkill -u tester"', shell=True)
 
     def _cleanup(self):
         """Cleanup temp dirs and release the model."""
