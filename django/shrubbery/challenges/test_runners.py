@@ -119,7 +119,7 @@ class FullTestsRunner(TestsRunner):
                 solution.failed_tests = 0
                 solution.result = stdout
             finally:
-                process = subprocess.Popen('killall -9 -u tester', shell=True)
+                pass#process = subprocess.Popen('killall -9 -u tester', shell=True)
             solution.save()
             solution.assign_points()
 
@@ -165,7 +165,7 @@ class SanityTestsRunner(TestsRunner):
                 'log': stdout
             }
         finally:
-            process = subprocess.Popen('killall -9 -u tester', shell=True)
+            pass#process = subprocess.Popen('killall -9 -u tester', shell=True)
 
     def _cleanup(self):
         """Cleanup temp dirs and release the model."""
