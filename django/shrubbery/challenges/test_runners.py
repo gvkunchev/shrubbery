@@ -63,8 +63,8 @@ class TestsRunner(ABC):
             # Copy the solution
             shutil.copy(source_code, os.path.join(self._work_dir, 'tmp/solution.py'))
             # Build the command
-            return (f'runuser -l tester -c "env -i /usr/sbin/chroot {self._work_dir} '
-                     '/usr/bin/python3.10 /tmp/test_runner.py /tmp/test.py"')
+            return (f'env -i /usr/sbin/chroot {self._work_dir} '
+                     'runuser -l tester -c "/usr/bin/python3.10 /tmp/test_runner.py /tmp/test.py"')
         else:
             # Copy the solution
             shutil.copy(source_code, os.path.join(self._work_dir, 'solution.py'))
