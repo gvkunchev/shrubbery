@@ -33,7 +33,7 @@
                     <tr>
                         <th scope="row">{{ forloop.counter }}</th>
                         <td>
-                            <a href="media/{{ material.content }}" target="_blank">
+                            <a href="https://{{ request.get_host }}/media/{{ material.content }}" target="_blank">
                                 {{ material.title }}
                             </a>
                         </td>
