@@ -119,8 +119,8 @@ class FullTestsRunner(TestsRunner):
                 solution.failed_tests = 0
                 solution.result = stdout
             finally:
-                subprocess.Popen(f'kill -9 {process.pid}', shell=True)
-                subprocess.Popen('runuser -l tester -c "pkill -u tester"', shell=True)
+                subprocess.Popen(f'kill -9 {process.pid}', shell=True).communicate(timeout=self.TIMEOUT)
+                subprocess.Popen('runuser -l tester -c "pkill -u tester"', shell=True).communicate(timeout=self.TIMEOUT)
             solution.save()
             solution.assign_points()
 
@@ -166,8 +166,8 @@ class SanityTestsRunner(TestsRunner):
                 'log': stdout
             }
         finally:
-            subprocess.Popen(f'kill -9 {process.pid}', shell=True)
-            subprocess.Popen('runuser -l tester -c "pkill -u tester"', shell=True)
+            subprocess.Popen(f'kill -9 {process.pid}', shell=True).communicate(timeout=self.TIMEOUT)
+            subprocess.Popen('runuser -l tester -c "pkill -u tester"', shell=True).communicate(timeout=self.TIMEOUT)
 
     def _cleanup(self):
         """Cleanup temp dirs and release the model."""
