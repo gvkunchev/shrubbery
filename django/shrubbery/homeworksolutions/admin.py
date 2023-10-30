@@ -17,7 +17,7 @@ class HomeworkSolutionAdmin(admin.ModelAdmin):
                 "fields": (
                    ('homework', 'author', 'content', 'upload_date', 'points',
                        'line_count', 'result', 'passed_tests', 'failed_tests',
-                       'subscribers')
+                       'subscribers', 'commit_message')
                 ),
             }),
         )
@@ -25,7 +25,7 @@ class HomeworkSolutionAdmin(admin.ModelAdmin):
         (None, {
             'fields': ('homework', 'author', 'content', 'upload_date', 'points',
                        'line_count', 'result', 'passed_tests', 'failed_tests',
-                       'subscribers')
+                       'subscribers', 'commit_message')
         }),
     )
 
@@ -39,13 +39,13 @@ class HomeworkSolutionHistoryAdmin(admin.ModelAdmin):
     fieldsets = (
             (None, {
                 "fields": (
-                   ('homework', 'author', 'solution', 'content', 'upload_date', 'diff')
+                   ('homework', 'author', 'solution', 'content', 'upload_date', 'diff', 'commit_message')
                 ),
             }),
         )
     add_fieldsets = (
         (None, {
-            'fields': ('homework', 'author', 'solution', 'content', 'upload_date', 'diff')
+            'fields': ('homework', 'author', 'solution', 'content', 'upload_date', 'diff', 'commit_message')
         }),
     )
 

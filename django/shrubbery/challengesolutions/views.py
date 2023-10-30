@@ -65,6 +65,7 @@ def challenge_solution(request, challenge, solution):
         'solution': solution,
         'content': solution.get_content(),
         'comments': solution.comments,
+        'commit_message': solution.commit_message,
         'history': ChallengeSolutionHistory.objects.filter(solution=solution),
         'inline_comments': ChallengeSolutionInlineComment.objects.filter(solution=solution),
     }
@@ -107,6 +108,7 @@ def add_challenge_solution(request, challenge):
         data = {
             'author': request.user,
             'challenge': challenge,
+            'commit_message': request.POST.get('commit_message', '')[:50] # Ensure no more than 50 chars
         }
         history_object = None
         try:

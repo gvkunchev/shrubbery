@@ -43,6 +43,7 @@ class HomeworkSolution(PointsGiver):
     failed_tests = models.IntegerField(default=0)
     line_count = models.IntegerField(default=0)
     subscribers = models.ManyToManyField(Teacher, related_name='subscribed_homeworks', blank=True)
+    commit_message = models.TextField(default='', max_length=50, blank=True, null=True)
 
     class Meta:
         ordering = ('-upload_date',)
@@ -108,7 +109,8 @@ class HomeworkSolution(PointsGiver):
                                                          author=self.author,
                                                          upload_date=self.upload_date,
                                                          solution=self,
-                                                         content=content)
+                                                         content=content,
+                                                         commit_message=self.commit_message)
         history.save()
         self._reset_points()
         self._send_inline_comments_to_history(history)
@@ -170,6 +172,7 @@ class HomeworkSolutionHistory(models.Model):
     upload_date = models.DateTimeField(default=timezone.now)
     solution = models.ForeignKey(HomeworkSolution, on_delete=models.CASCADE)
     diff = models.TextField(default='')
+    commit_message = models.TextField(default='', max_length=50, blank=True, null=True)
 
     class Meta:
         ordering = ('-upload_date',)

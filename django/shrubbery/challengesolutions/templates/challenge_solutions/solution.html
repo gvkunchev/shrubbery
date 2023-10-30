@@ -135,7 +135,7 @@
 
     <div class="card mt-2">
         <div class="card-header">
-            <h6 class="card-title">Код</h6>
+            <h6 class="card-title">Код {% if commit_message %}({{ commit_message }}){% endif %}</h6>
         </div>
         {% if inline_comments %}
             <div class="card-body text-primary toggle-inline-comments">
@@ -235,8 +235,8 @@
                     <div class="card mt-2">
                         <div class="card-header">
                             <h6 class="card-title">
-                                <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#history_{{ history_solution.pk }}">
-                                    <i class="bi bi-chevron-bar-expand"></i> {{ history_solution.human_upload_date }}
+                                <button class="btn btn-primary mw-100" type="button" data-toggle="collapse" data-target="#history_{{ history_solution.pk }}">
+                                    <i class="bi bi-chevron-bar-expand"></i> {{ history_solution.human_upload_date }} {% if history_solution.commit_message %}({{ history_solution.commit_message }}){% endif %}
                                 </button>
                             </h6>
                         </div>

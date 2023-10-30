@@ -8,7 +8,7 @@ class HomeworkSolutionForm(forms.ModelForm):
 
     class Meta:
         model = HomeworkSolution
-        fields = ('homework', 'author', 'content')
+        fields = ('homework', 'author', 'content', 'commit_message')
 
 
 class HomeworkSolutionCommentForm(forms.ModelForm):

@@ -8,7 +8,7 @@ class ChallengeSolutionForm(forms.ModelForm):
 
     class Meta:
         model = ChallengeSolution
-        fields = ('challenge', 'author', 'content')
+        fields = ('challenge', 'author', 'content', 'commit_message')
 
 
 class ChallengeSolutionCommentForm(forms.ModelForm):
