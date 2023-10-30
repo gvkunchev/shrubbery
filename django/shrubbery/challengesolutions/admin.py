@@ -17,7 +17,7 @@ class ChallengeSolutionAdmin(admin.ModelAdmin):
                 "fields": (
                    ('challenge', 'author', 'content', 'upload_date', 'points',
                        'line_count', 'result', 'passed_tests', 'failed_tests',
-                       'subscribers')
+                       'subscribers', 'commit_message')
                 ),
             }),
         )
@@ -25,7 +25,7 @@ class ChallengeSolutionAdmin(admin.ModelAdmin):
         (None, {
             'fields': ('challenge', 'author', 'content', 'upload_date', 'points',
                        'line_count', 'result', 'passed_tests', 'failed_tests',
-                       'subscribers')
+                       'subscribers', 'commit_message')
         }),
     )
 
@@ -39,13 +39,13 @@ class ChallengeSolutionHistoryAdmin(admin.ModelAdmin):
     fieldsets = (
             (None, {
                 "fields": (
-                   ('challenge', 'author', 'solution', 'content', 'upload_date', 'diff')
+                   ('challenge', 'author', 'solution', 'content', 'upload_date', 'diff', 'commit_message')
                 ),
             }),
         )
     add_fieldsets = (
         (None, {
-            'fields': ('challenge', 'author', 'solution', 'content', 'upload_date', 'diff')
+            'fields': ('challenge', 'author', 'solution', 'content', 'upload_date', 'diff', 'commit_message')
         }),
     )
 

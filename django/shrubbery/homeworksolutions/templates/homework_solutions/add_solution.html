@@ -21,6 +21,8 @@
                 {% csrf_token %}
                 <input type="file" accept=".py" name="content" required="True" class="form-control">
                 <div class="text-danger">{{ errors.content.as_text }}</div>
+                <label for="commit_message">Описание (по желание):</label>
+                <input type="text" name="commit_message" id="commit_message" class="form-control" maxlength="50">
                 {% if info %}
                     <div class="text-info"><i class="bi bi-check-circle-fill"></i> {{ info }}</div>
                 {% endif %}
