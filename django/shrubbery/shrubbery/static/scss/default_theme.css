@@ -9717,7 +9717,8 @@ span.linenos.special {
   display: none; }
 
 .home-overview-card {
-  height: 150px; }
+  height: 160px;
+  overflow-y: auto; }
 
 @media (max-width: 991.98px) {
   .home-overview-card {
