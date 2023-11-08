@@ -85,6 +85,22 @@
         </div>
     </div>
 
+    {% if homework.verified %}
+    <div class="card mt-2">
+        <div class="card-header">
+            <h6 class="card-title">
+                <button class="btn btn-primary mw-100" type="button" data-toggle="collapse" data-target="#sanity_test">
+                    <i class="bi bi-chevron-bar-expand"></i> Тестове при качване
+                </button>
+            </h6>
+        </div>
+        <div class="collapse" id="sanity_test">
+            <div class="card-body">
+                <div class="showdown-trigger">```{{ homework.sanity_test }}```</div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
 
     <div class="card mt-2">
         <div class="card-header">
