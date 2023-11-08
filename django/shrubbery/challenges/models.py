@@ -5,6 +5,8 @@ from django.apps import apps
 from users.models import User
 from points.models import PointsGiver
 
+from .pygment import pygmentize
+
 
 class Challenge(models.Model):
     author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
@@ -63,6 +65,12 @@ class Challenge(models.Model):
                                                                       date=self.creation_date,
                                                                       type='C')
             action.save()
+    
+    def get_pygmentized_sanity_test(self):
+        return pygmentize(self.sanity_test)
+    
+    def get_pygmentized_full_test(self):
+        return pygmentize(self.full_test)
 
 class ChallengeComment(PointsGiver):
     date = models.DateTimeField(default=timezone.now)

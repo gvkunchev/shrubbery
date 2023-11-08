@@ -5,6 +5,8 @@ from django.apps import apps
 from users.models import User
 from points.models import PointsGiver
 
+from .pygment import pygmentize
+
 
 class Homework(models.Model):
     author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
@@ -63,6 +65,12 @@ class Homework(models.Model):
                                                                       date=self.creation_date,
                                                                       type='HW')
             action.save()
+    
+    def get_pygmentized_sanity_test(self):
+        return pygmentize(self.sanity_test)
+    
+    def get_pygmentized_full_test(self):
+        return pygmentize(self.full_test)
 
 
 class HomeworkComment(PointsGiver):

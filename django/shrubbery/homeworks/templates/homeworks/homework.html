@@ -86,20 +86,38 @@
     </div>
 
     {% if homework.verified %}
-    <div class="card mt-2">
-        <div class="card-header">
-            <h6 class="card-title">
+        <div class="card mt-2">
+            <div class="card-header">
                 <button class="btn btn-primary mw-100" type="button" data-toggle="collapse" data-target="#sanity_test">
-                    <i class="bi bi-chevron-bar-expand"></i> Тестове при качване
+                    <i class="bi bi-chevron-bar-expand"></i> <i class="bi bi-filetype-py"></i> Тестове при качване
                 </button>
-            </h6>
-        </div>
-        <div class="collapse" id="sanity_test">
-            <div class="card-body">
-                <div class="showdown-trigger">```{{ homework.sanity_test }}```</div>
+            </div>
+            <div class="collapse" id="sanity_test">
+                <div class="card-body">
+                    <div class="showdown-trigger1">
+                        {% autoescape off %}
+                            {{ homework.get_pygmentized_sanity_test }}
+                        {% endautoescape %}
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
+        <div class="card mt-2">
+            <div class="card-header">
+                <button class="btn btn-primary mw-100" type="button" data-toggle="collapse" data-target="#full_test">
+                    <i class="bi bi-chevron-bar-expand"></i> <i class="bi bi-filetype-py"></i> Тестове при оценяване
+                </button>
+            </div>
+            <div class="collapse" id="full_test">
+                <div class="card-body">
+                    <div class="showdown-trigger1">
+                        {% autoescape off %}
+                            {{ homework.get_pygmentized_full_test }}
+                        {% endautoescape %}
+                    </div>
+                </div>
+            </div>
+        </div>
     {% endif %}
 
     <div class="card mt-2">
