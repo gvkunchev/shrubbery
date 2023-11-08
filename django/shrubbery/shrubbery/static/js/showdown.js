@@ -6,7 +6,7 @@ $(document).ready(function(){
 
     // Inline text
     $('.showdown-trigger').each(function(){
-        $(this).html(showDownConverter.makeHtml($(this).text()));
+        $(this).html(showDownConverter.makeHtml($(this).html()));
     })
 
     
@@ -20,7 +20,8 @@ $(document).ready(function(){
     $('.showdown-preview').bind('click', function(e){
         var source_id = $(this).data('showdown-source');
         var source = $('#' + source_id);
-        $('#showdown-modal').find('.modal-body').html(showDownConverter.makeHtml(source.val()));
+        var escaped_val = $("<div>").text(source.val()).html()
+        $('#showdown-modal').find('.modal-body').html(showDownConverter.makeHtml(escaped_val));
         // Add syntax highlighting
         $('#showdown-modal').find('.modal-body').find('code').each(function(i, e){
             var parsed = hljs.highlightAuto($(e).html());
