@@ -3,6 +3,7 @@ $(document).ready(function(){
     var showDownConverter = new showdown.Converter();
     showDownConverter.setOption('emoji', true);
     showDownConverter.setOption('simplifiedAutoLink', true);
+    showDownConverter.setOption('strikethrough', true);
 
     // Inline text
     $('.showdown-trigger').each(function(){
