@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="{% static 'bootstrap/bootstrap-icons.css' %}">
     
-    <link href="{% sass_src  'default_theme.scss' %}?v4" rel="stylesheet" type="text/css">
+    <link href="{% sass_src  'default_theme.scss' %}?v5" rel="stylesheet" type="text/css">
 
     {# Syntax highlighter for Showdown #}
     {% if request.user and request.user.dark_theme %}
@@ -33,6 +33,7 @@
     <script src="{% static 'js/dialogs.js' %}"></script>
     <script src="{% static 'js/ajax.js' %}?v3"></script>
     <script src="{% static 'js/inline_comments.js' %}?v3"></script>
+    <script src="{% static 'js/deadline.js' %}?v3"></script>
 
     {% block javascript %}
         {# Add custom content when extending this template #}

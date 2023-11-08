@@ -23,7 +23,8 @@
 }
 
 .home-overview-card {
-    height: 150px;
+    height: 160px;
+    overflow-y: auto;
 }
 
 @include media-breakpoint-down(lg) {
