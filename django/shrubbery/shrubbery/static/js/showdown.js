@@ -1,5 +1,9 @@
 $(document).ready(function(){
 
+    function enableCompareSymbols(text) {
+        return text.replace(/ &amp;lt; /g, ' < ').replace(/ &amp;gt; /g, ' > ').replace(/ &amp;lt;= /g, ' <= ').replace(/ &amp;gt;= /g, ' >= ');
+    }
+
     var showDownConverter = new showdown.Converter();
     showDownConverter.setOption('emoji', true);
     showDownConverter.setOption('simplifiedAutoLink', true);
@@ -7,7 +11,7 @@ $(document).ready(function(){
 
     // Inline text
     $('.showdown-trigger').each(function(){
-        $(this).html(showDownConverter.makeHtml($(this).html()));
+        $(this).html(enableCompareSymbols(showDownConverter.makeHtml($(this).html())));
     })
 
     
@@ -22,7 +26,7 @@ $(document).ready(function(){
         var source_id = $(this).data('showdown-source');
         var source = $('#' + source_id);
         var escaped_val = $("<div>").text(source.val()).html()
-        $('#showdown-modal').find('.modal-body').html(showDownConverter.makeHtml(escaped_val));
+        $('#showdown-modal').find('.modal-body').html(enableCompareSymbols(showDownConverter.makeHtml(escaped_val)));
         // Add syntax highlighting
         $('#showdown-modal').find('.modal-body').find('code').each(function(i, e){
             var parsed = hljs.highlightAuto($(e).html());
