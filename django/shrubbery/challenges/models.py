@@ -17,6 +17,8 @@ class Challenge(models.Model):
     points = models.IntegerField(default=1)
     sanity_test = models.TextField()
     full_test = models.TextField(default="", null=True, blank=True)
+    custom_module_name = models.CharField(default="", max_length=50, null=True, blank=True)
+    custom_module_content = models.TextField(default="", null=True, blank=True)
     hidden = models.BooleanField(default=True)
     verified = models.BooleanField(default=False)
     executing_tests = models.BooleanField(default=False)

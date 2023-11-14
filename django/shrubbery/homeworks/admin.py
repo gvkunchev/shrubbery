@@ -14,6 +14,7 @@ class HomeworkAdmin(admin.ModelAdmin):
                 "fields": (
                    ('title', 'content', 'creation_date', 'author',
                     'deadline', 'points', 'sanity_test', 'full_test',
+                    'custom_module_name', 'custom_module_content',
                     'hidden', 'verified', 'executing_tests')
                 ),
             }),
@@ -22,6 +23,7 @@ class HomeworkAdmin(admin.ModelAdmin):
         (None, {
             'fields': ('title', 'content', 'creation_date', 'author',
                        'deadline', 'points', 'sanity_test', 'full_test',
+                       'custom_module_name', 'custom_module_content',
                        'hidden', 'verified', 'executing_tests')
         }),
     )

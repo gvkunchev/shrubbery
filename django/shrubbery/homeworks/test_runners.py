@@ -46,6 +46,12 @@ class TestsRunner(ABC):
             # Copy the test itself
             with open(os.path.join(self._work_dir, 'tmp/test.py'), 'w') as f:
                 f.write(getattr(self._homework, self.TEST_KEY))
+            # Copy the custom module, if defined
+            name = self._homework.custom_module_name
+            content = self._homework.custom_module_content
+            if name and content:
+                with open(os.path.join(self._work_dir, f'tmp/{name}.py'), 'w') as f:
+                    f.write(content)
         else:
             # Create a temp directory
             self._work_dir = os.path.join(tempfile.gettempdir(), f'homework{self._temp_id}')
@@ -55,7 +61,13 @@ class TestsRunner(ABC):
             # Copy the test itself
             with open(os.path.join(self._work_dir, 'test.py'), 'w') as f:
                 f.write(getattr(self._homework, self.TEST_KEY))
-    
+            # Copy the custom module, if defined
+            name = self._homework.custom_module_name
+            content = self._homework.custom_module_content
+            if name and content:
+                with open(os.path.join(self._work_dir, f'{name}.py'), 'w') as f:
+                    f.write(content)
+
     def _prepare_command(self, solution):
         """Prepare the solution in place and the command to run the test."""
         source_code = os.path.join(settings.MEDIA_ROOT, solution.content.path)

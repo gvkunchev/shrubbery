@@ -46,6 +46,19 @@
                     <textarea name="full_test" class="form-control" id="full_test" placeholder="Оценяващ тест">{% if request.POST.full_test %}{{ request.POST.full_test }}{% else %}{{ homework.full_test }}{% endif %}</textarea>
                     <div class="text-danger">{{ errors.full_test.as_text }}</div>
                 </div>
+                <fieldset class="form-group border my-3 p-3">
+                    <legend>Допълнителен модул</legend>
+                    <div class="form-group">
+                        <label for="custom_module_name">Име</label>
+                        <input type="text" name="custom_module_name" class="form-control" id="custom_module_name" placeholder="Име" value="{% if request.POST.custom_module_name %}{{ request.POST.custom_module_name }}{% else %}{{ homework.custom_module_name|default_if_none:'' }}{% endif %}"></input>
+                        <div class="text-danger">{{ errors.custom_module_name.as_text }}</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="custom_module_content">Съдържание</label>
+                        <textarea name="custom_module_content" class="form-control" id="custom_module_content" placeholder="Съдържание">{% if request.POST.custom_module_content %}{{ request.POST.custom_module_content }}{% else %}{{ homework.custom_module_content|default_if_none:'' }}{% endif %}</textarea>
+                        <div class="text-danger">{{ errors.custom_module_content.as_text }}</div>
+                    </div>
+                </fieldset>
                 <div class="form-group my-2">
                     <input class="form-check-input" name="hidden" type="checkbox" {% if request.method == 'GET' and homework.hidden %}checked="checked"{% endif %} {% if request.method == 'POST' and request.POST.hidden %}checked="checked"{% endif %} id="hidden">
                     <label for="hidden">Скритo</label>

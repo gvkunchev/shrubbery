@@ -46,6 +46,19 @@
                     <textarea name="full_test" class="form-control" id="full_test" placeholder="Оценяващ тест">{{ request.POST.full_test }}</textarea>
                     <div class="text-danger">{{ errors.full_test.as_text }}</div>
                 </div>
+                <fieldset class="form-group border my-3 p-3">
+                    <legend>Допълнителен модул</legend>
+                    <div class="form-group">
+                        <label for="custom_module_name">Име</label>
+                        <input type="text" name="custom_module_name" class="form-control" id="custom_module_name" placeholder="Име" value="{{ request.POST.custom_module_name|default_if_none:'' }}"></input>
+                        <div class="text-danger">{{ errors.custom_module_name.as_text }}</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="custom_module_content">Съдържание</label>
+                        <textarea name="custom_module_content" class="form-control" id="custom_module_content" placeholder="Съдържание">{{ request.POST.custom_module_content|default_if_none:'' }}</textarea>
+                        <div class="text-danger">{{ errors.custom_module_content.as_text }}</div>
+                    </div>
+                </fieldset>
                 <div class="form-group my-2">
                     <input class="form-check-input" name="hidden" type="checkbox" {% if request.POST.hidden %}checked="checked"{% endif %} id="hidden">
                     <label for="hidden">Скритo</label>
