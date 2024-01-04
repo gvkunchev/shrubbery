@@ -89,6 +89,17 @@ def set_teacher_points(request, homework, solution):
         form.save()
     return redirect(f"/homework/{homework.pk}/solution/{solution.pk}")
 
+@is_teacher
+def edit_internal_notes(request, homework, solution):
+    """Edit internal notes for a homework solution."""
+    try:
+        homework = Homework.objects.get(pk=homework)
+        solution = HomeworkSolution.objects.get(pk=solution)
+    except ObjectDoesNotExist:
+        return redirect('missing')
+    solution.internal_notes = request.POST.get('internal_notes', '')
+    solution.save()
+    return redirect(f"/homework/{homework.pk}/solution/{solution.pk}")
 
 def add_homework_solution(request, homework):
     """Add homework solution page."""

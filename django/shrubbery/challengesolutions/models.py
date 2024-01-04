@@ -44,6 +44,7 @@ class ChallengeSolution(PointsGiver):
     line_count = models.IntegerField(default=0)
     subscribers = models.ManyToManyField(Teacher, related_name='subscribed_challenges', blank=True)
     commit_message = models.TextField(default='', max_length=50, blank=True, null=True)
+    internal_notes = models.TextField(default='', blank=True, null=True)
 
     class Meta:
         ordering = ('-upload_date',)

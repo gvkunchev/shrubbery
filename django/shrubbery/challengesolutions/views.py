@@ -89,6 +89,17 @@ def set_teacher_points(request, challenge, solution):
         form.save()
     return redirect(f"/challenge/{challenge.pk}/solution/{solution.pk}")
 
+@is_teacher
+def edit_internal_notes(request, challenge, solution):
+    """Edit internal notes for a challenge solution."""
+    try:
+        challenge = Challenge.objects.get(pk=challenge)
+        solution = ChallengeSolution.objects.get(pk=solution)
+    except ObjectDoesNotExist:
+        return redirect('missing')
+    solution.internal_notes = request.POST.get('internal_notes', '')
+    solution.save()
+    return redirect(f"/challenge/{challenge.pk}/solution/{solution.pk}")
 
 def add_challenge_solution(request, challenge):
     """Add challenge solution page."""
