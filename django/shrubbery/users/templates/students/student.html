@@ -4,6 +4,14 @@
     <h6 class="location-info"><i class="bi bi-globe"></i> <a href="/students">Студенти</a> > <a href="/student/{{ student.id }}">{{ student.full_name }}</a></h6>
 {% endblock %}
 {% block body %}
+    {% if request.user.is_teacher %}
+        <a href="/login_as/{{ student.pk }}" class="text-reset text-decoration-none">
+            <button type="button" class="btn btn-primary m-1">
+                <i class="bi bi-pencil-square"></i> Влез като {{ student.full_name }}
+            </button>
+        </a>
+        <hr class="mt-2 mb-1"/>
+    {% endif %}
     <h4>{{ student.full_name }}</h4>
     {% if student.image %}
         <img src="/media/{{ student.image }}" class="student-profile-image border"/>

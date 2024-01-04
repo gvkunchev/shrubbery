@@ -278,6 +278,18 @@ def teacher(request, teacher):
 
 # Administration student views
 
+
+@is_teacher
+def login_as(request, student):
+    '''Login as a student.'''
+    try:
+        student = Student.objects.get(pk=student)
+    except ObjectDoesNotExist:
+        return redirect('missing')
+    login(request, student)
+    return redirect('/')
+
+
 @is_teacher
 def participants(request):
     '''List of participants.'''
