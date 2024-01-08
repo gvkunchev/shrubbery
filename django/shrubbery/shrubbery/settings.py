@@ -67,6 +67,7 @@ INSTALLED_APPS = [
     'materials',
     'forum',
     'activity',
+    'final'
 ]
 
 MIDDLEWARE = [
@@ -210,3 +211,5 @@ CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = TIME_ZONE
+
+SHOW_FINAL_SCHEDULE = False

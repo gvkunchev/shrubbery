@@ -1,0 +1,77 @@
+{% extends "backbone/base.html" %}
+{% load static %}
+
+
+{% block location %}
+    <h6 class="location-info"><i class="bi bi-globe"></i> <a href="/final/schedule_editor">Редактор на графика за защита</a></h6>
+{% endblock %}
+
+{% block body %}
+
+    <div class="card mt-2 mx-2 d-inline-block align-top">
+        <div class="card-header">
+            <h5 class="card-title">Добави списък със слотове</h5>
+        </div>
+        <div class="card-body">
+            <div class="mb-2" style="max-width: 350px">
+                <i class="bi bi-info-circle-fill"></i> Качи .csv файл с един ред за всеки слот. Първата колона е начало на слота, втората е край на слота, всяка следваща колона е факултетен номер на студент в този слот.
+                <br/>
+                *Слот може да не съдържа никакви студенти
+                <br/>
+                **Форматът за време е %d.%m.%Y %H:%M
+            </div>
+            <form action="/final/slots/add" method="POST" enctype="multipart/form-data" class="form-horizontal"> 
+                {% csrf_token %}
+                <input type="file" accept=".csv" name="csv_file" required="True" class="form-control">
+                <div class="text-danger">{{ errors.csv }}</div>
+                <div class="text-danger">
+                    {% if errors.csv_list %}
+                        <ul>
+                            {% for error in errors.csv_list %}
+                                <li>
+                                    <ul>
+                                        <li>Индекс: {{ error.0 }}</li>
+                                        <li>Стойност: {{ error.1 }}</li>
+                                        <li>Грешка: {{ error.2 }}</li>
+                                    </ul>
+                                <br/>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </div>
+                <button class="btn btn-primary mt-2"><i class="bi bi-plus-circle"></i> Добави слотове</button>
+                {% if info %}
+                    <div class="text-info"><i class="bi bi-check-circle-fill"></i> {{ info }}</div>
+                {% endif %}
+            </form>
+        </div>
+    </div>
+
+
+    <div class="card mt-2 d-inline-block">
+        <div class="card-header">
+            <h5 class="card-title">Добави слот</h5>
+        </div>
+        <div class="card-body">
+            <form method="POST" action="/final/slot/add">
+                {% csrf_token %}
+                <label for="start" class="d-inline">Начало:</label>
+                <input type="datetime-local" required="required" name="start" class="le-input form-control" id="start" value="{{ request.POST.start }}">
+                <label for="end">Край:</label>
+                <input type="datetime-local" required="required" name="end" class="le-input form-control" id="end" value="{{ request.POST.end }}">
+                <button class="btn btn-primary mw-100 mt-2" type="submit">
+                    <i class="bi bi-plus-circle"></i> Добави слот
+                </button>
+                <div class="text-danger">{{ errors.end.as_text }}</div>
+            </form>
+        </div>
+    </div>
+
+    <br/><br/>
+    <div class="slots-wrapper">
+        {% include 'final/slots.html' %}
+    </div>
+
+    {% include 'common/delete_modal.html' with content='Сигурен ли си, че искаш да изтриеш този слот?' id='confirm_delete_slot_modal' %}
+
+{% endblock %}

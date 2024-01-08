@@ -18,6 +18,7 @@
             <tbody>
                 {% for row in data %}
                 <tr
+                id="student_{{ row.student.pk }}"
                     {% if row.student.pk is request.user.pk %}
                         {% if request.user.dark_theme %}
                             class="bg-light text-dark"

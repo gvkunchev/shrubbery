@@ -42,6 +42,7 @@ urlpatterns = [
     path('', include('challengesolutions.urls')),
     path('', include('activity.urls')),
     path('', include('info.urls')),
+    path('', include('final.urls')),
     re_path(r'^$', views.home, name='home'),
     re_path(r'^missing$', views.missing, name='missing')
 ]

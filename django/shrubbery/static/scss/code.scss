@@ -1,0 +1,47 @@
+.linenos {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.diff_add, .diff_chg, .diff_sub, .diff_header {
+    color: black !important
+}
+
+.diff_next a {
+    display: none;
+}
+
+table.diff[summary="Legends"] {
+    display: none !important;
+}
+
+.code-diff-container {
+    overflow-y: scroll;
+    overflow-x: scroll;
+    height: 400px;
+}
+
+.word-wrap-diff {
+    table.diff {
+        width: 100%;
+        max-width: 100%;
+        table-layout: fixed;
+    }
+    .diff td.diff_next {
+        width: 0 !important
+    }
+    .diff td.diff_header {
+        width: 3em !important;
+    }
+    .diff td[nowrap="nowrap"] {
+        white-space: break-spaces;
+    }
+
+    span[id^=code-line]{
+        white-space: break-spaces;
+    }
+}

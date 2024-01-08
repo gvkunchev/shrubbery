@@ -1,0 +1,60 @@
+<table class="table table-hover table-bordered">
+    <thead>
+        <tr>
+            {% if request.user.is_teacher %}
+                <th scope="col">Контрол</th>
+            {% endif %}
+            <th scope="col">Слот</th>
+            <th scope="col" class="w-75">Студенти</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for slot in slots %}
+            <tr>
+                {% if request.user.is_teacher %}
+                    <td>
+                        <a href="/final/slot/remove/{{ slot.pk }}" data-toggle="tooltip" class="confirm-delete-slot" title="Изтрий слот"><i class="text-danger bi bi-trash cursor-pointer"></i></a>
+                        <a href="/final/slot/edit/{{ slot.pk }}" data-toggle="tooltip" class="edit-slot" title="Редактирай слот"><i class="text-primary bi bi-pencil-square cursor-pointer"></i></a>
+                    </td>
+                {% endif %}
+                <td class="slot-title">{{ slot.human_time }}</td>
+                <td>
+                    {% for student in slot.students.all %}
+                        <div class="slot-student" id="student_{{ student.pk }}">
+                            {% if request.user.pk == student.pk %}
+                                <span class="spinner-grow text-primary inline-block hidden student-locator" style="width:1em;height:1em;"></span>
+                            {% endif %}
+
+                            {% if request.user.is_student and my_slot and my_slot != slot %}
+                                {% if not exchange_requester and request.user.pk != student.pk %}
+                                    {% if not exchange_confirmer or exchange_confirmer.get.requester.pk != student.pk %}
+                                            <a href="/final/exchange/request/{{ student.pk }}"><i class="bi text-primary bi-shuffle" data-toggle="tooltip" title="Заяви размяна с този студент"></i></a> |
+                                    {% endif %}
+                                {% endif %}
+
+                                {% if exchange_requester and exchange_requester.get.confirmer.pk == student.pk %}
+                                    <a href="/final/exchange/cancel/{{ student.pk }}"><i class="bi text-danger bi-shuffle" data-toggle="tooltip" title="Отмени заявката за размяна с този студент"></i></a> |
+                                {% endif %}
+
+                                {% if exchange_confirmer and exchange_confirmer.get.requester.pk == student.pk %}
+                                    {% if exchange_requester %}
+                                        <a href="#"><i class="bi text-warning bi-shuffle" data-toggle="tooltip" title="Отмени заявките си за размяна, за да приемеш тази заявка"></i></a> |
+                                    {% else %}
+                                        <a href="/final/exchange/confirm/{{ student.pk }}"><i class="bi text-success bi-shuffle" data-toggle="tooltip" title="Приеми заявката за размяна с този студент"></i></a> |
+                                    {% endif %}
+                                {% endif %}
+                            
+                            {% endif %}
+
+                            <a href="/student/{{ student.pk }}" class="text-decoration-none"><img src="{% include 'common/profile_picture' with user=student %}" class="small-profile-picture"/> {{ student.full_name }}</a>
+
+                            {% if request.user.pk == student.pk %}
+                                <span class="spinner-grow text-primary inline-block hidden student-locator" style="width:1em;height:1em;"></span>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>

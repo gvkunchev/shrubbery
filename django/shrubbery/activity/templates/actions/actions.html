@@ -110,6 +110,9 @@
                                         {% endif %}
                                     {% endif %}
                                 {% endif %}
+                                {% if action.type == 'FSC' %}
+                                    <a href="/activity/{{ action.pk }}/force_seen"><i class="text-danger bi bi-exclamation-octagon-fill"></i></a>
+                                {% endif %}
                             {% endif %}
                         </td>
                         <td>
@@ -165,6 +168,9 @@
                             {% endif %}
                             {% if action.type == 'CSIC' %}
                                 добави <a href="{% if action.object.solution %}{{ action.link }}{% else %}{{ action.link|overwrite_to_history }}{% endif %}" target="_blank">коментар в кода на решение на предизвикателство</a>.
+                            {% endif %}
+                            {% if action.type == 'FSC' %}
+                                прие <a href="{{ action.link }}" target="_blank">размяна за защитата</a> с <a href="student/{{ action.object.pk }}" target="_blank">{{ action.object.full_name }}</a>.
                             {% endif %}
                         </td>
                         <td>{{ action.human_date }}</td>

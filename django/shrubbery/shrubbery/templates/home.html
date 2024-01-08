@@ -66,13 +66,25 @@
         </div>
     {% endif %}
 
+    {% if final_countdown %}
+        <div class="card mt-2 d-inline-block home-overview-card">
+            <div class="card-header">Финален проект</div>
+            <div class="card-body">
+                <i class="bi bi-heart-pulse-fill text-primary"></i></i>
+                <a href="/final/schedule#student_{{ request.user.pk }}">
+                    Защита
+                </a>
+                <div class="ms-1 deadline hidden">{{ final_countdown|date:"c" }}</div>
+            </div>
+        </div>
+    {% endif %}
 
     {% if ranking %}
         <div class="card mt-2 d-inline-block home-overview-card">
             <div class="card-header">Позиция в класацията</div>
             <div class="card-body">
                 <ul class="list-group list-group-flush">
-                    <li class="list-group-item"><i class="bi bi-trophy-fill text-primary"></i> <a href="scoreboard">Място</a>: {{ ranking.rank }} / {{ ranking.student_count }}</li>
+                    <li class="list-group-item"><i class="bi bi-trophy-fill text-primary"></i> <a href="/scoreboard#student_{{ request.user.pk }}">Място</a>: {{ ranking.rank }} / {{ ranking.student_count }}</li>
                     <li class="list-group-item"><i class="bi bi-star-fill text-primary"></i> <a href="/my_points">Точки</a>: {{ ranking.total }}</li>
                 </ul>
             </div>
