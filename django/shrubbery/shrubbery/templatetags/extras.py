@@ -1,4 +1,5 @@
 import six
+from django.conf import settings
 from django import template
 from django.template.base import Node
 from django.utils.functional import keep_lazy
@@ -9,6 +10,10 @@ from homeworksolutions.models import HomeworkSolution
 from homeworksolutions.models import HomeworkSolutionHistoryInlineComment
 from challengesolutions.models import ChallengeSolution, ChallengeSolutionHistoryInlineComment
 
+
+@register.simple_tag()
+def show_final_schedule(*args):
+    return settings.SHOW_FINAL_SCHEDULE
 
 @register.simple_tag()
 def create_list(*args):

@@ -1,0 +1,42 @@
+{% extends "backbone/base.html" %}
+{% load static %}
+
+
+{% block location %}
+    <h6 class="location-info"><i class="bi bi-globe"></i> <a href="/final/schedule">Графика за защита</a></h6>
+{% endblock %}
+
+{% block body %}
+    
+    <hr/>
+
+    {% if request.user.is_teacher %}
+        <a href="/final/schedule_editor" class="text-reset text-decoration-none">
+            <button type="button" class="btn btn-primary m-1">
+                <i class="bi bi-pencil-square"></i> Редактирай графика
+            </button>
+        </a>
+    {% endif %}
+
+    {% if not_in_schedule %}
+        <span class="text-danger fw-bold">Няма те в графика. Ако ще защитаваш проект, пиши ни, за да те включим.</span>
+    {% endif %}
+
+    {% if enable_find_me %}
+        <a href="#student_{{ request.user.pk }}" id="find_me_in_slots">
+            <button class="btn btn-primary mw-100" type="button">
+                <i class="bi bi-search"></i> Намери ме
+            </button>
+        </a>
+    {% endif %}
+
+    <hr/>
+    
+
+    <div class="slots-wrapper">
+        {% include 'final/slots.html' %}
+    </div>
+
+    {% include 'common/delete_modal.html' with content='Сигурен ли си, че искаш да изтриеш този слот?' id='confirm_delete_slot_modal' %}
+
+{% endblock %}

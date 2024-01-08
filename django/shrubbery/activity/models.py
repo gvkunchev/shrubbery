@@ -5,7 +5,7 @@ from django.utils import timezone
 # Improting the monitor to get it registered on start-up
 from . import signal_monitor
 
-
+from users.models import Student
 from forum.models import ForumComment
 from homeworks.models import HomeworkComment
 from homeworksolutions.models import (HomeworkSolution,
@@ -37,6 +37,7 @@ class Action(models.Model):
         CHALLENGE_SOLUTION = 'CS', 'Challenge Solution'
         CHALLENGE_SOLUTION_UPDATE = 'CSU', 'Challenge Solution Update'
         CHALLENGE_SOLUTION_COMMENT = 'CSC', 'Challenge Solution Comment'
+        FINAL_SCHEDULE_FLIP = 'FSC', 'Final Schedule flip'
 
 
     author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
@@ -85,5 +86,8 @@ class Action(models.Model):
             elif self.type == 'CSIC':
                 pk = int(self.link.split('#inlinecomment')[-1])
                 return ChallengeSolutionInlineComment.objects.get(pk=pk)
+            elif self.type == 'FSC':
+                pk = int(self.link.split('#student_')[-1])
+                return Student.objects.get(pk=pk)
         except:
             return None

@@ -1,0 +1,23 @@
+.scoreboard-table {
+    max-width: 600px;
+}
+
+
+.scoreboard-image-wrapper {
+    position: relative;
+    display: inline-block;
+
+    .medal {
+        width: 1em;
+        position: absolute;
+        right: -0.3em;
+        bottom: -0.3em;
+    }
+    
+    .small-profile-picture {
+        width: 2em;
+        height: 2em;
+        border-radius: 50%;
+        border: 1px solid $gray-500;
+    }
+}

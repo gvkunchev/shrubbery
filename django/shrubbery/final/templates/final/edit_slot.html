@@ -1,0 +1,65 @@
+{% extends "backbone/base.html" %}
+{% load static %}
+
+
+{% block location %}
+    <h6 class="location-info"><i class="bi bi-globe"></i> <a href="/final/schedule_editor">Редактор на графика за защита</a> > <a href="/final/slot/edit/{{ slot.pk }}">Редактирай слот</a></h6>
+{% endblock %}
+
+{% block body %}
+
+    <div class="card mt-2">
+        <div class="card-header">
+            <h5 class="card-title">Редактирай време</h5>
+        </div>
+        <div class="card-body">
+            <form method="POST" action="/final/slot/edit/{{ slot.pk }}">
+                {% csrf_token %}
+                <label for="start" class="d-inline">Начало:</label>
+                <input type="datetime-local" required="required" name="start" class="le-input form-control" id="start" value="{% if request.POST.start %}{{ request.POST.start }}{% else %}{{ slot.parsable_start }}{% endif %}">
+                <label for="end">Край:</label>
+                <input type="datetime-local" required="required" name="end" class="le-input form-control" id="end" value="{% if request.POST.end %}{{ request.POST.end }}{% else %}{{ slot.parsable_end }}{% endif %}">
+                <button class="btn btn-primary mw-100 mt-2" type="submit">
+                    <i class="bi bi-check-circle"></i> Запази
+                </button>
+                <div class="text-danger">{{ errors.end.as_text }}</div>
+            </form>
+        </div>
+    </div>
+
+    <div class="card mt-2">
+        <div class="card-header">
+            <h5 class="card-title">Редактирай студенти</h5>
+        </div>
+        <div class="card-body">
+            <form method="POST" action="/final/slot/edit/{{ slot.pk }}/add">
+                {% csrf_token %}
+                <select id="student" name="student" class="form-select">
+                    <option value="0">Добави студент..</option>
+                    {% for student in students %}
+                        {% if not student.finalscheduleslot_set.values %}
+                            <option value="{{ student.pk }}">{{ student.full_name }} - {{ student.fn }}</option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+                <br/>
+                <button class="btn btn-primary mw-100 mt-2" type="submit">
+                    <i class="bi bi-plus-circle"></i> Добави
+                </button>
+            </form>
+        </div>
+        <div class="card-body">
+            {% for student in slot.students.all %}
+                <div class="slot-student">
+                    <a class="confirm-remove-student" href="/final/slot/edit/{{ slot.pk }}/remove/{{ student.pk }}"><i class="text-danger bi bi-trash cursor-pointer"></i></a>
+                    |
+                    <a href="/student/{{ student.pk }}" class="text-decoration-none"><img src="{% include 'common/profile_picture' with user=student %}" class="small-profile-picture"/> {{ student.full_name }}</a>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+
+    {% include 'common/delete_modal.html' with content='Сигурен ли си, че искаш да премахнеш този студент?' id='confirm_remove_student_modal' %}
+
+{% endblock %}

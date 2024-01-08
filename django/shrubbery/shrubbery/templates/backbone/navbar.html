@@ -24,6 +24,8 @@
 {% url 'homeworks:homeworks' as homeworks_url %}
 {% url 'challenges:challenges' as challenges_url %}
 {% url 'activity:activity' as activity_url %}
+{% url 'final:schedule_editor' as schedule_editor_url %}
+{% url 'final:schedule' as schedule_url %}
 
 
 <nav class="navbar navbar-expand-lg">
@@ -46,6 +48,11 @@
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             {% include 'common/navbar_inline_link.html' with url=home_url text='<i class="bi bi-house-fill text-primary"></i> Начало' %}
             {% include 'common/navbar_inline_link.html' with url=news_url text='<i class="bi bi-newspaper text-primary"></i> Новини' %}
+            
+            {% show_final_schedule as show_schedule_url %}
+            {% if request.user.is_authenticated and show_schedule_url %}
+                {% include 'common/navbar_inline_link.html' with url=schedule_url text='<i class="bi bi-heart-pulse-fill text-primary"></i> Защита' %}
+            {% endif %}
             {% include 'common/navbar_inline_link.html' with url=homeworks_url text='<i class="bi bi-house-door-fill text-primary"></i> Домашни' %}
             {% include 'common/navbar_inline_link.html' with url=challenges_url text='<i class="bi bi-hourglass-split text-primary"></i> Предизвикателства' %}
             {% if request.user.is_student %}
@@ -61,8 +68,8 @@
             {% include 'common/navbar_dropdown.html' with text='<i class="bi bi-person-fill-lock text-primary"></i> Потребители' items=users_items %}
 
             {% if request.user.is_teacher %}
-                {% create_list activity_url participants_url team_url lectures_url vouchers_url exams_url points_url resources_url add_news_url add_homework_url add_challenge_url add_forum_url as admin_urls_list %}
-                {% create_list '<i class="bi bi-tv-fill"></i> Активност' '<i class="bi bi-card-checklist"></i> Записани студенти' '<i class="bi bi-people-fill"></i> Учителски колектив' '<i class="bi bi-file-pdf-fill"></i> Лекции' '<i class="bi bi-upc"></i> Ваучери' '<i class="bi bi-vector-pen"></i> Изпити' '<i class="bi bi-star-fill"></i> Точки' '<i class="bi bi-folder-symlink-fill"></i> Ресурси' '<i class="bi bi-newspaper"></i> Създай новина'  '<i class="bi bi-house-door-fill"></i> Създай домашно'  '<i class="bi bi-hourglass-split"></i> Създай предизвикателство' '<i class="bi bi-chat-right-text-fill"></i> Създай форум тема' as admin_texts_list %}
+                {% create_list activity_url participants_url team_url lectures_url vouchers_url exams_url points_url schedule_editor_url resources_url add_news_url add_homework_url add_challenge_url add_forum_url as admin_urls_list %}
+                {% create_list '<i class="bi bi-tv-fill"></i> Активност' '<i class="bi bi-card-checklist"></i> Записани студенти' '<i class="bi bi-people-fill"></i> Учителски колектив' '<i class="bi bi-file-pdf-fill"></i> Лекции' '<i class="bi bi-upc"></i> Ваучери' '<i class="bi bi-vector-pen"></i> Изпити' '<i class="bi bi-star-fill"></i> Точки' '<i class="bi bi-calendar-range"></i> График Защита' '<i class="bi bi-folder-symlink-fill"></i> Ресурси' '<i class="bi bi-newspaper"></i> Създай новина'  '<i class="bi bi-house-door-fill"></i> Създай домашно'  '<i class="bi bi-hourglass-split"></i> Създай предизвикателство' '<i class="bi bi-chat-right-text-fill"></i> Създай форум тема' as admin_texts_list %}
                 {% zip admin_urls_list admin_texts_list as admin_items %}
                 {% include 'common/navbar_dropdown.html' with text='<i class="bi bi-person-fill-lock text-primary"></i> Администрация' items=admin_items %}
             {% endif %}
