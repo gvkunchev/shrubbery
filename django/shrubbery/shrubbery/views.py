@@ -30,7 +30,7 @@ def home(request):
         context.update({
             'active_challenges': get_active_challenges()
         })
-    if request.user.is_student and settings.SHOW_FINAL_SCHEDULE:
+    if request.user.is_authenticated and request.user.is_student and settings.SHOW_FINAL_SCHEDULE:
         student = Student.objects.get(pk=request.user.pk)
         try:
             slot = student.finalscheduleslot_set.get()
