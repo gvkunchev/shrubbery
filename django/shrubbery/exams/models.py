@@ -9,7 +9,7 @@ class Exam(models.Model):
     title = models.CharField(max_length=200)
 
     class Meta:
-        ordering = ('-date', )
+        ordering = ('date', )
 
     def __str__(self):
         """String representation for the admin panel."""
