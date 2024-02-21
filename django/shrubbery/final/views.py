@@ -18,7 +18,9 @@ def schedule_editor(request):
     slots = FinalScheduleSlot.objects.all()
     return render(request, "final/schedule_editor.html", {'slots': slots})
 
-@login_required
+
+@is_teacher
+#@login_required # TODO: Put back if you want to show the schedule to students and remove the line above
 def schedule(request):
     """Final schedule."""
     slots = FinalScheduleSlot.objects.all()
