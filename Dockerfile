@@ -8,11 +8,11 @@ RUN apt install -y python3-venv
 RUN apt install -y nginx
 RUN apt install -y redis-server
 RUN apt install -y mmdebstrap
+RUN apt install -y cargo 
 
 # Create and activate venv
 RUN python3.12 -m venv /var/venv
 ENV PATH="/var/venv/bin:$PATH"
-RUN which python3.12
 
 # Install all python packages
 COPY requirements.txt .
