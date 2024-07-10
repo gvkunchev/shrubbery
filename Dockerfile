@@ -9,6 +9,7 @@ RUN apt install -y nginx
 RUN apt install -y redis-server
 RUN apt install -y mmdebstrap
 RUN apt install -y cargo 
+RUN apt install -y libpq-dev python-dev
 
 # Create and activate venv
 RUN python3.12 -m venv /var/venv
