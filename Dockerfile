@@ -10,8 +10,8 @@ RUN apt install -y redis-server
 RUN apt install -y mmdebstrap
 
 # Create and activate venv
-RUN python3.12 -m venv venv
-RUN . venv/bin/activate
+RUN python3.12 -m venv /var/venv
+ENV PATH="/var/venv/bin:$PATH"
 
 # Install all python packages
 COPY requirements.txt .
