@@ -11,7 +11,7 @@ RUN apt install -y mmdebstrap
 
 # Create and activate venv
 RUN python3.12 -m venv venv
-RUN source venv/bin/activate
+RUN . venv/bin/activate
 
 # Install all python packages
 COPY requirements.txt .
