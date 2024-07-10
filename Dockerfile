@@ -12,10 +12,11 @@ RUN apt install -y mmdebstrap
 # Create and activate venv
 RUN python3.12 -m venv /var/venv
 ENV PATH="/var/venv/bin:$PATH"
+RUN which python3.12
 
 # Install all python packages
 COPY requirements.txt .
-RUN pip3 install -r requirements.txt
+RUN python3.12 -m pip install -r requirements.txt
 
 # Copy the Django project
 COPY django/shrubbery /var/shrubbery
