@@ -43,7 +43,7 @@ RUN mmdebstrap --variant=apt noble /var/shrubbery/sandbox/sandbox-origin
 RUN chroot /var/shrubbery/sandbox/sandbox-origin apt update --allow-insecure-repositories
 RUN chroot /var/shrubbery/sandbox/sandbox-origin apt install -y --allow-unauthenticated python3.12
 #RUN chroot /var/shrubbery/sandbox/sandbox-origin python3.12 /tmp/get-pip.py
-RUN chroot /var/shrubbery/sandbox/sandbox-origin python3.12 -m pip install timeout_decorator
+#RUN chroot /var/shrubbery/sandbox/sandbox-origin python3.12 -m pip install timeout_decorator
 RUN useradd tester
 
 # Copy start script and execute it
