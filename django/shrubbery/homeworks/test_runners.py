@@ -76,7 +76,7 @@ class TestsRunner(ABC):
             shutil.copy(source_code, os.path.join(self._work_dir, 'tmp/solution.py'))
             # Build the command
             return (f'env -i /usr/sbin/chroot --userspec=tester:tester {self._work_dir} '
-                     '/usr/bin/python3.10 /tmp/test_runner.py /tmp/test.py')
+                     '/usr/bin/python3.12 /tmp/test_runner.py /tmp/test.py')
         else:
             # Copy the solution
             shutil.copy(source_code, os.path.join(self._work_dir, 'solution.py'))
