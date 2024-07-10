@@ -4,6 +4,7 @@ FROM ubuntu:24.10
 RUN apt update
 RUN apt install -y python3.12
 RUN apt install -y python3-pip
+RUN apt install -y python3-venv
 RUN apt install -y nginx
 RUN apt install -y redis-server
 RUN apt install -y mmdebstrap
