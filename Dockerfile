@@ -40,6 +40,12 @@ COPY gunicorn_conf.py /var/shrubbery
 RUN useradd tester
 RUN mkdir -p /var/shrubbery/sandbox/sandbox-origin
 RUN mmdebstrap --variant=apt noble /var/shrubbery/sandbox/sandbox-origin
+
+# Clone user specs to the sandbox
+RUN cp /etc/passwd /var/shrubbery/sandbox/sandbox-origin/etc/passwd
+RUN cp /etc/group /var/shrubbery/sandbox/sandbox-origin/etc/group
+
+# Prepare sandbox Python environment
 COPY get-pip.py /var/shrubbery/sandbox/sandbox-origin/tmp
 RUN chroot /var/shrubbery/sandbox/sandbox-origin apt update --allow-insecure-repositories
 RUN chroot /var/shrubbery/sandbox/sandbox-origin apt install -y --allow-unauthenticated python3.12
