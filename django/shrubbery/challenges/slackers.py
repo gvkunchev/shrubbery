@@ -6,7 +6,7 @@ from copydetect import CopyDetector
 
 
 if os.environ.get('SHRUBBERY_ENV') == 'prd':
-    DOMAIN = 'https://py-fmi.org'
+    DOMAIN = 'https://2024.py-fmi.org'
     SOURCE = r'/var/shrubbery/media/challengesolutions/\d+/(\d+)/latest.py'
     TARGET = fr"<a href='{DOMAIN}/student/\1' target='_blank'>{DOMAIN}/student/\1</a>"
 else:
