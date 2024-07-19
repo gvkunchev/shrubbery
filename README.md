@@ -1,6 +1,6 @@
 # Shrubbery
 Web site for the Python course in FMI  
-[https://djecrety.ir/](https://py-fmi.org/)
+[https://py-fmi.org/](https://py-fmi.org/)
 
 ### Develop
 * Clone the repository
