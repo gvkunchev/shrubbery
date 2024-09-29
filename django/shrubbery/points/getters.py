@@ -7,7 +7,7 @@ from homeworksolutions.models import HomeworkSolution
 from challenges.models import Challenge
 from challengesolutions.models import ChallengeSolution
 from points.models import PointsGiver
-
+from achievements.models import ACHIEVEMENTS
 
 # Constant holding all models in the project
 ALL_MODELS = apps.get_models()
@@ -114,6 +114,9 @@ def get_point_summary(user):
     # Exams
     for exam in user.examresult_set.values():
         points[f"exam_{exam.get('exam_id')}"] = exam.get('points', 0)
+    # Achievements
+    for achievement in ACHIEVEMENTS:
+        points[f'achievement_{achievement.NAME}'] = achievement.objects.get(owner=user).points
     # Total
     points['total'] = sum(points.values())
     return points

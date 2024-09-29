@@ -24,6 +24,11 @@ def zip_many(*args):
     return list(zip(*args))
 
 @register.simple_tag()
+def get_achievement_points(data, achievement):
+    key = f'achievement_{achievement.NAME}'
+    return data.get(key, '-')
+
+@register.simple_tag()
 def get_homework_results(data, homework):
     key = f'homework_{homework.pk}'
     return data.get(key, '-')

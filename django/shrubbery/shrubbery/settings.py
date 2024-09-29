@@ -67,7 +67,8 @@ INSTALLED_APPS = [
     'materials',
     'forum',
     'activity',
-    'final'
+    'final',
+    'achievements'
 ]
 
 MIDDLEWARE = [

@@ -1,0 +1,37 @@
+{% extends "backbone/base.html" %}
+{% load static %}
+{% block location %}
+    <h6 class="location-info"><i class="bi bi-globe"></i> <a href="/achievements">Постижения</a></h6>
+{% endblock %}
+{% block body %}
+
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col"></th>
+                <th scope="col">Име</th>
+                <th scope="col" class="text-center">Точки</th>
+                <th scope="col">Описание</th>
+                <th scope="col" class="text-center">Постигнато</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for achievement in achievements %}
+            <tr>
+                <td class="text-center"><img src="/static/img/{{ achievement.model.IMAGE }}" class="achievement-thumbnail border"/></td>
+                <td>{{ achievement.model.NAME }}</td>
+                <td class="text-center">{{ achievement.model.POINTS }}</td>
+                <td>{{ achievement.model.DESCRIPTION }}</td>
+                <td class="text-center">
+                    {% if achievement.achieved %}
+                        <i class="bi bi-check-circle-fill text-primary"></i>
+                    {% else %}
+                        <i class="bi bi-x-circle-fill text-danger"></i>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}
