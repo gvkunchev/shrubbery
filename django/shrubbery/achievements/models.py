@@ -21,5 +21,11 @@ class KingArthur(Achievement):
     POINTS = 1
 
 
+class SirBedevere(Achievement):
+    NAME = 'Sir Bedevere'
+    DESCRIPTION = 'Домашно с поне 80% точки от тестове и написано на не повече от 4 реда'
+    IMAGE = 'sir_bedevere.png'
+    POINTS = 1
+
 # Update this so that all other apps know the complete list of achevements
-ACHIEVEMENTS = (KingArthur, )
+ACHIEVEMENTS = (KingArthur, SirBedevere)

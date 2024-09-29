@@ -9757,6 +9757,13 @@ img {
   border-radius: 50%;
   border: 1px solid #adb5bd; }
 
+.achievement-thumbnail {
+  width: 3em;
+  height: 3em;
+  max-width: 9999px;
+  border-radius: 50%;
+  border: 1px solid #adb5bd; }
+
 .form-switch * {
   cursor: pointer; }
 

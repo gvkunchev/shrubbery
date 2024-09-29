@@ -66,6 +66,14 @@ img {
     border: 1px solid $gray-500;
 }
 
+.achievement-thumbnail {
+    width: 3em;
+    height: 3em;
+    max-width: 9999px;
+    border-radius: 50%;
+    border: 1px solid $gray-500;
+}
+
 .form-switch *{
     cursor: pointer;
 }

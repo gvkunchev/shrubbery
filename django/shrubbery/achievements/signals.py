@@ -1,10 +1,14 @@
+import os
+from django.conf import settings
 from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
 from django.core.exceptions import ObjectDoesNotExist
 
 from users.models import Student
 from exams.models import Exam, ExamResult
-from .models import ACHIEVEMENTS, KingArthur
+from homeworks.models import Homework
+from homeworksolutions.models import HomeworkSolution
+from .models import ACHIEVEMENTS, KingArthur, SirBedevere
 
 
 
@@ -58,10 +62,50 @@ def post_save_exam_results(*args, **kwargs):
 def post_delete_exam_results(*args, **kwargs):
     update_king_arthurs_achievement()
 
-@receiver(post_save, sender=Exam) 
-def post_save_exam(*args, **kwargs):
-    update_king_arthurs_achievement()
 
-@receiver(post_delete, sender=Exam) 
-def post_delete_exam(*args, **kwargs):
-    update_king_arthurs_achievement()
+
+def update_sir_bedevere_achievement(user):
+    """Update all Sir Bedevere achievements."""
+    achieved = False
+    try:
+        solutions = HomeworkSolution.objects.filter(author=user)
+        for solution in solutions:
+            if not solution.homework.verified:
+                continue
+            if solution.points >= (solution.homework.points * 8) / 10:
+                source_code = os.path.join(settings.MEDIA_ROOT, solution.content.path)
+                used_lines = 0
+                with open(source_code) as f:
+                    for line in f.readlines():
+                        if line.strip():
+                            used_lines += 1
+                if used_lines <= 4:
+                    achieved = True
+                    print(used_lines)
+                    break
+    except ObjectDoesNotExist:
+        pass # No exam result for this user in this exam -> go to next exam
+        # Set achievement status to the database
+    if achieved:
+        achievement = SirBedevere.objects.get(owner=user)
+        achievement.achieved = True
+        achievement.points = SirBedevere.POINTS
+        achievement.save()
+    else:
+        achievement = SirBedevere.objects.get(owner=user)
+        achievement.achieved = False
+        achievement.points = 0
+        achievement.save()
+
+@receiver(post_save, sender=HomeworkSolution) 
+def post_save_exam_results(sender, instance, **kwargs):
+    update_sir_bedevere_achievement(instance.author)
+
+@receiver(post_delete, sender=HomeworkSolution) 
+def post_delete_exam_results(sender, instance, **kwargs):
+    update_sir_bedevere_achievement(instance.author)
+
+@receiver(post_save, sender=Homework) 
+def post_save_exam_results(sender, instance, **kwargs):
+    for solution in instance.homeworksolution_set.all():
+        update_sir_bedevere_achievement(solution.author)
