@@ -27,5 +27,13 @@ class SirBedevere(Achievement):
     IMAGE = 'sir_bedevere.png'
     POINTS = 1
 
+
+class SirLancelot(Achievement):
+    NAME = 'Sir Lancelot'
+    DESCRIPTION = 'Първа версия на домашно, предадена в последните 30 секунди преди крайния срок'
+    IMAGE = 'sir_lancelot.png'
+    POINTS = 1
+
+
 # Update this so that all other apps know the complete list of achevements
-ACHIEVEMENTS = (KingArthur, SirBedevere)
+ACHIEVEMENTS = (KingArthur, SirBedevere, SirLancelot)
