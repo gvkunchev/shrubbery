@@ -13,6 +13,7 @@ class Homework(models.Model):
     title = models.CharField(max_length=200)
     content = models.TextField()
     creation_date = models.DateTimeField(default=timezone.now)
+    first_reveal = models.DateTimeField(null=True, blank=True, default=None)
     deadline = models.DateTimeField()
     points = models.IntegerField(default=10)
     sanity_test = models.TextField()
@@ -67,7 +68,7 @@ class Homework(models.Model):
                                                                       date=self.creation_date,
                                                                       type='HW')
             action.save()
-    
+
     def get_pygmentized_sanity_test(self):
         return pygmentize(self.sanity_test)
     

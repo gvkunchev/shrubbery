@@ -15,7 +15,7 @@ class HomeworkAdmin(admin.ModelAdmin):
                    ('title', 'content', 'creation_date', 'author',
                     'deadline', 'points', 'sanity_test', 'full_test',
                     'custom_module_name', 'custom_module_content',
-                    'hidden', 'verified', 'executing_tests')
+                    'hidden', 'verified', 'executing_tests', 'first_reveal')
                 ),
             }),
         )

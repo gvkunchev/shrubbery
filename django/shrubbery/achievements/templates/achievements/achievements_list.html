@@ -18,10 +18,22 @@
         <tbody>
             {% for achievement in achievements %}
             <tr>
-                <td class="text-center"><img src="/static/img/{{ achievement.model.IMAGE }}" class="achievement-thumbnail border"/></td>
+                <td class="text-center">
+                    {% if achievement.achieved %}
+                        <img src="/static/img/{{ achievement.model.IMAGE }}" class="achievement-thumbnail border"/>
+                    {% else %}
+                        <img src="/static/img/hidden_achievement.png" class="achievement-thumbnail border"/>
+                    {% endif %}
+                </td>
                 <td>{{ achievement.model.NAME }}</td>
                 <td class="text-center">{{ achievement.model.POINTS }}</td>
-                <td>{{ achievement.model.DESCRIPTION }}</td>
+                <td>
+                    {% if achievement.achieved %}
+                        {{ achievement.model.DESCRIPTION }}
+                    {% else %}
+                        {{ achievement.model.HINT }}
+                    {% endif %}
+                </td>
                 <td class="text-center">
                     {% if achievement.achieved %}
                         <i class="bi bi-check-circle-fill text-primary"></i>

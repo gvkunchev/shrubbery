@@ -3,6 +3,7 @@ import os
 from django.template.loader import render_to_string
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.utils import timezone
 
 from celery import shared_task
 
@@ -114,6 +115,7 @@ def forum_action(sender, instance, created, **kwargs):
 def homework_action(sender, instance, created, **kwargs):
     if not instance.hidden and not instance.email_sent:
         instance.email_sent = True
+        instance.first_reveal = timezone.now()
         instance.save()
         if os.environ.get('SHRUBBERY_ENV') == 'prd':
             send_email_homework.delay(instance.pk)
