@@ -3,6 +3,7 @@ from django.conf import settings
 from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
 from django.core.exceptions import ObjectDoesNotExist
+from celery import shared_task
 
 from users.models import Student
 from exams.models import Exam, ExamResult
@@ -10,6 +11,15 @@ from homeworks.models import Homework
 from homeworksolutions.models import HomeworkSolution
 from .models import ACHIEVEMENTS, KingArthur, SirBedevere
 
+
+def background_process(fun):
+    """Decorator for running on the background only if celery is present."""
+    def wrapped(*args, **kwargs):
+        if os.environ.get('SHRUBBERY_ENV') == 'prd':
+            fun.delay(*args, **kwargs)
+        else:
+            fun(*args, **kwargs)
+    return wrapped
 
 
 @receiver(post_save, sender=Student) 
@@ -21,6 +31,8 @@ def create_achievements(sender, instance, created, **kwargs):
         achievement.objects.create(owner=instance)
 
 
+@background_process
+@shared_task
 def update_king_arthurs_achievement():
     """Update all King Arthurs achievements"""
     # Collect max score for every exam
@@ -42,17 +54,7 @@ def update_king_arthurs_achievement():
                     break
             except ObjectDoesNotExist:
                 continue # No exam result for this user in this exam -> go to next exam
-        # Set achievement status to the database
-        if achieved:
-            achievement = KingArthur.objects.get(owner=user)
-            achievement.achieved = True
-            achievement.points = KingArthur.POINTS
-            achievement.save()
-        else:
-            achievement = KingArthur.objects.get(owner=user)
-            achievement.achieved = False
-            achievement.points = 0
-            achievement.save()
+        KingArthur.objects.get(owner=user).toggle(achieved)
 
 @receiver(post_save, sender=ExamResult) 
 def post_save_exam_results(*args, **kwargs):
@@ -64,14 +66,16 @@ def post_delete_exam_results(*args, **kwargs):
 
 
 
+@background_process
+@shared_task
 def update_sir_bedevere_achievement(user):
     """Update all Sir Bedevere achievements."""
+    if user.is_teacher:
+        return
     achieved = False
     try:
-        solutions = HomeworkSolution.objects.filter(author=user)
+        solutions = HomeworkSolution.objects.filter(author=user, homework__verified=True)
         for solution in solutions:
-            if not solution.homework.verified:
-                continue
             if solution.points >= (solution.homework.points * 8) / 10:
                 source_code = os.path.join(settings.MEDIA_ROOT, solution.content.path)
                 used_lines = 0
@@ -81,31 +85,22 @@ def update_sir_bedevere_achievement(user):
                             used_lines += 1
                 if used_lines <= 4:
                     achieved = True
-                    print(used_lines)
                     break
     except ObjectDoesNotExist:
         pass # No exam result for this user in this exam -> go to next exam
-        # Set achievement status to the database
-    if achieved:
-        achievement = SirBedevere.objects.get(owner=user)
-        achievement.achieved = True
-        achievement.points = SirBedevere.POINTS
-        achievement.save()
-    else:
-        achievement = SirBedevere.objects.get(owner=user)
-        achievement.achieved = False
-        achievement.points = 0
-        achievement.save()
+    SirBedevere.objects.get(owner=user).toggle(achieved)
 
 @receiver(post_save, sender=HomeworkSolution) 
-def post_save_exam_results(sender, instance, **kwargs):
+def post_save_homework_solution(sender, instance, **kwargs):
     update_sir_bedevere_achievement(instance.author)
 
 @receiver(post_delete, sender=HomeworkSolution) 
-def post_delete_exam_results(sender, instance, **kwargs):
+def post_delete_homework_solution(sender, instance, **kwargs):
     update_sir_bedevere_achievement(instance.author)
 
 @receiver(post_save, sender=Homework) 
-def post_save_exam_results(sender, instance, **kwargs):
+def post_save_homework(sender, instance, **kwargs):
     for solution in instance.homeworksolution_set.all():
         update_sir_bedevere_achievement(solution.author)
+
+
