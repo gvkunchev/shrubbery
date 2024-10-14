@@ -15,17 +15,17 @@
                 {% if request.user.is_student %}
                     <div class="form-group">
                         <label for="fn">Факултетен номер</label>
-                        <input type="text" disabled="disabled" class="form-control" id="fn" placeholder="Факултетен номер" value="{{ request.user.fn }}">
+                        <input type="text" disabled="disabled" class="form-control" id="fn" placeholder="Факултетен номер" value="{{ request.user.student.fn }}">
                     </div>
                 {% endif %}
                 <div class="form-group">
                     <label for="first_name">Име</label>
-                    <input type="text" required="required" class="form-control" id="first_name" name="first_name" placeholder="Име" value="{% if request.POST.first_name %}{{ request.POST.first_name }}{% else %}{{ request.user.first_name }}{% endif %}">
+                    <input type="text" disabled="disabled" required="required" class="form-control" id="first_name" name="first_name" placeholder="Име" value="{% if request.POST.first_name %}{{ request.POST.first_name }}{% else %}{{ request.user.first_name }}{% endif %}">
                     <div class="text-danger">{{ errors.first_name.as_text }}</div>
                 </div>
                 <div class="form-group">
                     <label for="last_name">Фамилия</label>
-                    <input type="text" required="required" class="form-control" id="last_name" name="last_name" placeholder="Фамилия" value="{% if request.POST.last_name %}{{ request.POST.last_name }}{% else %}{{ request.user.last_name }}{% endif %}">
+                    <input type="text" disabled="disabled" required="required" class="form-control" id="last_name" name="last_name" placeholder="Фамилия" value="{% if request.POST.last_name %}{{ request.POST.last_name }}{% else %}{{ request.user.last_name }}{% endif %}">
                     <div class="text-danger">{{ errors.last_name.as_text }}</div>
                 </div>
                 <div class="form-group">

@@ -187,10 +187,6 @@ def settings(request):
             # they can upload files without any validation being done.
             # There is already front-end validation that requires inputing these fields.
             # This is just in case.
-            if 'first_name' not in request.POST or request.POST['first_name'] == '':
-                return redirect('missing')
-            if 'last_name' not in request.POST or request.POST['last_name'] == '':
-                return redirect('missing')
             form = EditUserForm(request.POST, request.FILES, instance=request.user)
             context = {}
             if form.is_valid():
