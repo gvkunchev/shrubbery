@@ -76,7 +76,7 @@ class ChallengeSolution(PointsGiver):
         if total == 0:
             return False
         percentage = self.passed_tests / total
-        self.points = round(self.challenge.points * percentage)
+        self.points = round((self.challenge.points * percentage) + 0.5)
         self.save()
     
     def _reset_points(self):
