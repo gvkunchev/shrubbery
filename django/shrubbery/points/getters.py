@@ -73,7 +73,7 @@ def memoize(func):
     return wrapped
 
 
-@memoize_user
+#@memoize_user Disabled due to bug in PRD. TODO: Fix it
 def get_point_summary(user):
     """Get points summary for a user."""
     points = {
@@ -119,7 +119,7 @@ def get_point_summary(user):
     return points
 
 
-@memoize
+#@memoize Disabled due to bug in PRD. TODO: Fix it
 def get_scoreboard_summary():
     """Get ranks for users."""
     data = []
