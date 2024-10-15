@@ -76,7 +76,7 @@ class HomeworkSolution(PointsGiver):
         if total == 0:
             return False
         percentage = self.passed_tests / total
-        self.points = round((self.homework.points * percentage) + 0.5)
+        self.points = int((self.homework.points * percentage) + 0.5)
         self.save()
     
     def _reset_points(self):
