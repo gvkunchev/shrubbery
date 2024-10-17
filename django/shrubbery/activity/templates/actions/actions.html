@@ -16,7 +16,7 @@
                             Важно
                         </span>
                     </th>
-                    <th scope="col">Събитие</th>
+                    <th scope="col" colspan="2">Събитие</th>
                     <th scope="col">Дата</th>
                 </tr>
             </thead>
@@ -113,6 +113,56 @@
                                 {% if action.type == 'FSC' %}
                                     <a href="/activity/{{ action.pk }}/force_seen"><i class="text-danger bi bi-exclamation-octagon-fill"></i></a>
                                 {% endif %}
+                            {% endif %}
+                        </td>
+                        <td class="text-center">
+                            {% if action.type == 'NA' %}
+                                <i class="text-success bi bi-newspaper"></i>
+                            {% endif %}
+                            {% if action.type == 'F' %}
+                                <i class="text-success bi bi-person-lines-fill"></i>
+                            {% endif %}
+                            {% if action.type == 'FC' %}
+                                <i class="text-danger bi bi-chat"></i>
+                            {% endif %}
+                            {% if action.type == 'HW' %}
+                                <i class="text-success bi bi-house-add-fill"></i>
+                            {% endif %}
+                            {% if action.type == 'HWC' %}
+                                <i class="text-danger bi bi-chat-dots"></i>
+                            {% endif %}
+                            {% if action.type == 'HWS' %}
+                                <i class="text-warning bi bi-github"></i>
+                            {% endif %}
+                            {% if action.type == 'HWSU' %}
+                                <i class="text-warning bi bi-git"></i>
+                            {% endif %}
+                            {% if action.type == 'HWSC' %}
+                                <i class="text-danger bi bi-chat-dots-fill"></i>
+                            {% endif %}
+                            {% if action.type == 'HWSIC' %}
+                                <i class="text-danger bi bi-chat-dots-fill"></i>
+                            {% endif %}
+                            {% if action.type == 'C' %}
+                                <i class="text-success bi bi-house-add"></i>
+                            {% endif %}
+                            {% if action.type == 'CC' %}
+                                <i class="text-danger bi bi-chat-dots"></i>
+                            {% endif %}
+                            {% if action.type == 'CS' %}
+                                <i class="text-warning bi bi-github"></i>
+                            {% endif %}
+                            {% if action.type == 'CSU' %}
+                                <i class="text-warning bi bi-git"></i>
+                            {% endif %}
+                            {% if action.type == 'CSC' %}
+                                <i class="text-danger bi bi-chat-dots-fill"></i>
+                            {% endif %}
+                            {% if action.type == 'CSIC' %}
+                                <i class="text-danger bi bi-chat-dots-fill"></i>
+                            {% endif %}
+                            {% if action.type == 'FSC' %}
+                                <i class="text-info bi bi-arrow-repeat"></i>
                             {% endif %}
                         </td>
                         <td>
