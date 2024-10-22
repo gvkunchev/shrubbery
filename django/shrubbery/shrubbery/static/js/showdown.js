@@ -2,7 +2,7 @@ $(document).ready(function(){
 
     function enableCompareSymbols(text) {
         console.log(text)
-        return text.replace(/&amp;amp;lt;/g, '&lt;').replace(/&amp;amp;gt;/g, '&gt;');
+        return text.replace(/&amp;amp;lt;/g, '&lt;').replace(/&amp;amp;gt;/g, '&gt;').replace(/ &amp;gt; /g, ' > ').replace(/ &amp;lt;= /g, ' <= ').replace(/ &amp;gt;= /g, ' >= ').replace(/ -&amp;gt; /g, ' -> ');
     }
 
     var showDownConverter = new showdown.Converter();
