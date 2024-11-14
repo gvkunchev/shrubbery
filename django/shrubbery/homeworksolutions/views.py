@@ -30,17 +30,18 @@ def homework_solutions(request, homework):
         return redirect('missing')
     solutions = list(HomeworkSolution.objects.filter(homework=homework))
     filtered_solutions = solutions[:]
-    for solution in solutions:
-        subscribers = map(lambda x: x.pk, solution.subscribers.all())
-        if 'filter_subscribed' in request.GET:
-            if request.user.pk in subscribers:
-                filtered_solutions.remove(solution)
-        if 'filter_no_subscribers' in request.GET:
-            if not len(solution.subscribers.all()):
-                filtered_solutions.remove(solution)
-        if 'filter_foreign_subscribers_only' in request.GET:
-            if solution in filtered_solutions and request.user.pk not in subscribers and len(solution.subscribers.all()):
-                filtered_solutions.remove(solution)
+    if request.user.is_authenticated and request.user.is_teacher:
+        for solution in solutions:
+            subscribers = map(lambda x: x.pk, solution.subscribers.all())
+            if 'filter_subscribed' in request.GET:
+                if request.user.pk in subscribers:
+                    filtered_solutions.remove(solution)
+            if 'filter_no_subscribers' in request.GET:
+                if not len(solution.subscribers.all()):
+                    filtered_solutions.remove(solution)
+            if 'filter_foreign_subscribers_only' in request.GET:
+                if solution in filtered_solutions and request.user.pk not in subscribers and len(solution.subscribers.all()):
+                    filtered_solutions.remove(solution)
     context = {
         'homework': homework,
         'solutions': filtered_solutions
