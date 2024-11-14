@@ -30,7 +30,7 @@ def challenge_solutions(request, challenge):
         return redirect('missing')
     context = {
         'challenge': challenge,
-        'solutions': ChallengeSolution.objects.filter(challenge=challenge)
+        'solutions': challenge.challengesolution_set.all()
     }
     return render(request, "challenge_solutions/solutions.html", context)
 

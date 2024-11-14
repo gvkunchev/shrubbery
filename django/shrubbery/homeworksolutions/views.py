@@ -30,7 +30,7 @@ def homework_solutions(request, homework):
         return redirect('missing')
     context = {
         'homework': homework,
-        'solutions': HomeworkSolution.objects.filter(homework=homework)
+        'solutions': homework.homeworksolution_set.all()
     }
     return render(request, "homework_solutions/solutions.html", context)
 
