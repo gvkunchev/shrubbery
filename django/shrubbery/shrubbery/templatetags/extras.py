@@ -3,7 +3,7 @@ from django.conf import settings
 from django import template
 from django.template.base import Node
 from django.utils.functional import keep_lazy
-
+from users.models import User
 register = template.Library()
 
 from homeworksolutions.models import HomeworkSolution

@@ -15,6 +15,7 @@
     {% else %}
       <link href="{% static 'css/default.min.css' %}" rel="stylesheet" type="text/css">
     {% endif %}
+    <link href="{% static 'css/bootstrap-suggest.css' %}" rel="stylesheet" type="text/css">
 
     {% block css %}
         {# Add custom content when extending this template #}
@@ -25,7 +26,7 @@
     <script src="{% static 'js/bootstrap.min.js' %}"></script>
     <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
     <script src="{% static 'js/showdown.min.js' %}"></script>
-    <script src="{% static 'js/showdown.js' %}?v9"></script>
+    <script src="{% static 'js/showdown.js' %}?v10"></script>
     <script src="{% static 'js/highlight.min.js' %}?v3"></script>
     <script src="{% static 'js/controls.js' %}?v3"></script>
     <script src="{% static 'js/clipboard.js' %}"></script>
@@ -35,6 +36,8 @@
     <script src="{% static 'js/inline_comments.js' %}?v3"></script>
     <script src="{% static 'js/deadline.js' %}?v3"></script>
     <script src="{% static 'js/schedule.js' %}"></script>
+    <script src="{% static 'js/bootstrap-suggest.min.js' %}"></script>
+    <script src="{% static 'js/mention.js' %}"></script>
 
     {% block javascript %}
         {# Add custom content when extending this template #}

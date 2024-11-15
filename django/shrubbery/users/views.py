@@ -8,6 +8,7 @@ from django.utils.http import urlsafe_base64_decode
 from django.utils.encoding import force_str
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.forms import SetPasswordForm
+from django.http import JsonResponse
 
 from shrubbery.view_decorators import is_teacher
 
@@ -270,6 +271,12 @@ def user(request, user):
             raise ObjectDoesNotExist
     except (ValueError, ObjectDoesNotExist):
         return redirect('missing')
+
+@login_required
+def users(request):
+    '''List of all users for automatic mention.'''
+    users = User.objects.filter(is_active=True)
+    return JsonResponse(list(map(lambda x: x.full_name, users)), safe=False)
 
 
 # Public teacher views
