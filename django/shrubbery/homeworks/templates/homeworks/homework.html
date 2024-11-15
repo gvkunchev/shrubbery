@@ -143,19 +143,60 @@
 
 
                     {% for comment in comments %}
-                        <tr><td id="comment{{ comment.pk }}" class="ajax-toggle-container">
-                            {% include 'common/user_dated_card.html' with user=comment.author date=comment.human_date add_star=comment.starred %}
-                            <br/>
-                            <div class="showdown-trigger">{{ comment.content }}</div>
-                            {% if request.user.is_teacher %}
-                                <span class="ajax-toggle">
-                                    <a href="/homework/{{ homework.pk }}/comment/{{ comment.pk }}/star/add?page={{ request.GET.page }}" class="ajax-toggle-trigger {% if not comment.starred %}active{% endif %}">Добави звезда</a>
-                                    <a href="/homework/{{ homework.pk }}/comment/{{ comment.pk }}/star/remove?page={{ request.GET.page }}" class="ajax-toggle-trigger {% if comment.starred %}active{% endif %}">Махни звездата</a>
-                                </span>
-                            {% endif %}
-                            {% if request.user.is_teacher or request.user.id == comment.author.id %}
-                                <a href="/homework/{{ homework.pk }}/comment/{{ comment.pk }}/edit?page={{ request.GET.page }}">Редактирай</a>
-                            {% endif %}
+                        <tr><td id="comment{{ comment.pk }}">
+                            <div class="ajax-toggle-container">
+                                {% include 'common/user_dated_card.html' with user=comment.author date=comment.human_date add_star=comment.starred %}
+                                <br/>
+                                <div class="showdown-trigger">{{ comment.content }}</div>
+                                {% if request.user.is_teacher %}
+                                    <span class="ajax-toggle">
+                                        <a href="/homework/{{ homework.pk }}/comment/{{ comment.pk }}/star/add?page={{ request.GET.page }}" class="ajax-toggle-trigger {% if not comment.starred %}active{% endif %}">Добави звезда</a>
+                                        <a href="/homework/{{ homework.pk }}/comment/{{ comment.pk }}/star/remove?page={{ request.GET.page }}" class="ajax-toggle-trigger {% if comment.starred %}active{% endif %}">Махни звездата</a>
+                                    </span>
+                                {% endif %}
+                                {% if request.user.is_teacher or request.user.id == comment.author.id %}
+                                    <a href="/homework/{{ homework.pk }}/comment/{{ comment.pk }}/edit?page={{ request.GET.page }}">Редактирай</a>
+                                {% endif %}
+                                {% if request.user.is_authenticated %}
+                                    <a class="text-nowrap" href="/homework/{{ homework.pk }}/comment/{{ comment.pk }}/answer?page={{ request.GET.page }}#answer">Отговори в нишка</a>
+                                {% endif %}
+                            </div>
+                            <div class="thread-comments ps-sm-5">
+                                {% if comment.homeworkcomment_set.all %}
+                                    <div class="card mt-2">
+                                        <div class="card-header">
+                                            <h6 class="card-title">Нишка</h6>
+                                        </div>
+                                        <div class="card-body">
+                                            <table class="table table-hover fixed-table">
+                                                <tbody>
+                                                    {% for subcomment in comment.homeworkcomment_set.all reversed %}
+                                                        <tr><td id="comment{{ subcomment.pk }}">
+                                                            <div class="ajax-toggle-container">
+                                                                {% include 'common/user_dated_card.html' with user=subcomment.author date=subcomment.human_date add_star=subcomment.starred %}
+                                                                <br/>
+                                                                <div class="showdown-trigger">{{ subcomment.content }}</div>
+                                                                {% if request.user.is_teacher %}
+                                                                    <span class="ajax-toggle">
+                                                                        <a href="/homework/{{ homework.pk }}/comment/{{ subcomment.pk }}/star/add?page={{ request.GET.page }}" class="ajax-toggle-trigger {% if not subcomment.starred %}active{% endif %}">Добави звезда</a>
+                                                                        <a href="/homework/{{ homework.pk }}/comment/{{ subcomment.pk }}/star/remove?page={{ request.GET.page }}" class="ajax-toggle-trigger {% if subcomment.starred %}active{% endif %}">Махни звездата</a>
+                                                                    </span>
+                                                                {% endif %}
+                                                                {% if request.user.is_teacher or request.user.id == subcomment.author.id %}
+                                                                    <a href="/homework/{{ homework.pk }}/comment/{{ subcomment.pk }}/edit?page={{ request.GET.page }}">Редактирай</a>
+                                                                {% endif %}
+                                                                {% if request.user.is_authenticated %}
+                                                                    <a class="text-nowrap" href="/homework/{{ homework.pk }}/comment/{{ comment.pk }}/answer?page={{ request.GET.page }}#answer">Отговори в нишка</a>
+                                                                {% endif %}
+                                                            </div>
+                                                        </td></tr>
+                                                    {% endfor %}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            </div>
                         </td></tr>
                     {% endfor %}
                 </tbody>

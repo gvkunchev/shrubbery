@@ -1,0 +1,51 @@
+{% extends "backbone/base.html" %}
+{% block location %}
+    <h6 class="location-info"><i class="bi bi-globe"></i> <a href="/homeworks">Домашни</a> > <a href="/homework/{{ parent.homework.pk }}">{{ parent.homework.title }}</a> > <a href="/homework/{{ parent.homework.pk }}/comment/{{ parent.pk }}/answer?page={% if request.GET.page %}{{ request.GET.page }}{% else %}1{% endif %}">Отговори в нишка</a></h6>
+{% endblock %}
+{% block body %}
+
+    <div class="card mt-2">
+        <div class="card-header">
+            <h5 class="card-title">Отговори на коментар в нишка</h5>
+        </div>
+        <div class="card-header">
+            {% include 'common/user_dated_card.html' with user=parent.author date=parent.human_date %}
+            <div class="showdown-trigger">{{ parent.content }}</div>
+            {% if parent.homeworkcomment_set.all %}
+                <div class="thread-comments ps-sm-5">
+                    <div class="card mt-2">
+                        <div class="card-header">
+                            <h6 class="card-title">Нишка</h6>
+                        </div>
+                        <div class="card-body">
+                            <table class="table table-hover fixed-table">
+                                <tbody>
+                                    {% for subcomment in parent.homeworkcomment_set.all reversed %}
+                                        <tr><td id="comment{{ subcomment.pk }}">
+                                            <div class="ajax-toggle-container">
+                                                {% include 'common/user_dated_card.html' with user=subcomment.author date=subcomment.human_date add_star=subcomment.starred %}
+                                                <br/>
+                                                <div class="showdown-trigger">{{ subcomment.content }}</div>
+                                            </div>
+                                        </td></tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+        <div class="card-body">
+            <form method="post" id="answer">
+                {% csrf_token %}
+                <input type="hidden" name="page" value="{% if request.GET.page %}{{ request.GET.page }}{% else %}1{% endif %}">
+                <input type="hidden" name="parent" value="{{ parent.id }}">
+                <textarea name="content" class="form-control showdown-input" id="content" placeholder="Съдържание">{% if request.POST.content %}{{ request.POST.content }}{% else %}{{ comment.content }}{% endif %}</textarea>
+                <div class="text-danger">{{ errors.content.as_text }}</div>
+                <button type="submit" name="edit" class="btn btn-primary mt-2 mx-1">Отговори</button>
+                <button class="btn btn-secondary mt-2 mx-1 showdown-preview" data-showdown-source="content"><i class="bi bi-eye-fill"></i> Преглед</button>
+            </form>
+        </div>
+    </div>
+{% endblock %}

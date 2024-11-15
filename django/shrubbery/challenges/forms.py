@@ -29,4 +29,4 @@ class ChallengeCommentForm(forms.ModelForm):
 
     class Meta:
         model = ChallengeComment
-        fields = ('challenge', 'content', 'author')
+        fields = ('challenge', 'content', 'author', 'parent')

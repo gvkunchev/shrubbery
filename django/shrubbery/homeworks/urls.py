@@ -16,8 +16,9 @@ urlpatterns = [
     re_path(r'^homework/(?P<homework>\d+)/delete$', views.delete_homework, name='delete_homework'),
     re_path(r'^homework/(?P<homework>\d+)/comment/(?P<comment>\d+)/edit$', views.EditHomeworkComment.as_view(), name='edit_homework_comment'),
     re_path(r'^homework/(?P<homework>\d+)/comment/(?P<comment>\d+)/delete$', views.DeleteHomeworkComment.as_view(), name='delete_homework_comment'),
+    re_path(r'^homework/(?P<homework>\d+)/comment/(?P<parent>\d+)/answer$', views.answer_homework_comment, name='answer_homework_comment'),
     re_path(r'^homework/(?P<homework>\d+)/comment/add$', views.AddHomeworkComment.as_view(), name='add_homework_comment'),
     re_path(r'^homework/(?P<homework>\d+)/comment/(?P<comment>\d+)/star/add$', views.AddHomeworkCommentStar.as_view(), name='add_homework_comment_star'),
     re_path(r'^homework/(?P<homework>\d+)/comment/(?P<comment>\d+)/star/remove$', views.RemoveHomeworkCommentStar.as_view(), name='remove_homework_comment_star'),
-    
+
 ]

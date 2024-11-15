@@ -30,7 +30,7 @@ class Homework(models.Model):
     def __str__(self):
         """String representation for the admin panel."""
         return self.title
-    
+
     @property
     def can_upload(self):
         """Whether solutions can be uploaded or not."""
@@ -56,7 +56,7 @@ class Homework(models.Model):
     def parsable_deadline(self):
         """Deadline that can be parsed by front-end."""
         return self.deadline.astimezone(timezone.get_current_timezone()).strftime("%Y-%m-%dT%H:%M")
-    
+
     def save(self, *args, **kwargs):
         """Create action record for a new instance."""
         is_new = self.id is None
@@ -67,10 +67,10 @@ class Homework(models.Model):
                                                                       date=self.creation_date,
                                                                       type='HW')
             action.save()
-    
+
     def get_pygmentized_sanity_test(self):
         return pygmentize(self.sanity_test)
-    
+
     def get_pygmentized_full_test(self):
         return pygmentize(self.full_test)
 
@@ -81,6 +81,7 @@ class HomeworkComment(PointsGiver):
     homework = models.ForeignKey(Homework, on_delete=models.CASCADE)
     content = models.TextField()
     starred = models.BooleanField(default=False)
+    parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
 
     class Meta:
         ordering = ('-date', )
@@ -118,6 +119,7 @@ class HomeworkComment(PointsGiver):
         """Is there an answer to the homework from a teacher after this comment?"""
         for comment in self.homework.comments:
             if comment.date > self.date:
-                if comment.author.is_teacher():
-                    return True
+                if (comment.parent is None and self.parent is None) or comment.parent == self.parent or comment.parent == self:
+                    if comment.author.is_teacher():
+                        return True
         return False
