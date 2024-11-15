@@ -6,7 +6,7 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils import timezone
 from django.apps import apps
-
+from shrubbery.easter_eggs import decorate_with_youtube
 from homeworks.models import Homework
 from users.models import User, Teacher
 from points.models import PointsGiver
@@ -52,16 +52,16 @@ class HomeworkSolution(PointsGiver):
     def __str__(self):
         """String representation for the admin panel."""
         return f"{self.homework} - {self.author}"
-    
+
     @property
     def comments(self):
         """Get all comments."""
         return self.homeworksolutioncomment_set.all()
-    
+
     @property
     def inline_comments_count(self):
         """Get count of all inline comments."""
-        return (len(HomeworkSolutionInlineComment.objects.filter(solution=self)) + 
+        return (len(HomeworkSolutionInlineComment.objects.filter(solution=self)) +
                 len(HomeworkSolutionHistoryInlineComment.objects.filter(solution=self)))
 
     def assign_line_count(self, *args, **kwargs):
@@ -78,7 +78,7 @@ class HomeworkSolution(PointsGiver):
         percentage = self.passed_tests / total
         self.points = int((self.homework.points * percentage) + 0.5)
         self.save()
-    
+
     def _reset_points(self):
         """Reset points when sending to history."""
         self.upload_date = timezone.now()
@@ -87,7 +87,7 @@ class HomeworkSolution(PointsGiver):
         self.failed_tests = 0
         self.points = 0
         self.save()
-    
+
     def _send_inline_comments_to_history(self, history):
         """Send inline comments to history."""
         comments = HomeworkSolutionInlineComment.objects.filter(solution=self)
@@ -154,11 +154,11 @@ class HomeworkSolution(PointsGiver):
                 if comment.author.is_teacher():
                     return True
         return False
-    
+
     def has_history(self):
         """If homework solution already has history."""
         return len(HomeworkSolutionHistory.objects.filter(solution=self))
-    
+
     def has_history_after(self, date):
         """If has history after a given date."""
         for history in HomeworkSolutionHistory.objects.filter(solution=self):
@@ -181,7 +181,7 @@ class HomeworkSolutionHistory(models.Model):
     def __str__(self):
         """String representation for the admin panel."""
         return f"{self.homework} - {self.author} - {self.upload_date}"
-    
+
     def assign_diff_to(self, target):
         """Generate diff of current solution to target and store it."""
         differ = HtmlDiff()
@@ -191,12 +191,12 @@ class HomeworkSolutionHistory(models.Model):
             new = f.readlines()
         self.diff = ''.join(differ.make_file(old, new))
         self.save()
-        
+
     @property
     def human_upload_date(self):
         """Ipload date format for human readers.."""
         return self.upload_date.astimezone(timezone.get_current_timezone()).strftime("%d.%m.%Y %H:%M")
-    
+
     def save(self, *args, **kwargs):
         """Create action record for a new instance."""
         is_new = self.id is None
@@ -239,6 +239,7 @@ class HomeworkSolutionComment(PointsGiver):
     def save(self, *args, **kwargs):
         """Decorate saving with points assignments and action recording."""
         is_new = self.id is None
+        self.content = decorate_with_youtube(self.content)
         super(HomeworkSolutionComment, self).save(*args, **kwargs)
         self._update_points(*args, **kwargs)
         if is_new:
@@ -282,6 +283,7 @@ class HomeworkSolutionInlineComment(models.Model):
     def save(self, *args, **kwargs):
         """Decorate saving with points assignments and action recording."""
         is_new = self.id is None
+        self.content = decorate_with_youtube(self.content)
         super(HomeworkSolutionInlineComment, self).save(*args, **kwargs)
         if is_new:
             action = apps.get_model('activity.Action').objects.create(author=self.author,

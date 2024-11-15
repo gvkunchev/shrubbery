@@ -2,7 +2,7 @@ from django.db import models
 from django.utils import timezone
 from users.models import User
 from django.apps import apps
-
+from shrubbery.easter_eggs import decorate_with_youtube
 
 class NewsArticle(models.Model):
     date = models.DateTimeField(default=timezone.now)
@@ -21,10 +21,11 @@ class NewsArticle(models.Model):
     def __str__(self):
         """String representation for the admin panel."""
         return f"{self.author} - {self.human_date} - {self.title}"
-    
+
     def save(self, *args, **kwargs):
         """Create action record for a new instance."""
         is_new = self.id is None
+        self.content = decorate_with_youtube(self.content)
         super(NewsArticle, self).save(*args, **kwargs)
         if is_new:
             action = apps.get_model('activity.Action').objects.create(author=self.author,

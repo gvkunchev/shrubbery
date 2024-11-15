@@ -1,7 +1,7 @@
 from django.db import models
 from django.utils import timezone
 from django.apps import apps
-
+from shrubbery.easter_eggs import decorate_with_youtube
 from users.models import User
 from points.models import PointsGiver
 
@@ -60,6 +60,7 @@ class Challenge(models.Model):
     def save(self, *args, **kwargs):
         """Create action record for a new instance."""
         is_new = self.id is None
+        self.content = decorate_with_youtube(self.content)
         super(Challenge, self).save(*args, **kwargs)
         if is_new:
             action = apps.get_model('activity.Action').objects.create(author=self.author,
@@ -105,6 +106,7 @@ class ChallengeComment(PointsGiver):
     def save(self, *args, **kwargs):
         """Decorate saving with points assignments."""
         is_new = self.id is None
+        self.content = decorate_with_youtube(self.content)
         super(ChallengeComment, self).save(*args, **kwargs)
         self._update_points(*args, **kwargs)
         if is_new:
