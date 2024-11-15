@@ -255,6 +255,23 @@ def student(request, student):
     return render(request, "students/student.html", {'student': student})
 
 
+def user(request, user):
+    '''Single user page.'''
+    try:
+        first_name, last_name = user.split('_')
+        user_obj = User.objects.get(first_name=first_name, last_name=last_name)
+        if not user_obj.is_active:
+            raise ObjectDoesNotExist
+        if user_obj.is_teacher:
+            return render(request, "teachers/teacher.html", {'teacher': user_obj})
+        elif user_obj.is_student:
+            return render(request, "students/student.html", {'student': user_obj})
+        else:
+            raise ObjectDoesNotExist
+    except (ValueError, ObjectDoesNotExist):
+        return redirect('missing')
+
+
 # Public teacher views
 
 def teachers(request):
