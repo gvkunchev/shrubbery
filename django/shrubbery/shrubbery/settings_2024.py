@@ -30,8 +30,8 @@ else:
 
 # SECURITY WARNING: don't run with debug turned on in production!
 if os.environ.get('SHRUBBERY_ENV') == 'prd':
-    ALLOWED_HOSTS = ['localhost', 'py-fmi.org']
-    CSRF_TRUSTED_ORIGINS = ['https://py-fmi.org']
+    ALLOWED_HOSTS = ['multishrubbery.onrender.com']
+    CSRF_TRUSTED_ORIGINS = ['multishrubbery.onrender.com']
 else:
     ALLOWED_HOSTS = ['*']
 
@@ -118,6 +118,9 @@ if os.environ.get('SHRUBBERY_ENV') == 'prd':
             'PASSWORD': os.environ['POSTGRES_PASSWORD'],
             'HOST': os.environ['POSTGRES_HOSTNAME'],
             'PORT': '5432',
+            'OPTIONS': {
+                'options': '-c search_path=2024'
+            }
         }
     }
 else:
@@ -198,7 +201,7 @@ AUTH_USER_MODEL = 'users.User'
 
 # Media files for uploading resources
 
-MEDIA_URL = '/media/' 
+MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
 # Default endpoints
