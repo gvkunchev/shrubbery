@@ -30,8 +30,8 @@ else:
 
 # SECURITY WARNING: don't run with debug turned on in production!
 if os.environ.get('SHRUBBERY_ENV') == 'prd':
-    ALLOWED_HOSTS = ['2023.multi-shrubbery.onrender.com']
-    CSRF_TRUSTED_ORIGINS = ['https://2023.multi-shrubbery.onrender.com']
+    ALLOWED_HOSTS = ['2023.multi-shrubbery.onrender.com', 'multi-shrubbery.onrender.com']
+    CSRF_TRUSTED_ORIGINS = ['https://2023.multi-shrubbery.onrender.com', 'https://multi-shrubbery.onrender.com']
 else:
     ALLOWED_HOSTS = ['*']
 
@@ -216,3 +216,26 @@ CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = TIME_ZONE
 
 SHOW_FINAL_SCHEDULE = False
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'logfile': {
+            'class': 'logging.handlers.WatchedFileHandler',
+            'filename': '/var/media/django/shrubbery_2023.log'
+        },
+    },
+    'loggers': {
+        'django.request': {
+            'handlers': ['logfile'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+        'django': {
+            'handlers': ['logfile'],
+            'level': 'ERROR',
+            'propagate': False,
+        }
+    },
+}
