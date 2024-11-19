@@ -119,7 +119,7 @@ if os.environ.get('SHRUBBERY_ENV') == 'prd':
             'HOST': os.environ['POSTGRES_HOSTNAME'],
             'PORT': '5432',
             'OPTIONS': {
-                'options': '-c search_path=2024'
+                'options': '-c search_path=schema2024'
             }
         }
     }
@@ -222,7 +222,7 @@ LOGGING = {
     'disable_existing_loggers': False,
     'handlers': {
         'logfile': {
-            'class': 'logging.handlers.WatchedFileHandler',
+            'class': 'logging.FileHandler',
             'filename': '/var/media/log/shrubbery_2024.log'
         },
     },

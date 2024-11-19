@@ -119,7 +119,7 @@ if os.environ.get('SHRUBBERY_ENV') == 'prd':
             'HOST': os.environ['POSTGRES_HOSTNAME'],
             'PORT': '5432',
             'OPTIONS': {
-                'options': '-c search_path=2023'
+                'options': '-c search_path=schema2023'
             }
         }
     }
