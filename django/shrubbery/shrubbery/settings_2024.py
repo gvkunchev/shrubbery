@@ -223,7 +223,7 @@ LOGGING = {
     'handlers': {
         'logfile': {
             'class': 'logging.handlers.WatchedFileHandler',
-            'filename': '/var/media/django/shrubbery_2024.log'
+            'filename': '/var/media/log/shrubbery_2024.log'
         },
     },
     'loggers': {

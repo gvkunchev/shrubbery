@@ -30,8 +30,8 @@ else:
 
 # SECURITY WARNING: don't run with debug turned on in production!
 if os.environ.get('SHRUBBERY_ENV') == 'prd':
-    ALLOWED_HOSTS = ['2023.multi-shrubbery.onrender.com', 'multi-shrubbery.onrender.com']
-    CSRF_TRUSTED_ORIGINS = ['https://2023.multi-shrubbery.onrender.com', 'https://multi-shrubbery.onrender.com']
+    ALLOWED_HOSTS = ['2024.multi-shrubbery.onrender.com', 'multi-shrubbery.onrender.com']
+    CSRF_TRUSTED_ORIGINS = ['https://2024.multi-shrubbery.onrender.com', 'https://multi-shrubbery.onrender.com']
 else:
     ALLOWED_HOSTS = ['*']
 
@@ -119,7 +119,7 @@ if os.environ.get('SHRUBBERY_ENV') == 'prd':
             'HOST': os.environ['POSTGRES_HOSTNAME'],
             'PORT': '5432',
             'OPTIONS': {
-                'options': '-c search_path=2023'
+                'options': '-c search_path=2024'
             }
         }
     }
@@ -222,8 +222,7 @@ LOGGING = {
     'disable_existing_loggers': False,
     'handlers': {
         'logfile': {
-            'class': 'logging.FileHandler',
-            'filename': '/var/media/log/shrubbery_2023.log'
+            "class": "logging.StreamHandler",
         },
     },
     'loggers': {
