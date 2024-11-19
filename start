@@ -16,7 +16,8 @@ celery -A shrubbery worker -l DEBUG --logfile=celery_worker_2024.log --detach
 celery -A shrubbery beat -l DEBUG --logfile=celery_beat_2024.log --detach
 
 # Start Gunicorn + Nginx
-cd /var/shrubbery/
-gunicorn -c 2023/gunicorn_conf_2023.py
-gunicorn -c 2024/gunicorn_conf_2024.py
+cd /var/shrubbery/2023
+gunicorn -c gunicorn_conf_2023.py
+cd /var/shrubbery/2024
+gunicorn -c gunicorn_conf_2024.py
 nginx -g 'daemon off;'
