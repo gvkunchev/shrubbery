@@ -16,8 +16,9 @@ urlpatterns = [
     re_path(r'^challenge/(?P<challenge>\d+)/delete$', views.delete_challenge, name='delete_challenge'),
     re_path(r'^challenge/(?P<challenge>\d+)/comment/(?P<comment>\d+)/edit$', views.EditChallengeComment.as_view(), name='edit_challenge_comment'),
     re_path(r'^challenge/(?P<challenge>\d+)/comment/(?P<comment>\d+)/delete$', views.DeleteChallengeComment.as_view(), name='delete_challenge_comment'),
+    re_path(r'^challenge/(?P<challenge>\d+)/comment/(?P<parent>\d+)/answer$', views.answer_challenge_comment, name='answer_challenge_comment'),
     re_path(r'^challenge/(?P<challenge>\d+)/comment/add$', views.AddChallengeComment.as_view(), name='add_challenge_comment'),
     re_path(r'^challenge/(?P<challenge>\d+)/comment/(?P<comment>\d+)/star/add$', views.AddChallengeCommentStar.as_view(), name='add_challenge_comment_star'),
     re_path(r'^challenge/(?P<challenge>\d+)/comment/(?P<comment>\d+)/star/remove$', views.RemoveChallengeCommentStar.as_view(), name='remove_challenge_comment_star'),
-    
+
 ]

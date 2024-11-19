@@ -1,12 +1,98 @@
+from django.apps import apps
 from django.core.exceptions import ObjectDoesNotExist
 
 from users.models import Student, ProfilePicturePoints
 from homeworks.models import Homework
-from homeworksolutions.models import HomeworkSolution
+from homeworksolutions.models import HomeworkSolution, HomeworkSolutionTeacherPoints
 from challenges.models import Challenge
-from challengesolutions.models import ChallengeSolution
+from challengesolutions.models import ChallengeSolution, ChallengeSolutionTeacherPoints
+from points.models import PointsGiver
 
 
+# Constant holding all models in the project
+ALL_MODELS = apps.get_models()
+# Constant holding all points givers in the project
+POINTS_GIVER_MODELS = []
+for model in ALL_MODELS:
+    if issubclass(model, PointsGiver):
+        POINTS_GIVER_MODELS.append(model)
+
+
+
+def get_all_points():
+    """Collect all points given."""
+    points = []
+    for model in POINTS_GIVER_MODELS:
+        if model is HomeworkSolutionTeacherPoints:
+            for object in model.objects.filter(solution__homework__verified=True):
+                points.append(object.points)
+        elif model is ChallengeSolutionTeacherPoints:
+            for object in model.objects.filter(solution__challenge__verified=True):
+                points.append(object.points)
+        elif model is HomeworkSolution:
+            for object in model.objects.filter(homework__verified=True):
+                points.append(object.points)
+        elif model is ChallengeSolution:
+            for object in model.objects.filter(challenge__verified=True):
+                points.append(object.points)
+        else:
+            for object in model.objects.all():
+                points.append(object.points)
+    return points
+
+
+def get_all_points_per_user(user):
+    """Collect all points for a particular user."""
+    points = []
+    for model in POINTS_GIVER_MODELS:
+        if hasattr(model, 'author'):
+            for object in model.objects.filter(author=user):
+                points.append(object.points)
+        elif hasattr(model, 'owner'):
+            for object in model.objects.filter(owner=user):
+                points.append(object.points)
+        elif hasattr(model, 'solution'):
+            if model is HomeworkSolutionTeacherPoints:
+                for object in model.objects.filter(solution__author=user, solution__homework__verified=True):
+                    points.append(object.points)
+            elif model is ChallengeSolutionTeacherPoints:
+                for object in model.objects.filter(solution__author=user, solution__challenge__verified=True):
+                    points.append(object.points)
+            else:
+                raise Exception("Can't collect all points.")
+    return points
+
+
+def memoize_user(func):
+    """Memoize the scores for all users to boost performance."""
+    memoized = {}
+    def wrapped(user):
+        all_points = get_all_points_per_user(user)
+        if all_points != memoized.get(user.full_name, {}).get('all_points'):
+            memoized[user.full_name] = {
+                'all_points': all_points,
+                'result': func(user)
+            }
+        return memoized[user.full_name]['result']
+    return wrapped
+
+
+def memoize(func):
+    """Memoize the scores for all users to boost performance."""
+    memoized = None
+    result = None
+    def wrapped(*args, **kwargs):
+        nonlocal memoized
+        nonlocal result
+        all_points = get_all_points()
+        if all_points != memoized:
+            memoized = all_points
+            result = func(*args, **kwargs)
+        return result
+    return wrapped
+
+
+@memoize_user
 def get_point_summary(user):
     """Get points summary for a user."""
     points = {
@@ -26,6 +112,10 @@ def get_point_summary(user):
     for comment in user.homeworkcomment_set.values():
         points['comments'] += comment.get('points', 0)
     for comment in user.homeworksolutioncomment_set.values():
+        points['comments'] += comment.get('points', 0)
+    for comment in user.challengecomment_set.values():
+        points['comments'] += comment.get('points', 0)
+    for comment in user.challengesolutioncomment_set.values():
         points['comments'] += comment.get('points', 0)
     # Vouchers
     for voucher in user.voucher_set.values():
@@ -48,6 +138,7 @@ def get_point_summary(user):
     return points
 
 
+@memoize
 def get_scoreboard_summary():
     """Get ranks for users."""
     data = []

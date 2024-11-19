@@ -7,6 +7,7 @@ from django.shortcuts import render, redirect
 from django.core.exceptions import ObjectDoesNotExist
 from django.conf import settings
 from django.http import HttpResponse
+from django.contrib.auth.decorators import login_required
 
 from shrubbery.view_decorators import is_teacher
 
@@ -49,7 +50,8 @@ def challenge(request, challenge):
         challenge = Challenge.objects.get(pk=challenge)
         if challenge.hidden and not (request.user.is_authenticated and request.user.is_teacher):
             raise ObjectDoesNotExist()
-        paginator = Paginator(challenge.comments, 10)
+        main_comments = challenge.comments.filter(parent=None)
+        paginator = Paginator(main_comments, 10)
         page_number = request.GET.get("page")
         page_obj = paginator.get_page(page_number)
     except ObjectDoesNotExist:
@@ -98,6 +100,33 @@ def edit_challenge(request, challenge):
         else:
             context['errors'] = form.errors
     return render(request, "challenges/edit_challenge.html", context)
+
+
+@login_required
+def answer_challenge_comment(request, challenge, parent):
+    '''Answer challenge comment in a thread.'''
+    try:
+        challenge = Challenge.objects.get(pk=challenge)
+        parent = ChallengeComment.objects.get(pk=parent)
+    except ObjectDoesNotExist:
+        return redirect('missing')
+    if request.method == 'POST':
+        data = {
+            'challenge': challenge,
+            'content': request.POST.get('content'),
+            'parent': parent,
+            'author': request.user
+        }
+        form = ChallengeCommentForm(data)
+        if form.is_valid():
+            comment = form.save()
+            return redirect(f"/challenge/{challenge.pk}?page={request.POST.get('page')}#comment{comment.pk}")
+        else:
+            return render(request, "challenges/answer_challenge_comment.html", {'challenge': challenge,
+                                                                               'parent': parent,
+                                                                               'errors': form.errors})
+    else:
+        return render(request, "challenges/answer_challenge_comment.html", {'challenge': challenge, 'parent': parent})
 
 
 class AddChallengeComment(AddComment):

@@ -1,7 +1,7 @@
 from django.db import models
 from django.utils import timezone
 from django.apps import apps
-
+from shrubbery.easter_eggs import decorate_with_youtube
 from users.models import User
 from points.models import PointsGiver
 
@@ -30,7 +30,7 @@ class Challenge(models.Model):
     def __str__(self):
         """String representation for the admin panel."""
         return self.title
-    
+
     @property
     def can_upload(self):
         """Whether solutions can be uploaded or not."""
@@ -56,10 +56,11 @@ class Challenge(models.Model):
     def parsable_deadline(self):
         """Deadline that can be parsed by front-end."""
         return self.deadline.astimezone(timezone.get_current_timezone()).strftime("%Y-%m-%dT%H:%M")
-    
+
     def save(self, *args, **kwargs):
         """Create action record for a new instance."""
         is_new = self.id is None
+        self.content = decorate_with_youtube(self.content)
         super(Challenge, self).save(*args, **kwargs)
         if is_new:
             action = apps.get_model('activity.Action').objects.create(author=self.author,
@@ -67,10 +68,10 @@ class Challenge(models.Model):
                                                                       date=self.creation_date,
                                                                       type='C')
             action.save()
-    
+
     def get_pygmentized_sanity_test(self):
         return pygmentize(self.sanity_test)
-    
+
     def get_pygmentized_full_test(self):
         return pygmentize(self.full_test)
 
@@ -80,6 +81,7 @@ class ChallengeComment(PointsGiver):
     challenge = models.ForeignKey(Challenge, on_delete=models.CASCADE)
     content = models.TextField()
     starred = models.BooleanField(default=False)
+    parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
 
     class Meta:
         ordering = ('-date', )
@@ -104,6 +106,7 @@ class ChallengeComment(PointsGiver):
     def save(self, *args, **kwargs):
         """Decorate saving with points assignments."""
         is_new = self.id is None
+        self.content = decorate_with_youtube(self.content)
         super(ChallengeComment, self).save(*args, **kwargs)
         self._update_points(*args, **kwargs)
         if is_new:
@@ -117,8 +120,9 @@ class ChallengeComment(PointsGiver):
         """Is there an answer to the challenge from a teacher after this comment?"""
         for comment in self.challenge.comments:
             if comment.date > self.date:
-                if comment.author.is_teacher():
-                    return True
+                if (comment.parent is None and self.parent is None) or comment.parent == self.parent or comment.parent == self:
+                    if comment.author.is_teacher():
+                        return True
         return False
 
 

@@ -1,13 +1,15 @@
 $(document).ready(function(){
 
     function enableCompareSymbols(text) {
-        return text.replace(/ &amp;lt; /g, ' < ').replace(/ &amp;gt; /g, ' > ').replace(/ &amp;lt;= /g, ' <= ').replace(/ &amp;gt;= /g, ' >= ').replace(/ -&amp;gt; /g, ' -> ');
+        return text.replace(/&amp;amp;lt;/g, '&lt;').replace(/&amp;amp;gt;/g, '&gt;').replace(/ &amp;gt; /g, ' > ').replace(/ &amp;lt;= /g, ' <= ').replace(/ &amp;gt;= /g, ' >= ').replace(/ -&amp;gt; /g, ' -> ');
     }
 
     var showDownConverter = new showdown.Converter();
     showDownConverter.setOption('emoji', true);
     showDownConverter.setOption('simplifiedAutoLink', true);
     showDownConverter.setOption('strikethrough', true);
+    showDownConverter.setOption('ghMentions', true);
+    showDownConverter.setOption('ghMentionsLink', '/user/{u}');
 
     // Inline text
     $('.showdown-trigger').each(function(){

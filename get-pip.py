@@ -77,7 +77,7 @@ def determine_pip_install_arguments():
     if include_wheel(pre):
         args.append("wheel")
 
-    return ["install", "--upgrade", "--force-reinstall"] + args
+    return ["install", "--upgrade", "--force-reinstall", "--break-system-packages"] + args
 
 
 def monkeypatch_for_cert(tmpdir):

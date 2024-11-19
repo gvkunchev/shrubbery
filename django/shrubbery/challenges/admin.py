@@ -32,19 +32,19 @@ class ChallengeAdmin(admin.ModelAdmin):
 class ChallengeCommentAdmin(admin.ModelAdmin):
     model = ChallengeComment
     ordering = ('date', 'author')
-    search_fields = ('date', 'author', 'challenge', 'content')
+    search_fields = ('date', 'author', 'challenge', 'parent', 'content')
     list_display = ('date', 'author', 'challenge')
     list_filter = ('author', 'challenge')
     fieldsets = (
             (None, {
                 "fields": (
-                   ('date', 'author', 'challenge', 'content', 'starred')
+                   ('date', 'author', 'challenge', 'parent', 'content', 'starred')
                 ),
             }),
         )
     add_fieldsets = (
         (None, {
-            'fields': ('date', 'author', 'challenge', 'content', 'starred')
+            'fields': ('date', 'author', 'challenge', 'parent', 'content', 'starred')
         }),
     )
 

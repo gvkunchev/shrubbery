@@ -8,6 +8,7 @@ from django.utils.http import urlsafe_base64_decode
 from django.utils.encoding import force_str
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.forms import SetPasswordForm
+from django.http import JsonResponse
 
 from shrubbery.view_decorators import is_teacher
 
@@ -187,10 +188,6 @@ def settings(request):
             # they can upload files without any validation being done.
             # There is already front-end validation that requires inputing these fields.
             # This is just in case.
-            if 'first_name' not in request.POST or request.POST['first_name'] == '':
-                return redirect('missing')
-            if 'last_name' not in request.POST or request.POST['last_name'] == '':
-                return redirect('missing')
             form = EditUserForm(request.POST, request.FILES, instance=request.user)
             context = {}
             if form.is_valid():
@@ -257,6 +254,29 @@ def student(request, student):
     except ObjectDoesNotExist:
         return redirect('missing')
     return render(request, "students/student.html", {'student': student})
+
+
+def user(request, user):
+    '''Single user page.'''
+    try:
+        first_name, last_name = user.split('_')
+        user_obj = User.objects.get(first_name=first_name, last_name=last_name)
+        if not user_obj.is_active:
+            raise ObjectDoesNotExist
+        if user_obj.is_teacher:
+            return render(request, "teachers/teacher.html", {'teacher': user_obj})
+        elif user_obj.is_student:
+            return render(request, "students/student.html", {'student': user_obj})
+        else:
+            raise ObjectDoesNotExist
+    except (ValueError, ObjectDoesNotExist):
+        return redirect('missing')
+
+@login_required
+def users(request):
+    '''List of all users for automatic mention.'''
+    users = User.objects.filter(is_active=True)
+    return JsonResponse(list(map(lambda x: x.full_name, users)), safe=False)
 
 
 # Public teacher views

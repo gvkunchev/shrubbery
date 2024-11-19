@@ -8,6 +8,7 @@ from django.shortcuts import render, redirect
 from django.core.exceptions import ObjectDoesNotExist
 from django.conf import settings
 from django.http import HttpResponse
+from django.contrib.auth.decorators import login_required
 
 
 from shrubbery.view_decorators import is_teacher
@@ -51,7 +52,8 @@ def homework(request, homework):
         homework = Homework.objects.get(pk=homework)
         if homework.hidden and not (request.user.is_authenticated and request.user.is_teacher):
             raise ObjectDoesNotExist()
-        paginator = Paginator(homework.comments, 10)
+        main_comments = homework.comments.filter(parent=None)
+        paginator = Paginator(main_comments, 10)
         page_number = request.GET.get("page")
         page_obj = paginator.get_page(page_number)
     except ObjectDoesNotExist:
@@ -100,6 +102,33 @@ def edit_homework(request, homework):
         else:
             context['errors'] = form.errors
     return render(request, "homeworks/edit_homework.html", context)
+
+
+@login_required
+def answer_homework_comment(request, homework, parent):
+    '''Answer homework comment in a thread.'''
+    try:
+        homework = Homework.objects.get(pk=homework)
+        parent = HomeworkComment.objects.get(pk=parent)
+    except ObjectDoesNotExist:
+        return redirect('missing')
+    if request.method == 'POST':
+        data = {
+            'homework': homework,
+            'content': request.POST.get('content'),
+            'parent': parent,
+            'author': request.user
+        }
+        form = HomeworkCommentForm(data)
+        if form.is_valid():
+            comment = form.save()
+            return redirect(f"/homework/{homework.pk}?page={request.POST.get('page')}#comment{comment.pk}")
+        else:
+            return render(request, "homeworks/answer_homework_comment.html", {'homework': homework,
+                                                                              'parent': parent,
+                                                                              'errors': form.errors})
+    else:
+        return render(request, "homeworks/answer_homework_comment.html", {'homework': homework, 'parent': parent})
 
 
 class AddHomeworkComment(AddComment):

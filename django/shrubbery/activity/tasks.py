@@ -71,7 +71,6 @@ def alert_for_new_solution_comments(*args, **kwargs):
 @shared_task(name="backup_points")
 def backup_points(*args, **kwargs):
     """Backup the points via email send."""
-    return True # Disabled due to lack of need for this at the moment
     points = {}
     for student in Student.objects.filter(is_active=True):
         points[student.fn] = {

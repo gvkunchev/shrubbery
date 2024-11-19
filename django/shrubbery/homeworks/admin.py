@@ -32,19 +32,19 @@ class HomeworkAdmin(admin.ModelAdmin):
 class HomeworkCommentAdmin(admin.ModelAdmin):
     model = HomeworkComment
     ordering = ('date', 'author')
-    search_fields = ('date', 'author', 'homework', 'content')
+    search_fields = ('date', 'author', 'homework', 'parent', 'content')
     list_display = ('date', 'author', 'homework')
     list_filter = ('author', 'homework')
     fieldsets = (
             (None, {
                 "fields": (
-                   ('date', 'author', 'homework', 'content', 'starred')
+                   ('date', 'author', 'homework', 'parent', 'content', 'starred')
                 ),
             }),
         )
     add_fieldsets = (
         (None, {
-            'fields': ('date', 'author', 'homework', 'content', 'starred')
+            'fields': ('date', 'author', 'homework', 'parent', 'content', 'starred')
         }),
     )
 

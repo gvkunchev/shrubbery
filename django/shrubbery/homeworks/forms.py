@@ -29,4 +29,4 @@ class HomeworkCommentForm(forms.ModelForm):
 
     class Meta:
         model = HomeworkComment
-        fields = ('homework', 'content', 'author')
+        fields = ('homework', 'content', 'author', 'parent')

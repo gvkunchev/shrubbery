@@ -28,22 +28,9 @@ def challenge_solutions(request, challenge):
                 raise ObjectDoesNotExist
     except ObjectDoesNotExist:
         return redirect('missing')
-    solutions = list(ChallengeSolution.objects.filter(challenge=challenge))
-    filtered_solutions = solutions[:]
-    for solution in solutions:
-        subscribers = map(lambda x: x.pk, solution.subscribers.all())
-        if 'filter_subscribed' in request.GET:
-            if request.user.pk in subscribers:
-                filtered_solutions.remove(solution)
-        if 'filter_no_subscribers' in request.GET:
-            if not len(solution.subscribers.all()):
-                filtered_solutions.remove(solution)
-        if 'filter_foreign_subscribers_only' in request.GET:
-            if request.user.pk not in subscribers and len(solution.subscribers.all()):
-                filtered_solutions.remove(solution)
     context = {
         'challenge': challenge,
-        'solutions': filtered_solutions
+        'solutions': challenge.challengesolution_set.all()
     }
     return render(request, "challenge_solutions/solutions.html", context)
 

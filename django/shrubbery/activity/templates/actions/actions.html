@@ -27,19 +27,19 @@
                             {% if not action.forced_seen %}
                                 {% if action.type == 'FC' %}
                                     {% if action.object.author.is_student and not action.object.is_answered_by_teacher %}
-                                        <a href="/activity/{{ action.pk }}/force_seen"><i class="text-danger bi bi-exclamation-octagon-fill"></i></a>
+                                        <a href="/activity/{{ action.pk }}/force_seen"><i class="text-danger bi bi-chat"></i></a>
                                     {% endif %}
                                 {% endif %}
                                 {% if action.type == 'HWC' %}
                                     {% if action.object.author.is_student and not action.object.is_answered_by_teacher %}
-                                        <a href="/activity/{{ action.pk }}/force_seen"><i class="text-danger bi bi-exclamation-octagon-fill"></i></a>
+                                        <a href="/activity/{{ action.pk }}/force_seen"><i class="text-danger bi bi-chat-dots"></i></a>
                                     {% endif %}
                                 {% endif %}
                                 {% if action.type == 'HWS' %}
                                     {% if action.object.author.is_student %}
                                         {% if request.user|is_subscribed_to:action.object or not action.object.subscribers.all %}
                                             {% if not action.object.has_history and not action.object.is_followed_up_by_teacher %}
-                                                <a href="/activity/{{ action.pk }}/force_seen"><i class="text-danger bi bi-exclamation-octagon-fill"></i></a>
+                                                <a href="/activity/{{ action.pk }}/force_seen"><i class="text-warning bi bi-github"></i></a>
                                             {% endif %}
                                         {% endif %}
                                     {% endif %}
@@ -48,7 +48,7 @@
                                     {% if action.object.author.is_student %}
                                         {% if request.user|is_subscribed_to:action.object or not action.object.subscribers.all %}
                                             {% if not action.object|has_newer_version:action.date and not action.object.is_followed_up_by_teacher %}
-                                                <a href="/activity/{{ action.pk }}/force_seen"><i class="text-danger bi bi-exclamation-octagon-fill"></i></a>
+                                                <a href="/activity/{{ action.pk }}/force_seen"><i class="text-warning bi bi-git"></i></a>
                                             {% endif %}
                                         {% endif %}
                                     {% endif %}
@@ -57,7 +57,7 @@
                                     {% if action.object.author.is_student %}
                                         {% if request.user|is_subscribed_to:action.object.solution or not action.object.solution.subscribers.all %}
                                             {% if not action.object.is_followed_up_by_teacher %}
-                                                <a href="/activity/{{ action.pk }}/force_seen"><i class="text-danger bi bi-exclamation-octagon-fill"></i></a>
+                                                <a href="/activity/{{ action.pk }}/force_seen"><i class="text-danger bi bi-chat-dots-fill"></i></a>
                                             {% endif %}
                                         {% endif %}
                                     {% endif %}
@@ -66,20 +66,20 @@
                                     {% if action.object.author.is_student %}
                                         {% if request.user|is_subscribed_to:action.object.solution or not action.object.solution.subscribers.all %}
                                             {% if not action.object.is_followed_up_by_teacher %}
-                                                <a href="/activity/{{ action.pk }}/force_seen"><i class="text-danger bi bi-exclamation-octagon-fill"></i></a>
+                                                <a href="/activity/{{ action.pk }}/force_seen"><i class="text-danger bi bi-chat-dots-fill"></i></a>
                                             {% endif %}
                                         {% endif %}
                                     {% endif %}
                                 {% endif %}
                                 {% if action.type == 'CC' %}
                                     {% if action.object.author.is_student and not action.object.is_answered_by_teacher %}
-                                        <a href="/activity/{{ action.pk }}/force_seen"><i class="text-danger bi bi-exclamation-octagon-fill"></i></a>
+                                        <a href="/activity/{{ action.pk }}/force_seen"><i class="text-danger bi bi-chat-dots"></i></a>
                                     {% endif %}
                                 {% endif %}
                                 {% if action.type == 'CS' %}
                                     {% if action.object.author.is_student %}
                                         {% if not action.object.has_history and not action.object.is_followed_up_by_teacher %}
-                                            <a href="/activity/{{ action.pk }}/force_seen"><i class="text-danger bi bi-exclamation-octagon-fill"></i></a>
+                                            <a href="/activity/{{ action.pk }}/force_seen"><i class="text-warning bi bi-github"></i></a>
                                         {% endif %}
                                     {% endif %}
                                 {% endif %}
@@ -87,7 +87,7 @@
                                     {% if action.object.author.is_student %}
                                         {% if request.user|is_subscribed_to:action.object or not action.object.subscribers.all %}
                                             {% if not action.object|has_newer_version:action.date and not action.object.is_followed_up_by_teacher %}
-                                                <a href="/activity/{{ action.pk }}/force_seen"><i class="text-danger bi bi-exclamation-octagon-fill"></i></a>
+                                                <a href="/activity/{{ action.pk }}/force_seen"><i class="text-warning bi bi-git"></i></a>
                                             {% endif %}
                                         {% endif %}
                                     {% endif %}
@@ -96,7 +96,7 @@
                                     {% if action.object.author.is_student %}
                                         {% if request.user|is_subscribed_to:action.object.solution or not action.object.solution.subscribers.all %}
                                             {% if not action.object.is_followed_up_by_teacher %}
-                                                <a href="/activity/{{ action.pk }}/force_seen"><i class="text-danger bi bi-exclamation-octagon-fill"></i></a>
+                                                <a href="/activity/{{ action.pk }}/force_seen"><i class="text-danger bi bi-chat-dots-fill"></i></a>
                                             {% endif %}
                                         {% endif %}
                                     {% endif %}
@@ -105,13 +105,13 @@
                                     {% if action.object.author.is_student %}
                                         {% if request.user|is_subscribed_to:action.object.solution or not action.object.solution.subscribers.all %}
                                             {% if not action.object.is_followed_up_by_teacher %}
-                                                <a href="/activity/{{ action.pk }}/force_seen"><i class="text-danger bi bi-exclamation-octagon-fill"></i></a>
+                                                <a href="/activity/{{ action.pk }}/force_seen"><i class="text-danger bi bi-chat-dots-fill"></i></a>
                                             {% endif %}
                                         {% endif %}
                                     {% endif %}
                                 {% endif %}
                                 {% if action.type == 'FSC' %}
-                                    <a href="/activity/{{ action.pk }}/force_seen"><i class="text-danger bi bi-exclamation-octagon-fill"></i></a>
+                                    <a href="/activity/{{ action.pk }}/force_seen"><i class="text-info bi bi-arrow-repeat"></i></a>
                                 {% endif %}
                             {% endif %}
                         </td>

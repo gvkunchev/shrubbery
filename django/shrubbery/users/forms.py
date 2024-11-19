@@ -20,7 +20,7 @@ class EditUserForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ('first_name', 'last_name', 'github', 'image', 'dark_theme')
+        fields = ('github', 'image', 'dark_theme')
 
 
 class EmailSettingsForm(forms.ModelForm):

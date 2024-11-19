@@ -31,28 +31,6 @@
         <div class="card-header">
             <h7 class="card-title">Решения ({{ solutions|length }})</h7>
         </div>
-        {% if request.user.is_teacher %}
-            <div class="card-header">
-                <div class="form-check form-switch text-primary">
-                    <input class="form-check-input form-check-trigger-link" type="checkbox" role="switch" id="filter_subscribed" {% if 'filter_subscribed' in request.GET %} checked="checked" {% endif %}>
-                    <label class="form-check-label" for="filter_subscribed">
-                        <a class="text-reset text-decoration-none" href="/challenge/{{ challenge.pk }}/solutions{{ request.GET|calculate_filter:'filter_subscribed' }}"><i class="bi bi-funnel-fill"></i> Скрий решенията, за които съм абониран</a>
-                    </label>
-                </div>
-                <div class="form-check form-switch text-primary">
-                    <input class="form-check-input form-check-trigger-link" type="checkbox" role="switch" id="filter_no_subscribers" {% if 'filter_no_subscribers' in request.GET %} checked="checked" {% endif %}>
-                    <label class="form-check-label" for="filter_no_subscribers">
-                        <a class="text-reset text-decoration-none" href="/challenge/{{ challenge.pk }}/solutions{{ request.GET|calculate_filter:'filter_no_subscribers' }}"><i class="bi bi-funnel-fill"></i> Скрий решенията без абонамент</a>
-                    </label>
-                </div>
-                <div class="form-check form-switch text-primary">
-                    <input class="form-check-input form-check-trigger-link" type="checkbox" role="switch" id="filter_foreign_subscribers_only" {% if 'filter_foreign_subscribers_only' in request.GET %} checked="checked" {% endif %}>
-                    <label class="form-check-label" for="filter_foreign_subscribers_only">
-                        <a class="text-reset text-decoration-none" href="/challenge/{{ challenge.pk }}/solutions{{ request.GET|calculate_filter:'filter_foreign_subscribers_only' }}"><i class="bi bi-funnel-fill"></i> Скрий решенията само с чужд абонамент</a>
-                    </label>
-                </div>
-            </div>
-        {% endif %}
         <div class="card-body">
             {% if solutions %}
                 <div class="overflow-auto">
