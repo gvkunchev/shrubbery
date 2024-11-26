@@ -113,8 +113,14 @@ def add_challenge_solution(request, challenge):
             # If there is already an uploaded solution,
             # move it to history and replace with the new one
             existing_solution = ChallengeSolution.objects.get(author=request.user, challenge=challenge)
-            history_object = existing_solution.send_to_history()
             form = ChallengeSolutionForm(data, request.FILES, instance=existing_solution)
+            # Sending something to history must only happen if the new one is valid
+            if form.is_valid():
+                # Once the form is validated, both `existing_solution` and `form`
+                # are transformed (the upload file name is changed so need to be refreshed)
+                existing_solution = ChallengeSolution.objects.get(author=request.user, challenge=challenge)
+                form = ChallengeSolutionForm(data, request.FILES, instance=existing_solution)
+                history_object = existing_solution.send_to_history()
         except ObjectDoesNotExist:
             form = ChallengeSolutionForm(data, request.FILES)
         if form.is_valid():

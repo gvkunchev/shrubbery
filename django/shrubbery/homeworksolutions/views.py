@@ -113,8 +113,14 @@ def add_homework_solution(request, homework):
             # If there is already an uploaded solution,
             # move it to history and replace with the new one
             existing_solution = HomeworkSolution.objects.get(author=request.user, homework=homework)
-            history_object = existing_solution.send_to_history()
             form = HomeworkSolutionForm(data, request.FILES, instance=existing_solution)
+            # Sending something to history must only happen if the new one is valid
+            if form.is_valid():
+                # Once the form is validated, both `existing_solution` and `form`
+                # are transformed (the upload file name is changed so need to be refreshed)
+                existing_solution = HomeworkSolution.objects.get(author=request.user, homework=homework)
+                form = HomeworkSolutionForm(data, request.FILES, instance=existing_solution)
+                history_object = existing_solution.send_to_history()
         except ObjectDoesNotExist:
             form = HomeworkSolutionForm(data, request.FILES)
         if form.is_valid():
