@@ -1,14 +1,23 @@
 #!/bin/bash
 
 # Prepare Django by migrating and collecting static files
-python3 /var/shrubbery/manage.py migrate --no-input
-python3 /var/shrubbery/manage.py collectstatic --noinput --clear
+python3 /var/shrubbery/2023/manage.py migrate --no-input
+python3 /var/shrubbery/2023/manage.py collectstatic --noinput --clear
+python3 /var/shrubbery/2024/manage.py migrate --no-input
+python3 /var/shrubbery/2024/manage.py collectstatic --noinput --clear
 
 # Run Redis and Celery
 redis-server --daemonize yes
-celery -A shrubbery worker -l DEBUG --logfile=celery_worker.log --detach
-celery -A shrubbery beat -l DEBUG --logfile=celery_beat.log --detach
+cd /var/shrubbery/2023/
+celery -A shrubbery worker -l DEBUG --logfile=celery_worker_2023.log --detach
+celery -A shrubbery beat -l DEBUG --logfile=celery_beat_2023.log --detach
+cd /var/shrubbery/2024/
+celery -A shrubbery worker -l DEBUG --logfile=celery_worker_2024.log --detach
+celery -A shrubbery beat -l DEBUG --logfile=celery_beat_2024.log --detach
 
 # Start Gunicorn + Nginx
-gunicorn -c gunicorn_conf.py
+cd /var/shrubbery/2023
+gunicorn -c gunicorn_conf_2023.py
+cd /var/shrubbery/2024
+gunicorn -c gunicorn_conf_2024.py
 nginx -g 'daemon off;'
