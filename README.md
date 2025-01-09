@@ -15,6 +15,7 @@ Web site for the Python course in FMI
   * POSTGRES_USER
   * POSTGRES_PASSWORD
   * POSTGRES_DB_NAME
+  * DJANGO_SECRET_KEY_XXXX (based on all years)
 * Set the global environment to production by setting the following env variable
   * SHRUBBERY_ENV='prd'
 * Provide persistent data storage and mount it in /var/shrubbery/media
