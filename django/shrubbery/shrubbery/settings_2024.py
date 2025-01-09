@@ -30,8 +30,8 @@ else:
 
 # SECURITY WARNING: don't run with debug turned on in production!
 if os.environ.get('SHRUBBERY_ENV') == 'prd':
-    ALLOWED_HOSTS = ['2024.shrubbery-rnmp.onrender.com', 'shrubbery-rnmp.onrender.com']
-    CSRF_TRUSTED_ORIGINS = ['https://2024.shrubbery-rnmp.onrender.com', 'https://shrubbery-rnmp.onrender.com']
+    ALLOWED_HOSTS = ['multi2024.py-fmi.org', '2024.shrubbery-rnmp.onrender.com', 'shrubbery-rnmp.onrender.com']
+    CSRF_TRUSTED_ORIGINS = ['https://multi2024.py-fmi.org', 'https://2024.shrubbery-rnmp.onrender.com', 'https://shrubbery-rnmp.onrender.com']
 else:
     ALLOWED_HOSTS = ['*']
 
