@@ -67,7 +67,7 @@ class TestsRunner(ABC):
             if name and content:
                 with open(os.path.join(self._work_dir, f'{name}.py'), 'w') as f:
                     f.write(content)
-    
+
     def _prepare_command(self, solution):
         """Prepare the solution in place and the command to run the test."""
         source_code = os.path.join(settings.MEDIA_ROOT, solution.content.path)
@@ -84,7 +84,7 @@ class TestsRunner(ABC):
             test_runner = os.path.join(self._work_dir, 'test_runner.py')
             test = os.path.join(self._work_dir, 'test.py')
             return f'python {test_runner} {test}'
-        
+
     @abstractmethod
     def _execute(self):
         pass
@@ -105,15 +105,24 @@ class FullTestsRunner(TestsRunner):
         self._challenge = None
         self._solutions = None
         super(FullTestsRunner, self).__init__()
-    
+
     def _prepare_data(self):
         """Prepare the data from database."""
         self._challenge = Challenge.objects.get(pk=self._challenge_pk)
         self._solutions = ChallengeSolution.objects.filter(challenge=self._challenge)
-    
+
     def _execute(self):
         """Execute all tests."""
         for solution in self._solutions:
+            # TODO: If you see this try/except statement, remove it
+            #       it was used for a stupid challenge
+            try:
+                position = list(reversed(list(self._solutions))).index(solution)
+                with open(os.path.join(self._work_dir, 'tmp/info.py'), 'w') as f:
+                    f.write(f'POSITION = {position + 1}')
+            except Exception as exe:
+                print(exe)
+                pass # Something went wrong, but this code is not important
             command = self._prepare_command(solution)
             process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             try:
@@ -153,11 +162,11 @@ class SanityTestsRunner(TestsRunner):
         self._solution = solution
         self._json_result = None
         super(SanityTestsRunner, self).__init__()
-    
+
     def _prepare_data(self):
         """Prepare the data from database."""
         self._challenge = self._solution.challenge
-    
+
     def _execute(self):
         """Execute all tests."""
         command = self._prepare_command(self._solution)
@@ -184,7 +193,7 @@ class SanityTestsRunner(TestsRunner):
     def _cleanup(self):
         """Cleanup temp dirs and release the model."""
         super(SanityTestsRunner, self)._cleanup()
-    
+
     def get_results(self):
         """Get test results."""
         return self._json_result

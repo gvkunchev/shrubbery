@@ -13,7 +13,7 @@
         <hr class="mt-2 mb-1"/>
 
         {% include 'common/delete_modal.html' with content='Сигурен ли си, че искаш да изтриеш този коментар?' id='confirm_delete_challenge_comment_modal' %}
-        
+
     {% endif %}
 
     <div class="card mt-2">
@@ -25,6 +25,7 @@
                 {% csrf_token %}
                 <input type="hidden" name="page" value="{% if request.GET.page %}{{ request.GET.page }}{% else %}1{% endif %}">
                 <textarea name="content" class="form-control showdown-input" id="content" placeholder="Съдържание">{% if request.POST.content %}{{ request.POST.content }}{% else %}{{ comment.content }}{% endif %}</textarea>
+                <input type="hidden" name="parent" value="{{ comment.parent.id }}">
                 <div class="text-danger">{{ errors.content.as_text }}</div>
                 <button type="submit" name="edit" class="btn btn-primary mt-2 mx-1">Запази</button>
                 <button class="btn btn-secondary mt-2 mx-1 showdown-preview" data-showdown-source="content"><i class="bi bi-eye-fill"></i> Преглед</button>
