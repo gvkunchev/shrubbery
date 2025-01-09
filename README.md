@@ -32,3 +32,9 @@ Web site for the Python course in FMI
 * Modify the new server.server_name to use the plain domain (py-fmi.org) and alter the old one to XXXX.py-fmi.org
 * Add a new line for every mention of an year in ./Dockerfile
 * Add a new line for every mention of an year in ./start
+* Create the new schema in the database:
+  ```
+  psql -h <host> -p <port> -U <username> <db_name> -W
+  CREATE SCHEMA schemaXXXX;
+  ```
+
