@@ -15,6 +15,7 @@ Web site for the Python course in FMI
   * POSTGRES_USER
   * POSTGRES_PASSWORD
   * POSTGRES_DB_NAME
+  * DJANGO_SECRET_KEY_XXXX (based on all years)
 * Set the global environment to production by setting the following env variable
   * SHRUBBERY_ENV='prd'
 * Provide persistent data storage and mount it in /var/shrubbery/media
@@ -32,3 +33,9 @@ Web site for the Python course in FMI
 * Modify the new server.server_name to use the plain domain (py-fmi.org) and alter the old one to XXXX.py-fmi.org
 * Add a new line for every mention of an year in ./Dockerfile
 * Add a new line for every mention of an year in ./start
+* Create the new schema in the database:
+  ```
+  psql -h <host> -p <port> -U <username> <db_name> -W
+  CREATE SCHEMA schemaXXXX;
+  ```
+
