@@ -7,7 +7,7 @@ from homeworksolutions.models import HomeworkSolution, HomeworkSolutionTeacherPo
 from challenges.models import Challenge
 from challengesolutions.models import ChallengeSolution, ChallengeSolutionTeacherPoints
 from points.models import PointsGiver
-
+from vouchers.models import Voucher
 
 # Constant holding all models in the project
 ALL_MODELS = apps.get_models()
@@ -34,6 +34,9 @@ def get_all_points():
                 points.append(object.points)
         elif model is ChallengeSolution:
             for object in model.objects.filter(challenge__verified=True):
+                points.append(object.points)
+        elif model is Voucher:
+            for object in model.objects.exclude(owner__isnull=True):
                 points.append(object.points)
         else:
             for object in model.objects.all():
