@@ -17,7 +17,6 @@ class Emailer:
 
     def send_email(self, recipients, subject, body):
         """Send email."""
-        return False # TODO: Remove after DB migration
         smtp = smtplib.SMTP('smtp.gmail.com', 587)
         smtp.starttls()
         smtp.login(self.SENDER, self.PASSWORD)
