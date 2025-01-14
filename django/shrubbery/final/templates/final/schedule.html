@@ -7,7 +7,7 @@
 {% endblock %}
 
 {% block body %}
-    
+
     <hr/>
 
     {% if request.user.is_teacher %}
@@ -31,12 +31,11 @@
     {% endif %}
 
     <hr/>
-    
+
 
     <div class="slots-wrapper">
         {% include 'final/slots.html' %}
     </div>
 
     {% include 'common/delete_modal.html' with content='Сигурен ли си, че искаш да изтриеш този слот?' id='confirm_delete_slot_modal' %}
-
 {% endblock %}

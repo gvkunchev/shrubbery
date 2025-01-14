@@ -40,6 +40,20 @@ $(document).ready(function(){
             window.location = $(trigger).attr('href');
         })
     }
+    // Confirmation dialogs for deletion and redirecting (multiple isntances on page - dirty fast hack)
+    function confirmDeleteMultiLink(trigger, modal){
+        $(trigger).click(function(e){
+            $(modal).find('.btn-no').bind('click', function(){
+                $(modal).modal('hide');
+            })
+            $(modal).find('.btn-yes').bind('click', function(){
+                $(modal).modal('hide');
+                window.location = $(trigger).attr('href');
+            })
+            $(modal).modal('show');
+            e.preventDefault();
+        })
+    }
     confirmDeleteLink($('.confirm-delete-news-article'), $('#confirm_delete_news_article_modal'));
     confirmDeleteLink($('.confirm-delete-forum'), $('#confirm_delete_forum_modal'));
     confirmDeleteLink($('.confirm-delete-forum-comment'), $('#confirm_delete_forum_comment_modal'));
@@ -48,7 +62,9 @@ $(document).ready(function(){
     confirmDeleteLink($('.confirm-delete-homework-comment'), $('#confirm_delete_homework_comment_modal'));
     confirmDeleteLink($('.confirm-delete-challenge'), $('#confirm_delete_challenge_modal'));
     confirmDeleteLink($('.confirm-delete-challenge-comment'), $('#confirm_delete_challenge_comment_modal'));
-    confirmDeleteLink($('.confirm-delete-slot'), $('#confirm_delete_slot_modal'));
+    $('.confirm-delete-slot').each(function(i, e){
+        confirmDeleteMultiLink(e, $('#confirm_delete_slot_modal'));
+    })
     confirmDeleteLink($('.confirm-remove-student'), $('#confirm_remove_student_modal'));
-    
+
 })
