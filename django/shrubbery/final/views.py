@@ -19,8 +19,8 @@ def schedule_editor(request):
     return render(request, "final/schedule_editor.html", {'slots': slots})
 
 
-@is_teacher
-#@login_required # TODO: Put back if you want to show the schedule to students and remove the line above
+#@is_teacher # TODO: Use to hide the schedule and only show the countdown on main page
+@login_required
 def schedule(request):
     """Final schedule."""
     slots = FinalScheduleSlot.objects.all()
