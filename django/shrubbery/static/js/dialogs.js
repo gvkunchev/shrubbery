@@ -65,6 +65,7 @@ $(document).ready(function(){
     $('.confirm-delete-slot').each(function(i, e){
         confirmDeleteMultiLink(e, $('#confirm_delete_slot_modal'));
     })
-    confirmDeleteLink($('.confirm-remove-student'), $('#confirm_remove_student_modal'));
-
+    $('.confirm-remove-student').each(function(i, e){
+        confirmDeleteMultiLink(e, $('#confirm_remove_student_modal'));
+    })
 })
