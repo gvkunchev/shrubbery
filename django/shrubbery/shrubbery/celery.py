@@ -25,8 +25,9 @@ app.conf.beat_schedule = {
         'task': 'alert_for_new_solution_comments',
         'schedule': crontab(minute=0), # Hourly UTC
     },
-    'backup_points': {
-        'task': 'backup_points',
-        'schedule': crontab(minute=0, hour=0) # Daily at midnight UTC
-    }
+    # TODO: Put back to enable points backup
+    #'backup_points': {
+    #    'task': 'backup_points',
+    #    'schedule': crontab(minute=0, hour=0) # Daily at midnight UTC
+    #}
 }
