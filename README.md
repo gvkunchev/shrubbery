@@ -22,7 +22,7 @@ Web site for the Python course in FMI
 * Ensure that port 80 is redirected to the container
   * For example, render.com automatically scans ports serving HTTP. The current project serves HTTP over 80 and 8000 - 8000 is Gunicorn, while 80 is Nginx. You are required to use 80 in order to go through Nginx and serve media files. Serving through 8000 will go ardoun Ngninx and will not allow serving media files.
 
-### Create new instance for the same container
+### Create new instance for the same container (based on the Render+Cloudflare setup)
 * Create new settings_XXXX.py file in ./django/shrubbery
 * Modify everything related to the year in that file
 * Define a new env var in the hosting service (e.g. Render) for DJANGO_SECRET_KEY_XXXX
@@ -33,6 +33,7 @@ Web site for the Python course in FMI
 * Modify everything related to the year in these new configurations
 * Modify the new server.server_name to use the plain domain (py-fmi.org) and alter the old one to XXXX.py-fmi.org
 * Modify CloudFlare (or whatever domain service is used) with the new subdomains
+* Add the new custom domain to Render's setup
 * Add a new line for every mention of an year in ./Dockerfile
 * Add a new line for every mention of an year in ./start
 * Create the new schema in the database (use an already running instance to access the DB):
