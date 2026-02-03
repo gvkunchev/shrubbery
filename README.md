@@ -25,6 +25,7 @@ Web site for the Python course in FMI
 ### Create new instance for the same container
 * Create new settings_XXXX.py file in ./django/shrubbery
 * Modify everything related to the year in that file
+* Define a new env var in the hosting service (e.g. Render) for DJANGO_SECRET_KEY_XXXX
 * Create new gunicorn_conf_XXXX.py file in ./
 * Modify everything related to the year in that file
 * Add new upstream in ./nginx.conf
@@ -33,7 +34,7 @@ Web site for the Python course in FMI
 * Modify the new server.server_name to use the plain domain (py-fmi.org) and alter the old one to XXXX.py-fmi.org
 * Add a new line for every mention of an year in ./Dockerfile
 * Add a new line for every mention of an year in ./start
-* Create the new schema in the database:
+* Create the new schema in the database (use an already running instance to access the DB):
   ```
   psql -h <host> -p <port> -U <username> <db_name> -W
   CREATE SCHEMA schemaXXXX;
