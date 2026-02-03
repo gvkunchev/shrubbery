@@ -15,7 +15,7 @@ from homeworksolutions.models import HomeworkSolution
 class TestsRunner(ABC):
     """Tests runner for full and sanity test."""
 
-    SANDBOX_MATRIX = '/var/shrubbery/sandbox/sandbox-origin'
+    SANDBOX_MATRIX = '/var/shrubbery/sandbox/sandbox.tar'
     SANDBOX_TMP_COPY = '/var/shrubbery/sandbox/sandbox{}'
     TEST_RUNNER = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'test_runner.py')
     TIMEOUT = 2 # seconds
@@ -40,7 +40,7 @@ class TestsRunner(ABC):
         if self._prd:
             # Create sandbox filesystem
             self._work_dir = self.SANDBOX_TMP_COPY.format(self._temp_id)
-            os.system(f'cp -r {self.SANDBOX_MATRIX} {self._work_dir}')
+            os.system(f'tar -C {self._work_dir} -cf {self.SANDBOX_MATRIX} .')
             # Copy the test runner
             shutil.copyfile(self.TEST_RUNNER, os.path.join(self._work_dir, 'tmp/test_runner.py'))
             # Copy the test itself
