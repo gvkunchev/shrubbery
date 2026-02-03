@@ -4,7 +4,7 @@ FROM ubuntu:26.04
 RUN apt update
 RUN apt install -y python3.14
 RUN apt install -y python3-pip
-RUN apt install -y python3-venv
+RUN apt install -y python3.14-venv
 RUN apt install -y nginx
 RUN apt install -y redis-server
 RUN apt install -y mmdebstrap
