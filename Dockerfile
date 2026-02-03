@@ -52,7 +52,7 @@ COPY gunicorn_conf_2026.py /var/shrubbery/2026
 # Prepare sandbox for executing tests
 RUN useradd tester
 RUN mkdir -p /var/shrubbery/sandbox/sandbox-origin
-RUN mmdebstrap --variant=apt noble /var/shrubbery/sandbox/sandbox-origin
+RUN mmdebstrap --variant=apt resolute /var/shrubbery/sandbox/sandbox-origin
 
 # Clone user specs to the sandbox
 RUN cp /etc/passwd /var/shrubbery/sandbox/sandbox-origin/etc/passwd
