@@ -35,6 +35,7 @@ Web site for the Python course in FMI
 * Modify CloudFlare (or whatever domain service is used) with the new subdomains
 * Add the new custom domain to Render's setup
 * Add a new line for every mention of an year in ./Dockerfile
+* Create the new media directory in the persistent directory - /var/shrubbery/media/20XX
 * Add a new line for every mention of an year in ./start
 * Create the new schema in the database (use an already running instance to access the DB):
   ```
