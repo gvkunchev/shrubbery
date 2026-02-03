@@ -22,7 +22,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 if os.environ.get('SHRUBBERY_ENV') == 'prd':
-    SECRET_KEY = os.environ['DJANGO_SECRET_KEY_2025']
+    SECRET_KEY = os.environ['DJANGO_SECRET_KEY_2026']
     ADMIN_ENABLED = False
 else:
     SECRET_KEY = "development-dummy-secret-key"
@@ -30,8 +30,8 @@ else:
 
 # SECURITY WARNING: don't run with debug turned on in production!
 if os.environ.get('SHRUBBERY_ENV') == 'prd':
-    ALLOWED_HOSTS = ['shrubbery2025.py-fmi.org', '2025.py-fmi.org', 'py-fmi.org']
-    CSRF_TRUSTED_ORIGINS = ['https://shrubbery2025.py-fmi.org', 'https://2025.py-fmi.org', 'https://py-fmi.org']
+    ALLOWED_HOSTS = ['shrubbery2026.py-fmi.org', '2026.py-fmi.org', 'py-fmi.org']
+    CSRF_TRUSTED_ORIGINS = ['https://shrubbery2026.py-fmi.org', 'https://2026.py-fmi.org', 'https://py-fmi.org']
 else:
     ALLOWED_HOSTS = ['*']
 
@@ -119,7 +119,7 @@ if os.environ.get('SHRUBBERY_ENV') == 'prd':
             'HOST': os.environ['POSTGRES_HOSTNAME'],
             'PORT': '5432',
             'OPTIONS': {
-                'options': '-c search_path=schema2025'
+                'options': '-c search_path=schema2026'
             }
         }
     }
@@ -223,7 +223,7 @@ LOGGING = {
     'handlers': {
         'logfile': {
             'class': 'logging.FileHandler',
-            'filename': '/var/media/log/shrubbery_2025.log'
+            'filename': '/var/media/log/shrubbery_2026.log'
         },
     },
     'loggers': {

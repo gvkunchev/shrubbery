@@ -32,6 +32,7 @@ Web site for the Python course in FMI
 * Add new server in ./nginx.conf
 * Modify everything related to the year in these new configurations
 * Modify the new server.server_name to use the plain domain (py-fmi.org) and alter the old one to XXXX.py-fmi.org
+* Modify CloudFlare (or whatever domain service is used) with the new subdomains
 * Add a new line for every mention of an year in ./Dockerfile
 * Add a new line for every mention of an year in ./start
 * Create the new schema in the database (use an already running instance to access the DB):

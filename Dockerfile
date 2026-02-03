@@ -23,15 +23,15 @@ RUN python3.12 -m pip install -r requirements.txt
 RUN mkdir -p /var/shrubbery
 COPY django/shrubbery /var/shrubbery/2023
 COPY django/shrubbery /var/shrubbery/2024
-COPY django/shrubbery /var/shrubbery/2025
+COPY django/shrubbery /var/shrubbery/2026
 RUN mv /var/shrubbery/2023/shrubbery/settings_2023.py /var/shrubbery/2023/shrubbery/settings.py
 RUN mv /var/shrubbery/2024/shrubbery/settings_2024.py /var/shrubbery/2024/shrubbery/settings.py
-RUN mv /var/shrubbery/2025/shrubbery/settings_2025.py /var/shrubbery/2025/shrubbery/settings.py
+RUN mv /var/shrubbery/2026/shrubbery/settings_2026.py /var/shrubbery/2026/shrubbery/settings.py
 
 # Prepare links for media
 RUN ln -s /var/shrubbery/media/2023 /var/shrubbery/2023/media
 RUN ln -s /var/shrubbery/media/2024 /var/shrubbery/2024/media
-RUN ln -s /var/shrubbery/media/2025 /var/shrubbery/2025/media
+RUN ln -s /var/shrubbery/media/2026 /var/shrubbery/2026/media
 
 # Set up Nginx
 ADD nginx.conf /etc/nginx/conf.d/default.conf
@@ -47,7 +47,7 @@ RUN mkdir -pv /var/log/gunicorn/
 RUN mkdir -pv /var/run/gunicorn/
 COPY gunicorn_conf_2023.py /var/shrubbery/2023
 COPY gunicorn_conf_2024.py /var/shrubbery/2024
-COPY gunicorn_conf_2025.py /var/shrubbery/2025
+COPY gunicorn_conf_2026.py /var/shrubbery/2026
 
 # Prepare sandbox for executing tests
 RUN useradd tester
