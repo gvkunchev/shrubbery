@@ -64,7 +64,7 @@ RUN chroot /var/shrubbery/sandbox/sandbox-origin apt update --allow-insecure-rep
 RUN chroot /var/shrubbery/sandbox/sandbox-origin apt install -y --allow-unauthenticated python3.14
 RUN chroot /var/shrubbery/sandbox/sandbox-origin python3.14 /tmp/get-pip.py
 RUN chroot /var/shrubbery/sandbox/sandbox-origin python3.14 -m pip install --break-system-packages timeout_decorator
-RUN tar -C /var/shrubbery/sandbox/sandbox-origin -cf /var/shrubbery/sandbox/sandbox.tar
+RUN tar -C /var/shrubbery/sandbox/sandbox-origin -cf /var/shrubbery/sandbox/sandbox.tar .
 
 # Copy start script and execute it
 COPY start /var/shrubbery
