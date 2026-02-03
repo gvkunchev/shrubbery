@@ -2,7 +2,7 @@ FROM ubuntu:24.04
 
 # Install all generic software
 RUN apt update
-RUN apt install -y python3.12
+RUN apt install -y python3.14
 RUN apt install -y python3-pip
 RUN apt install -y python3-venv
 RUN apt install -y nginx
@@ -12,12 +12,12 @@ RUN apt install -y cargo
 RUN apt install -y libpq-dev python3-dev
 
 # Create and activate venv
-RUN python3.12 -m venv /var/venv
+RUN python3.14 -m venv /var/venv
 ENV PATH="/var/venv/bin:$PATH"
 
 # Install all python packages
 COPY requirements.txt .
-RUN python3.12 -m pip install -r requirements.txt
+RUN python3.14 -m pip install -r requirements.txt
 
 # Copy the Django project
 RUN mkdir -p /var/shrubbery
@@ -61,9 +61,9 @@ RUN cp /etc/group /var/shrubbery/sandbox/sandbox-origin/etc/group
 # Prepare sandbox Python environment
 COPY get-pip.py /var/shrubbery/sandbox/sandbox-origin/tmp
 RUN chroot /var/shrubbery/sandbox/sandbox-origin apt update --allow-insecure-repositories
-RUN chroot /var/shrubbery/sandbox/sandbox-origin apt install -y --allow-unauthenticated python3.12
-RUN chroot /var/shrubbery/sandbox/sandbox-origin python3.12 /tmp/get-pip.py
-RUN chroot /var/shrubbery/sandbox/sandbox-origin python3.12 -m pip install --break-system-packages timeout_decorator
+RUN chroot /var/shrubbery/sandbox/sandbox-origin apt install -y --allow-unauthenticated python3.14
+RUN chroot /var/shrubbery/sandbox/sandbox-origin python3.14 /tmp/get-pip.py
+RUN chroot /var/shrubbery/sandbox/sandbox-origin python3.14 -m pip install --break-system-packages timeout_decorator
 
 # Copy start script and execute it
 COPY start /var/shrubbery

@@ -76,7 +76,7 @@ class TestsRunner(ABC):
             shutil.copy(source_code, os.path.join(self._work_dir, 'tmp/solution.py'))
             # Build the command
             return (f'env -i /usr/sbin/chroot --userspec=tester:tester {self._work_dir} '
-                     '/usr/bin/python3.12 /tmp/test_runner.py /tmp/test.py')
+                     '/usr/bin/python3.14 /tmp/test_runner.py /tmp/test.py')
         else:
             # Copy the solution
             shutil.copy(source_code, os.path.join(self._work_dir, 'solution.py'))
@@ -84,7 +84,7 @@ class TestsRunner(ABC):
             test_runner = os.path.join(self._work_dir, 'test_runner.py')
             test = os.path.join(self._work_dir, 'test.py')
             return f'python {test_runner} {test}'
-        
+
     @abstractmethod
     def _execute(self):
         pass
@@ -105,12 +105,12 @@ class FullTestsRunner(TestsRunner):
         self._homework = None
         self._solutions = None
         super(FullTestsRunner, self).__init__()
-    
+
     def _prepare_data(self):
         """Prepare the data from database."""
         self._homework = Homework.objects.get(pk=self._homework_pk)
         self._solutions = HomeworkSolution.objects.filter(homework=self._homework)
-    
+
     def _execute(self):
         """Execute all tests."""
         for solution in self._solutions:
@@ -153,11 +153,11 @@ class SanityTestsRunner(TestsRunner):
         self._solution = solution
         self._json_result = None
         super(SanityTestsRunner, self).__init__()
-    
+
     def _prepare_data(self):
         """Prepare the data from database."""
         self._homework = self._solution.homework
-    
+
     def _execute(self):
         """Execute all tests."""
         command = self._prepare_command(self._solution)
@@ -184,7 +184,7 @@ class SanityTestsRunner(TestsRunner):
     def _cleanup(self):
         """Cleanup temp dirs and release the model."""
         super(SanityTestsRunner, self)._cleanup()
-    
+
     def get_results(self):
         """Get test results."""
         return self._json_result
