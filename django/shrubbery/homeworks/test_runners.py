@@ -40,7 +40,7 @@ class TestsRunner(ABC):
         if self._prd:
             # Create sandbox filesystem
             self._work_dir = self.SANDBOX_TMP_COPY.format(self._temp_id)
-            os.system(f'tar -C {self._work_dir} -xf {self.SANDBOX_MATRIX}')
+            os.system(f'mkdir {self._work_dir} && tar -C {self._work_dir} -xf {self.SANDBOX_MATRIX}')
             # Copy the test runner
             shutil.copyfile(self.TEST_RUNNER, os.path.join(self._work_dir, 'tmp/test_runner.py'))
             # Copy the test itself
