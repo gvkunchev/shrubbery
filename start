@@ -17,7 +17,7 @@ redis-server --daemonize yes
 #celery -A shrubbery worker -l DEBUG --logfile=celery_worker_2024.log --detach
 #celery -A shrubbery beat -l DEBUG --logfile=celery_beat_2024.log --detach
 cd /var/shrubbery/2026/
-celery -A shrubbery worker --concurency=1 --pool=solo -l INFO --logfile=celery_worker_2026.log --detach
+celery -A shrubbery worker --concurrency=1 --pool=solo -l INFO --logfile=celery_worker_2026.log --detach
 celery -A shrubbery beat -l INFO --logfile=celery_beat_2026.log --detach
 
 # Start Gunicorn + Nginx
