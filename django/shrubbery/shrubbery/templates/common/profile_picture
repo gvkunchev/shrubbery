@@ -1,1 +1,1 @@
-{% if user.image %}/media/{{ user.image }}{% else %}/static/img/blank-profile.png{% endif %}
+{% if user.image %}/media/{{ user.image }}?{{ YEAR }}{% else %}/static/img/blank-profile.png{% endif %}

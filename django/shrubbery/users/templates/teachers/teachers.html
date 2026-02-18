@@ -17,7 +17,7 @@
             <div class="card d-inline-block m-1 teacher-card">
                 <a href="/teacher/{{ teacher.id }}">
                     {% if teacher.image %}
-                        <img src="media/{{ teacher.image }}" class="card-img-top"/>
+                        <img src="media/{{ teacher.image }}?{{ YEAR }}" class="card-img-top"/>
                     {% else %}
                         <img src="/static/img/blank-profile.png" class="card-img-top"/>
                     {% endif %}

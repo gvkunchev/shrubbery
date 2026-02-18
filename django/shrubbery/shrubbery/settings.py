@@ -32,6 +32,7 @@ ALLOWED_HOSTS = ['*']
 
 DEBUG = True
 
+YEAR = 'PLACEHOLDER'
 
 # Application definition
 
@@ -87,6 +88,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'shrubbery.context_processors.export_settings',
             ],
             'libraries': {
                 'extras': 'shrubbery.templatetags.extras',
