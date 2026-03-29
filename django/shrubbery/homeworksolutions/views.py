@@ -39,7 +39,7 @@ def homework_solution(request, homework, solution):
     """Homework solution page."""
     try:
         homework = Homework.objects.get(pk=homework)
-        solution = HomeworkSolution.objects.get(pk=solution)
+        solution = HomeworkSolution.objects.get(homework=homework, pk=solution)
         if homework.hidden or not homework.verified:
             if not request.user.is_authenticated:
                 raise ObjectDoesNotExist

@@ -39,7 +39,7 @@ def challenge_solution(request, challenge, solution):
     """Challenge solution page."""
     try:
         challenge = Challenge.objects.get(pk=challenge)
-        solution = ChallengeSolution.objects.get(pk=solution)
+        solution = ChallengeSolution.objects.get(challenge=challenge, pk=solution)
         if challenge.hidden or not challenge.verified:
             if not request.user.is_authenticated:
                 raise ObjectDoesNotExist
